@@ -692,8 +692,26 @@ function updCorpus() { $("#corpus-info").textContent = `${ordem().length} atas c
 updCorpus();
 const SUGS = ["O que o Copom disse sobre câmbio?", "Quando a ata falou pela primeira vez em pausa?", "Como mudou a visão sobre o mercado de trabalho?", "Por que o Copom não acelera os cortes?"];
 SUGS.forEach(s => { const b = el("button", {class: "ghost", type: "button"}, esc(s)); b.onclick = () => { $("#q").value = s; ask(); }; $("#sugs").appendChild(b); });
-let sample = null, history = [];
-(async () => { try { sample = await window.claude?.use("sample"); } catch (e) { sample = null; } if (!sample) { $("#send").disabled = true; $("#q").placeholder = "O chat funciona na versão publicada do site, que usa o Claude."; } })();
+/* Duas formas de falar com o Claude: dentro do artefato do claude.ai (capacidade "sample")
+   ou, no Netlify, pelas funções /api/chat e /api/tom, que guardam a chave da API no servidor. */
+let sample = null, api = false, history = [];
+const podeIA = () => !!(sample || api);
+async function apiPost(path, body) {
+  const r = await fetch(path, {method: "POST", headers: {"content-type": "application/json"}, body: JSON.stringify(body)});
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) { const e = new Error(j.erro || "erro"); e.msg = j.erro; e.status = r.status; throw e; }
+  return j;
+}
+const novaParaApi = () => novaR && atas[novaR] ? {reuniao: novaR, paragrafos: Object.fromEntries(Object.entries(atas[novaR].paragrafos).map(([n, p]) => [n, {secao: p.secao, texto: p.texto}]))} : null;
+(async () => {
+  try { sample = (await window.claude?.use("sample")) || null; } catch (e) { sample = null; }
+  if (!sample && location.protocol.startsWith("http")) {
+    try { const r = await fetch("/api/saude", {cache: "no-store"}); if (r.ok) api = !!(await r.json()).ok; } catch (e) { api = false; }
+  }
+  $("#send").disabled = !podeIA();
+  if (!podeIA()) $("#q").placeholder = "O chat precisa do Claude: use o site no Netlify ou o artefato publicado.";
+  if (novaR) $("#btn-score").disabled = !podeIA();
+})();
 function addMsg(cls, html) { const m = el("div", {class: "msg " + cls}, html); $("#log").appendChild(m); $("#log").scrollTop = 1e9; return m; }
 function checkCite(c) {
   const a = atas[String(c.reuniao)]; if (!a) return false;
@@ -702,7 +720,7 @@ function checkCite(c) {
 }
 async function ask(ev) {
   ev && ev.preventDefault();
-  const question = $("#q").value.trim(); if (!question || !sample) return;
+  const question = $("#q").value.trim(); if (!question || !podeIA()) return;
   $("#q").value = ""; $("#send").disabled = true;
   addMsg("u", esc(question));
   const box = addMsg("a", `<span class="status">Lendo as atas…</span>`);
@@ -722,12 +740,13 @@ Pergunta: ${question}
 ATAS:
 ${corpusText()}`;
   try {
-    const out = await sample.json(prompt, {cache: false, modelTier: "default"});
+    const out = sample ? await sample.json(prompt, {cache: false, modelTier: "default"})
+      : await apiPost("/api/chat", {pergunta: question, historico: history.slice(-4), nova: novaParaApi()});
     const cites = (out.citacoes || []).map(c => ({...c, ok: checkCite(c)}));
     box.innerHTML = `<div>${esc(out.resposta || "")}</div><div class="cites">${cites.map(c => `<div class="cite${c.ok ? "" : " bad"}"><b>${esc(c.reuniao)}ª §${esc(c.paragrafo)}</b> “${esc(c.trecho)}” <span class="chk">${c.ok ? "✓ trecho conferido" : "⚠ não encontrado literalmente"}</span></div>`).join("")}</div>`;
     history.push({role: "user", content: question}, {role: "assistant", content: out.resposta || ""});
   } catch (e) {
-    box.innerHTML = e && e.code === "rate_limited" ? "Muitas perguntas seguidas. Espere alguns segundos e tente de novo." : e && e.code === "not_granted" ? "O chat não foi autorizado nesta página." : "Não consegui responder agora. Tente de novo.";
+    box.innerHTML = e && e.msg ? esc(e.msg) : e && e.code === "rate_limited" ? "Muitas perguntas seguidas. Espere alguns segundos e tente de novo." : e && e.code === "not_granted" ? "O chat não foi autorizado nesta página." : "Não consegui responder agora. Tente de novo.";
   }
   $("#send").disabled = false; $("#log").scrollTop = 1e9;
 }
@@ -769,11 +788,11 @@ $("#btn-load").onclick = async () => {
     atas[r] = {data_reuniao: dataR, paragrafos: pars, semNota: true, nova: true};
     novaR = r; updCorpus(); renderTrail(); renderPicker();
     st.textContent = `${r}ª carregada: ${n} parágrafos. Já dá para perguntar sobre ela.`;
-    $("#btn-score").disabled = !sample;
+    $("#btn-score").disabled = !podeIA();
   } catch (e) { st.textContent = "Não consegui ler esse arquivo. Tente colar o texto."; }
 };
 $("#btn-score").onclick = async () => {
-  if (!novaR || !sample) return; const st = $("#new-status"); const a = atas[novaR]; $("#btn-score").disabled = true;
+  if (!novaR || !podeIA()) return; const st = $("#new-status"); const a = atas[novaR]; $("#btn-score").disabled = true;
   st.textContent = "Medindo o tom com a mesma régua…";
   const prompt = `Classifique o TOM de política monetária de CADA parágrafo desta ata do Copom com esta régua:
 +2 muito duro: juros altos/restrição "maior e por mais tempo" com ênfase, desancoragem adicional, alta de juros
@@ -786,7 +805,7 @@ Responda só com JSON: [{"n": 1, "nota": 0, "tema": "inflação|atividade|cenár
 
 ${Object.entries(a.paragrafos).map(([n, p]) => `§${n} (${p.secao[0]}) ${p.texto}`).join("\n")}`;
   try {
-    const arr = await sample.json(prompt, {cache: false, modelTier: "complex"});
+    const arr = sample ? await sample.json(prompt, {cache: false, modelTier: "complex"}) : await apiPost("/api/tom", novaParaApi());
     let all = [], bad = 0;
     arr.forEach(o => { const p = a.paragrafos[String(o.n)]; if (!p) return; const nota = Math.max(-2, Math.min(2, Math.round(+o.nota || 0)));
       const ok = norm(p.texto).includes(norm(o.trecho || "")) && (o.trecho || "").length > 10; if (!ok) bad++;

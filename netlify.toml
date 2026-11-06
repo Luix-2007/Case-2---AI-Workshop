@@ -1,0 +1,25 @@
+# Netlify: site estático em site/ + funções que chamam o Claude em netlify/functions/.
+# A chave vai em Site configuration → Environment variables → ANTHROPIC_API_KEY (nunca no repositório).
+[build]
+  publish = "site"
+  functions = "netlify/functions"
+  command = "echo 'site já gerado por scripts/gerar_site.py'"
+
+[functions]
+  node_bundler = "esbuild"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# O template e a versão para artefato não precisam ficar públicos.
+[[redirects]]
+  from = "/template.html"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/artifact.html"
+  to = "/"
+  status = 301
+  force = true

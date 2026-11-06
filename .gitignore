@@ -21,3 +21,7 @@ desktop.ini
 
 # Saídas geradas pelos scripts do caminho avançado
 avancado/**/saida/
+
+# Netlify / Node
+node_modules/
+.netlify/

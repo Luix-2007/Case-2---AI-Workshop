@@ -102,6 +102,27 @@ cd scripts && python indice.py && python montar_dados.py && python gerar_site.py
 
 **Ata nova** (ex.: 282ª, reunião em 04/11/2026; a ata é esperada para 10/11, seguindo o padrão de publicação 6 dias após a reunião): salvar o PDF como `dados/atas/ata_282_2026-11-04.pdf` e rodar o fluxo de novo, ou subir o PDF direto no chat do site.
 
+### Site no Netlify com o chat ligado ao Claude
+
+O site estático (`site/`) é servido pelo Netlify, e o chat chama três funções em `netlify/functions/`. A **chave da API fica só no servidor**: o navegador nunca a vê.
+
+| Rota | O que faz |
+|---|---|
+| `GET /api/saude` | Diz se a chave está configurada. O site usa isso para ligar o chat |
+| `POST /api/chat` | Recebe a pergunta, monta o prompt com as 6 atas no servidor e devolve resposta e citações em JSON |
+| `POST /api/tom` | Mede o tom de uma ata nova (ex.: 282ª) com a mesma régua |
+
+- **Modelo:** `claude-opus-5-5`, com esforço `low` no chat e `medium` na medição de tom. A resposta sai em JSON validado por schema.
+- **Custo:** o texto das atas (cerca de 25 mil tokens) fica em cache por 5 minutos, então as perguntas seguintes pagam cerca de 10% dessa parte.
+- **Recusa do filtro de segurança:** se o filtro recusar uma pergunta, a própria API refaz a chamada num modelo de reserva (`fallbacks: "default"`).
+- **Proteções:** só aceita chamadas do próprio site, limita a quantidade de perguntas por IP e minuto, e limita o tamanho das perguntas e de atas enviadas. O site continua conferindo cada trecho citado contra o texto da ata.
+
+**Para publicar:**
+1. No Netlify, escolha **Add new site → Import an existing project → GitHub** e selecione este repositório. As configurações vêm do `netlify.toml`.
+2. Em **Site configuration → Environment variables**, crie `ANTHROPIC_API_KEY` com a chave do [Console da Anthropic](https://console.anthropic.com). Ela nunca vai para o GitHub.
+3. Rode **Deploys → Trigger deploy** para o deploy pegar a chave.
+4. Recomendado: defina um limite de gasto no Console da Anthropic, porque o site é público.
+
 ## Limitações e próximos passos
 
 - A nota de tom é um julgamento, mesmo com uma régua fixa. A concordância de 76% mostra onde a régua ainda é ambígua, principalmente em parágrafos com sinais mistos.

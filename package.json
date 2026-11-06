@@ -1,0 +1,9 @@
+{
+  "name": "tradutor-do-copom",
+  "private": true,
+  "type": "module",
+  "description": "Funções do Netlify que ligam o chat do site ao Claude",
+  "dependencies": {
+    "@anthropic-ai/sdk": "1.1.0"
+  }
+}
