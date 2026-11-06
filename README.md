@@ -2,7 +2,7 @@
 
 > Claude Lab · Economia & Finanças · PUC-Rio · 06/11/2026
 
-**🎬 Vídeo (2 min):** [PREENCHER: link do YouTube não listado ou do Drive com "qualquer pessoa com o link"]
+**🎬 Vídeo (2 min):** https://www.youtube.com/watch?v=PN4bFBtdx5Y
 **🔗 Artefato público:** https://claude.ai/artifact/AXfdFGVa6h5voQmWovGHnr
 
 ## Equipe
@@ -10,13 +10,13 @@
 | Nome | Curso / período | Papel no projeto | LinkedIn / GitHub |
 |---|---|---|---|
 | Beatriz Menezes | Economia / 4º | Sugestões de funções e design | www.linkedin.com/in/beatriz-rangel-de-menezes-87a1b738a github: beatrizrmenezes|
-| Antônio Varejão | Engenharia de Produção / 3º| Sugestões de funções e organizaçao | https://www.linkedin.com/in/ant%C3%B4nio-varej%C3%A3o-734a68421/ github: antoniovarejao |
-| Rafael Sanches | Engenharia de computação / 3º  | desenvolvimento do site e orginazao | https://www.linkedin.com/in/rafael-sanches-05536a436/ github: rafasanches10 |
-| [PREENCHER] | [PREENCHER] | [PREENCHER] | [PREENCHER] |
+| Antônio Varejão | Engenharia de Produção / 3º | Sugestões de funções e organização | https://www.linkedin.com/in/ant%C3%B4nio-varej%C3%A3o-734a68421/ github: antoniovarejao |
+| Rafael Sanches | Engenharia de computação / 3º | Desenvolvimento do site e organização | https://www.linkedin.com/in/rafael-sanches-05536a436/ github: rafasanches10 |
+| Luiz José Vieira da Cruz | Inteligência Artificial / 3º | Programação com Claude Code e Design | https://www.linkedin.com/in/luiz-jos%C3%A9-vieira-da-cruz/ / https://github.com/Luix-2007 |
 
 ## O problema
 
-No dia em que sai uma ata do Copom, o economista-chefe precisa saber em poucos minutos três coisas: se o Banco Central ficou mais duro ou mais brando, o que mudou em relação à ata anterior e o que isso pode significar para os juros. As atas são longas, técnicas e muito parecidas entre si. A mudança que importa costuma ser uma única palavra. E ninguém aceita resumo sem fonte.
+No dia em que sai uma ata do Copom, o economista-chefe precisa saber em poucos minutos três coisas: se o Banco Central ficou mais "hawkish" ou mais "dovish", o que mudou em relação à ata anterior e o que isso pode significar para os juros. As atas são longas, técnicas e muito parecidas entre si. A mudança que importa costuma ser uma única palavra. E ninguém aceita resumo sem fonte.
 
 ## A solução
 
