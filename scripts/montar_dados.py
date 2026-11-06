@@ -92,6 +92,11 @@ impacto = {
 
 saida = {"atas": tom, "concordancia": T["concordancia"], "agregacao": T["agregacao"], "focus_origem": focus_origem, "mudancas": mudancas, "contraponto": contraponto, "inalterado": inalterado,
          "selic": selic, "focus": focus, "impacto": impacto,
-         "ata_publicada": {"279": "2026-06-23", "280": "2026-08-11", "281": "2026-09-22", "282": "2026-11-10"}}
+         # datas de publicação: API do site do BC (copom/atas), conferidas em 06/11/2026
+         "ata_publicada": {"276": "2026-02-03", "277": "2026-03-24", "278": "2026-05-05",
+                           "279": "2026-06-23", "280": "2026-08-11", "281": "2026-09-22"},
+         # decisão já anunciada cuja ata ainda não saiu (comunicado do Copom, conferido no site do BC em 06/11/2026)
+         "proxima": {"reuniao": 282, "data": "2026-11-04", "selic": 13.75, "decisao": "manteve",
+                     "ata_prevista": "2026-11-10", "fonte": "https://www.bcb.gov.br/publicacoes/comunicadoscopom"}}
 json.dump(saida, open(BASE / "dados" / "site_data.json", "w"), ensure_ascii=False)
 print("ok", len(json.dumps(saida, ensure_ascii=False)) // 1024, "KB")
