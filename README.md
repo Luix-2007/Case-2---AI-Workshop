@@ -30,7 +30,9 @@ Um site que **traduz as atas do Copom para quem decide**. Cada nota, cada mudan�
 | **Pergunte às atas** | Chat com o Claude que responde só com base nas atas. Cada citação passa por uma conferência automática (✓ trecho conferido / ⚠ não literal). O usuário também pode **subir uma ata nova em PDF**, como a 282ª, e medir o tom dela com a mesma régua |
 | **Como medimos** | A régua, os pesos (que o usuário pode alterar para ver o índice recalcular) e as checagens feitas |
 
-[PREENCHER: prints do site]
+<img width="959" height="453" alt="image" src="https://github.com/user-attachments/assets/6af9f62b-7a89-4cbf-a6a4-480bcb3f1daa" />
+<img width="959" height="455" alt="image" src="https://github.com/user-attachments/assets/0b5bf098-c749-47a7-8219-937db053cd57" />
+
 
 ### Resultado: índice de tom (−2 brando · +2 duro)
 
