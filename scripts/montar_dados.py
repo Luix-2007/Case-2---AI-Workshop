@@ -85,9 +85,10 @@ impacto = {
  "texto": [
   "A 281ª ata suavizou o diagnóstico: inflação ao consumidor abaixo do teto, desaceleração confirmada pelo PIB e pelo crédito, e a desancoragem das expectativas deixou de ser “adicional”. Mas as seções de discussão e decisão (C e D) ficaram praticamente iguais às de agosto. A leitura é de continuidade do ritmo de 0,25 ponto por reunião, sem sinal de aceleração.",
   "Para os juros futuros curtos, isso pode sustentar a aposta em mais cortes. O mercado já ia nessa direção: a mediana do Focus para a Selic no fim de 2026 caiu de 13,75% (08/09) para 13,50% (21/09, um dia antes da ata, após o comunicado) e para 13,25% em 13/10.",
-  "O risco está escrito na própria ata: câmbio “persistentemente mais depreciado” é um dos riscos de alta (§13). Depois da alta do dólar pós-eleição, as opções de Copom da B3 passaram a indicar cerca de 63% de chance de pausa em 4/11 (fechamento de 26/10), e o Focus voltou a 13,50% em 03/11. A ata da 282ª reunião, prevista para 10/11, dirá se o tom endureceu."],
+  "O risco está escrito na própria ata: câmbio “persistentemente mais depreciado” é um dos riscos de alta (§13). Depois da alta do dólar pós-eleição, as opções de Copom da B3 passaram a indicar cerca de 63% de chance de pausa em 4/11 (fechamento de 26/10), e o Focus voltou a 13,50% (dados de 30/10). Na 282ª reunião, em 04/11, o Copom de fato manteve a Selic em 13,75%, interrompendo os cortes (comunicado do BC). A ata dessa reunião, esperada para 10/11 (padrão de 6 dias após a reunião), dirá o quanto o tom endureceu."],
  "risco_trecho": tem(281, 13, "por meio de uma taxa de câmbio persistentemente mais depreciada"),
- "fontes": ["https://rankia.com.br/copom-4-novembro-selic-manutencao-63-opcoes-b3/"]}
+ "fontes": ["https://rankia.com.br/copom-4-novembro-selic-manutencao-63-opcoes-b3/",
+            "https://www.bcb.gov.br/publicacoes/comunicadoscopom"]}
 
 saida = {"atas": tom, "concordancia": T["concordancia"], "agregacao": T["agregacao"], "focus_origem": focus_origem, "mudancas": mudancas, "contraponto": contraponto, "inalterado": inalterado,
          "selic": selic, "focus": focus, "impacto": impacto,

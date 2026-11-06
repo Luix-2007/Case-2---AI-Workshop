@@ -8,7 +8,8 @@ Régua (aplicada a cada parágrafo):
  -2 muito brando: sinaliza corte de juros com ênfase
 
 Cada entrada: (nota, tema, trecho exato da ata que justifica a nota).
-Classificação feita pelo Claude e revisada pelo time (ver validacao_manual.csv).
+Segunda classificação feita pelo Claude, usada para medir a consistência da régua
+contra o agente (scripts/indice.py). Não é validação humana.
 """
 
 C = {

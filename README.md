@@ -74,17 +74,18 @@ O tom ficou mais duro enquanto a Selic caía. O Copom cortou em todas as reuniõ
 ## Dados usados
 
 - **Atas do Copom** 276ª a 281ª (PDF), do repositório do workshop. Fonte: [Banco Central do Brasil](https://www.bcb.gov.br/publicacoes/atascopom). A data da reunião é diferente da data de publicação da ata (por exemplo, a 281ª reunião foi em 16/09 e a ata saiu em 22/09).
-- **Selic meta**: o valor do parágrafo de decisão de cada ata (conferido por script). `scripts/dados_bcb.py` baixa a série 432 do SGS.
-- **Focus**: mediana da Selic esperada para o **fim de 2026**, que não é a expectativa para a próxima reunião. `scripts/dados_bcb.py` baixa os dados oficiais com `python-bcb`. Enquanto o CSV oficial não for gerado, o site usa 12 pontos de notícias que citam o boletim (fontes listadas em `scripts/montar_dados.py` e no rodapé do site).
+- **Selic meta**: o valor do parágrafo de decisão de cada ata (conferido por script). `scripts/dados_bcb.py` baixa a série 432 do SGS (`dados/selic_meta.csv`, até 06/11/2026). A 282ª reunião (04/11/2026) **manteve a Selic em 13,75%**, segundo o comunicado do Copom. A ata dela ainda não foi publicada.
+- **Focus**: mediana da Selic esperada para o **fim de 2026**, que não é a expectativa para a próxima reunião. Fonte: **Banco Central do Brasil, API Olinda**, via `scripts/dados_bcb.py` (`python-bcb`), `baseCalculo = 0`. São 208 pontos de 02/01 a **30/10/2026** (`dados/focus_selic.csv`).
 
 ## Como verificamos os resultados
 
 1. **Trechos existem?** `agente_tom.py --conferir` procura cada um dos 119 trechos citados no texto do parágrafo, ignorando espaços quebrados pelo PDF. Resultado: 119 de 119 encontrados. O chat faz a mesma conferência em cada resposta (✓ ou ⚠).
-2. **Segunda leitura independente.** Um revisor classificou os 119 parágrafos sem ver as notas do agente (`scripts/classificacao_revisor.py`). As notas foram idênticas em 91 (76%) e diferiram em no máximo 1 ponto em 115 (97%). Os índices seguem a mesma tendência. As discordâncias se concentram em parágrafos mistos (por exemplo, "inflação cedendo, mas acima da meta").
+2. **Segunda leitura (consistência da régua).** Uma segunda classificação dos 119 parágrafos, **também feita pelo Claude** (`scripts/classificacao_revisor.py`), foi comparada com a do agente. As notas foram idênticas em 91 (76%) e diferiram em no máximo 1 ponto em 115 (97%). Os índices seguem a mesma tendência. As discordâncias se concentram em parágrafos mistos (por exemplo, "inflação cedendo, mas acima da meta"). Como as duas leituras são do Claude, isso mede a consistência da régua. A validação humana é o item 7.
 3. **Selic conferida na fonte.** O valor da Selic de cada reunião foi conferido contra o parágrafo de decisão da própria ata.
 4. **"Nada mudou" medido, não suposto.** Os parágrafos de orientação da 281ª (§15–§19) foram comparados com os da 280ª (§14–§18) por similaridade de texto: 100%.
-5. **Ajuste feito.** O agente manteve nota +2 no parágrafo de expectativas da 281ª, mesmo sem a palavra "adicional". Por isso o site descreve essa mudança como "palavra mais branda, mesma nota", e não como queda de nota.
-6. **Validação manual (time):** [PREENCHER — 10 parágrafos classificados às cegas pelo time e comparados].
+5. **Focus conferido em duas fontes.** Os 208 pontos do Focus de 2026 baixados com `python-bcb` são idênticos aos baixados direto da API Olinda (`scripts/baixar_dados_bcb.py`). A primeira versão do site usava 11 valores citados em notícias. Todos batiam com o dado oficial, e foram trocados pela fonte primária.
+6. **Ajuste feito.** O agente manteve nota +2 no parágrafo de expectativas da 281ª, mesmo sem a palavra "adicional". Por isso o site descreve essa mudança como "palavra mais branda, mesma nota", e não como queda de nota.
+7. **Validação manual (time):** [PREENCHER — 10 parágrafos classificados às cegas pelo time e comparados].
 
 ## Como reproduzir
 
@@ -99,7 +100,7 @@ python scripts/agente_tom.py --conferir
 cd scripts && python indice.py && python montar_dados.py && python gerar_site.py
 ```
 
-**Ata nova** (ex.: 282ª, publicada em 10/11/2026): salvar o PDF como `dados/atas/ata_282_2026-11-04.pdf` e rodar o fluxo de novo, ou subir o PDF direto no chat do site.
+**Ata nova** (ex.: 282ª, reunião em 04/11/2026; a ata é esperada para 10/11, seguindo o padrão de publicação 6 dias após a reunião): salvar o PDF como `dados/atas/ata_282_2026-11-04.pdf` e rodar o fluxo de novo, ou subir o PDF direto no chat do site.
 
 ## Limitações e próximos passos
 

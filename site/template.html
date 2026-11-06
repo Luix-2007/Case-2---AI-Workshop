@@ -255,7 +255,7 @@ footer{padding:28px 0 48px;font-size:13px;color:var(--muted)}
     <div>
       <p><b>Agregação.</b> Média ponderada só dos parágrafos com nota diferente de zero. Peso 2 nas seções C (discussão da política) e D (decisão), peso 1 em A e B. Parágrafos neutros diluíam o sinal, e é em C e D que o Copom sinaliza os próximos passos. A média simples de todos os parágrafos aparece na aba de cada ata e conta a mesma história.</p>
       <p><b>Quem classifica.</b> Um agente lê cada ata e dá a nota de cada parágrafo seguindo a régua do arquivo <code>parametros.json</code>, sempre com o trecho que sustenta a nota. Um script confere se cada um dos <span class="num" id="n-trechos"></span> trechos existe na ata, ignorando espaços quebrados pelo PDF: <span class="num" id="n-ok"></span> encontrados.</p>
-      <p><b>Segunda leitura.</b> Um revisor classificou os mesmos parágrafos de forma independente. <span id="conc"></span></p>
+      <p><b>Segunda leitura.</b> Uma segunda classificação dos mesmos parágrafos, também feita pelo Claude, foi comparada com a do agente. Ela mede a consistência da régua, mas não substitui a validação humana. <span id="conc"></span></p>
       <p><b>Limitações.</b> A nota é um julgamento, mesmo com régua fixa. <span id="focus-lim"></span> Mudança de tom não é mudança de juros.</p>
     </div>
   </div>
@@ -358,7 +358,7 @@ $("#same").innerHTML = `<b>O que não mudou:</b> os parágrafos de orientação 
 
 /* impact */
 $("#imp-title").textContent = D.impacto.manchete;
-$("#imp-text").innerHTML = D.impacto.texto.map(t => `<p>${esc(t)}</p>`).join("") + `<p class="status">Trecho de risco: “${esc(D.impacto.risco_trecho)}” (281ª §13). Opções de Copom: <a href="${D.impacto.fontes[0]}">Rankia, 26/10</a>.</p>`;
+$("#imp-text").innerHTML = D.impacto.texto.map(t => `<p>${esc(t)}</p>`).join("") + `<p class="status">Trecho de risco: “${esc(D.impacto.risco_trecho)}” (281ª §13). Opções de Copom: <a href="${D.impacto.fontes[0]}">Rankia, 26/10</a>. Decisão da 282ª: <a href="${D.impacto.fontes[1]}">comunicado do Copom, 04/11</a>.</p>`;
 
 /* explorer */
 function showAta(r) {
