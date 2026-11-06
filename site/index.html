@@ -7,321 +7,365 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-/* Layout: painel em abas. Cada aba responde uma pergunta da economista-chefe; resumo antes do detalhe.
-   Cor = régua do Copom: pomba (brando, azul-petróleo) ↔ falcão (duro, vermelhão), neutros com viés verde-escuro. */
+/* Direção: "papel-moeda do Banco Central". Fundo de cédula com guilhoché, numerais condensados de nota de real,
+   faixa de cotações de terminal. Dados em escala divergente pomba (azul-petróleo) ↔ falcão (vermelhão); dourado de
+   fio de segurança só para seleção e destaque de interface. Layout: painel em abas, número antes do texto. */
 :root{
-  --bg:#f3f5f3; --surface:#ffffff; --sunk:#e9edea; --ink:#15201e; --muted:#5b6865; --line:#d6ddd9;
-  --accent:#0f3d3e; --accent-ink:#ffffff;
-  --dove:#1d6f8a; --dove-soft:#d9ebf1; --hawk:#c2410c; --hawk-soft:#fbe3d6;
-  --ok:#2f7d4f; --warn:#a15c00; --warn-soft:#f6e7cf;
-  --display:"Newsreader", Georgia, "Times New Roman", serif;
-  --body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --bg:#eceee7; --paper:#f6f7f2; --sunk:#e2e6dd; --ink:#0f1f1b; --muted:#5b6b65; --line:#cfd6cc; --line-2:#b8c3b8;
+  --dove:#0f5e7a; --dove-2:#8bbccc; --hawk:#cf4512; --hawk-2:#f1a882; --neu:#c3cbc2;
+  --gold:#9a7520; --gold-soft:#efe3c2; --ok:#2b7a4b; --warn:#a05a00; --warn-soft:#f6e6cb; --on-strong:#ffffff;
+  --display:"Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+  --body:"Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+  --ease:cubic-bezier(.2,.8,.2,1);
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0f1514; --surface:#172120; --sunk:#121a19; --ink:#e6ecea; --muted:#9ba8a5; --line:#2a3735;
-  --accent:#9fd3c7; --accent-ink:#0f1514;
-  --dove:#62b6d1; --dove-soft:#163541; --hawk:#f08a52; --hawk-soft:#3e2315;
-  --ok:#6cc08f; --warn:#e3a54a; --warn-soft:#3a2a12; color-scheme:dark;}}
+  --bg:#0a1412; --paper:#101d1a; --sunk:#0d1816; --ink:#e7eee9; --muted:#8fa39b; --line:#203330; --line-2:#2d4541;
+  --dove:#4fb6da; --dove-2:#1f5567; --hawk:#ff7a3d; --hawk-2:#6e3018; --neu:#2c3d39;
+  --gold:#e0b95c; --gold-soft:#3a3018; --ok:#6cc58f; --warn:#e8a64a; --warn-soft:#3b2a12; --on-strong:#0a1412; color-scheme:dark;}}
 :root[data-theme="dark"]{
-  --bg:#0f1514; --surface:#172120; --sunk:#121a19; --ink:#e6ecea; --muted:#9ba8a5; --line:#2a3735;
-  --accent:#9fd3c7; --accent-ink:#0f1514;
-  --dove:#62b6d1; --dove-soft:#163541; --hawk:#f08a52; --hawk-soft:#3e2315;
-  --ok:#6cc08f; --warn:#e3a54a; --warn-soft:#3a2a12; color-scheme:dark;}
+  --bg:#0a1412; --paper:#101d1a; --sunk:#0d1816; --ink:#e7eee9; --muted:#8fa39b; --line:#203330; --line-2:#2d4541;
+  --dove:#4fb6da; --dove-2:#1f5567; --hawk:#ff7a3d; --hawk-2:#6e3018; --neu:#2c3d39;
+  --gold:#e0b95c; --gold-soft:#3a3018; --ok:#6cc58f; --warn:#e8a64a; --warn-soft:#3b2a12; --on-strong:#0a1412; color-scheme:dark;}
 
 *{box-sizing:border-box}
 html,body{margin:0}
 [hidden]{display:none!important}
-body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body);}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
-a{color:var(--accent)}
-.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-h1,h2,h3{font-family:var(--display);font-weight:600;text-wrap:balance;margin:0}
-h1{font-size:clamp(30px,4.2vw,44px);line-height:1.06}
-h2{font-size:clamp(24px,3vw,30px);line-height:1.12}
-h3{font-size:19px;line-height:1.25}
-p{margin:0}
+body{background:var(--bg);color:var(--ink);font:15.5px/1.5 var(--body);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:20;background:var(--paper)}
+a{color:inherit}
+button{font-family:var(--body);color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .num{font-family:var(--mono);font-variant-numeric:tabular-nums}
-.kicker{font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.lede{max-width:66ch;color:var(--muted)}
-.status{font-size:13px;color:var(--muted)}
-.stack{display:grid;gap:16px}
-:focus-visible{outline:2px solid var(--hawk);outline-offset:2px}
-button{font-family:var(--body)}
+.big{font-family:var(--display);font-weight:800;line-height:.9;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.lbl{font:500 11px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.hawk{color:var(--hawk)} .dove{color:var(--dove)} .flat{color:var(--muted)}
+h1,h2,h3{margin:0;font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.005em;text-wrap:balance}
+h2{font-size:clamp(28px,3.4vw,40px);line-height:.95}
+h3{font-size:20px;line-height:1}
+p{margin:0}
 
-/* header + abas */
-header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--line)}
-.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:12px 0;flex-wrap:wrap}
-.brand{font:600 21px/1 var(--display);display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-.brand small{font:500 11px var(--mono);letter-spacing:.06em;color:var(--muted)}
-.live{display:inline-flex;align-items:center;gap:8px;font:500 12px var(--mono);color:var(--warn);background:var(--warn-soft);padding:4px 10px;border-radius:999px;text-decoration:none}
-.live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--warn)}
-nav.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin-top:8px}
+/* ===== topo ===== */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:15;background:var(--paper);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:10px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand .seal{width:30px;height:30px;flex:none}
+.brand b{font:800 22px/1 var(--display);letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+.brand small{font:500 10.5px var(--mono);letter-spacing:.12em;color:var(--muted);display:block;margin-top:2px}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
 nav.tabs::-webkit-scrollbar{display:none}
-nav.tabs a{flex:none;padding:10px 14px 12px;font:500 14px var(--body);color:var(--muted);text-decoration:none;border-bottom:3px solid transparent}
+nav.tabs a{flex:none;text-decoration:none;font:600 13px var(--body);padding:8px 12px;border-radius:999px;color:var(--muted);border:1px solid transparent;transition:color .2s,background .2s}
 nav.tabs a:hover{color:var(--ink)}
-nav.tabs a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent)}
-nav.tabs a b{font:500 11px var(--mono);color:var(--muted);margin-right:6px}
+nav.tabs a[aria-current="page"]{color:var(--ink);background:var(--gold-soft);border-color:var(--gold)}
+.ticker{border-top:1px solid var(--line);background:var(--ink);color:var(--paper);overflow:hidden;white-space:nowrap}
+.ticker-track{display:inline-flex;gap:36px;padding-block:7px;animation:tick 48s linear infinite;font:500 12px var(--mono);letter-spacing:.04em}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker span b{font-weight:700} .ticker .u{color:var(--hawk-2)} .ticker .d{color:var(--dove-2)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ticker .u{color:var(--hawk)} :root:not([data-theme="light"]) .ticker .d{color:var(--dove)}}
+:root[data-theme="dark"] .ticker .u{color:var(--hawk)} :root[data-theme="dark"] .ticker .d{color:var(--dove)}
+@keyframes tick{to{transform:translateX(-50%)}}
 
-main{padding-block:28px 40px}
-.view{display:grid;gap:28px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:18px 20px;min-width:0}
-.section-head{display:grid;gap:8px}
+main{padding-block:28px 56px}
+.view{display:grid;gap:22px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:20px;min-width:0;position:relative}
+.card-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
 
-/* panorama: hero */
-.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px;align-items:center}
-.hero .lede{margin-top:12px;font-size:17px}
-.dial{display:grid;justify-items:center;gap:4px}
-.dial svg{width:100%;max-width:360px;height:auto;display:block}
-.dial-read{font:600 15px var(--body);text-align:center}
-.dial-read span{display:block;font:400 13px var(--body);color:var(--muted);margin-top:2px}
-.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
-.tiles > div{background:var(--surface);padding:14px 16px;display:grid;gap:2px;align-content:start}
-.tiles b{font:600 26px/1.1 var(--mono);font-variant-numeric:tabular-nums}
-.tiles .d{font:500 12px var(--mono)}
-.tiles span{font-size:13px;color:var(--muted)}
-.up{color:var(--hawk)} .down{color:var(--dove)} .flat{color:var(--muted)}
+/* ===== hero ===== */
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:24px;align-items:center;padding:28px;overflow:hidden;background:var(--paper);border:1px solid var(--line);border-radius:4px}
+.hero::after{content:"";position:absolute;inset:auto 0 0 0;height:4px;background:linear-gradient(90deg,var(--dove) 0 50%,var(--hawk) 50% 100%)}
+.hero h1{font-size:clamp(46px,7.2vw,96px);line-height:.86;margin-top:14px}
+.hero h1 em{font-style:normal;color:var(--hawk)}
+.hero .sub{margin-top:16px;font-size:16px;max-width:46ch;color:var(--muted)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.chip{display:inline-flex;align-items:center;gap:6px;font:500 12px var(--mono);padding:5px 10px;border-radius:999px;border:1px solid var(--line-2);background:var(--bg)}
+.chip i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.gauge-box{position:relative;display:grid;place-items:center;min-height:330px}
+.guilloche{position:absolute;inset:-40px;width:calc(100% + 80px);height:calc(100% + 80px);opacity:.55;pointer-events:none}
+.guilloche path{fill:none;stroke:var(--line-2);stroke-width:.6}
+.spin{transform-origin:50% 50%;animation:spin 140s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#gauge{position:relative;width:100%;max-width:420px;height:auto}
+.needle{transform-origin:210px 210px;transition:transform 1.4s var(--ease)}
 
-/* gráfico */
-.chart-scroll{overflow-x:auto;margin-top:12px}
-.chart-scroll svg{display:block;min-width:560px;width:100%;height:auto}
-.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:8px}
-.legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+/* ===== KPIs ===== */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.kpi{background:var(--paper);padding:16px 18px 12px;display:grid;gap:6px;align-content:start;min-width:0}
+.kpi .v{font-size:clamp(40px,4.6vw,56px)}
+.kpi .d{font:600 12px var(--mono);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.kpi svg{width:100%;height:34px;display:block;overflow:visible}
+
+/* ===== gráficos ===== */
+.chart-scroll{overflow-x:auto}
+.chart-scroll svg{display:block;width:100%;min-width:600px;height:auto}
+svg text{font-family:var(--mono)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font:500 12px var(--mono);color:var(--muted)}
+.legend i{display:inline-block;width:14px;height:10px;margin-right:6px;vertical-align:-1px;border-radius:1px}
+.draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.8s var(--ease) .2s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.grow{transform-box:fill-box;animation:grow .9s var(--ease) both}
+.grow.up{transform-origin:50% 100%} .grow.dn{transform-origin:50% 0%}
+@keyframes grow{from{transform:scaleY(0)}}
+.pop{animation:pop .5s var(--ease) both}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--paper);font:500 12px/1.45 var(--mono);padding:8px 10px;border-radius:3px;white-space:nowrap;z-index:5;transform:translate(-50%,-110%)}
+
+/* mapa de calor e impressões digitais */
+.heat{display:grid;gap:4px}
+.heat-row{display:grid;grid-template-columns:116px repeat(var(--n),minmax(0,1fr));gap:4px;align-items:center}
+.heat-row .h{font:500 11px var(--mono);color:var(--muted);letter-spacing:.04em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cell{height:44px;border-radius:2px;display:grid;place-items:center;font:700 13px var(--mono);font-variant-numeric:tabular-nums;animation:pop .5s var(--ease) both}
+.heat-row.head .h2{font:600 12px var(--mono);text-align:center;color:var(--ink)}
+.prints{display:grid;gap:10px}
+.print{display:grid;grid-template-columns:54px minmax(0,1fr) 58px;gap:10px;align-items:center;cursor:pointer;border:0;background:none;padding:4px 0;text-align:left}
+.print:hover .sq{transform:scaleY(1.15)}
+.print .r{font:800 20px/1 var(--display)}
+.print .v{font:700 13px var(--mono);text-align:right}
+.sqs{display:flex;gap:2px;height:26px}
+.sq{flex:1;border-radius:1px;transition:transform .2s var(--ease);animation:pop .4s var(--ease) both}
+.scale{display:flex;gap:2px;align-items:center;font:500 11px var(--mono);color:var(--muted)}
+.scale i{width:18px;height:10px;display:inline-block;border-radius:1px}
 
 /* destaques */
-.insights{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.insight{display:grid;gap:6px;align-content:start;padding:18px 20px;border-radius:8px;background:var(--surface);border:1px solid var(--line)}
-.insight .big{font:600 34px/1 var(--mono);font-variant-numeric:tabular-nums}
-.insight h3{font-size:18px}
-.insight p{font-size:14.5px;color:var(--muted)}
-
-/* trilha das 6 atas */
-.trail{display:grid;grid-template-columns:repeat(var(--cols,6),minmax(0,1fr));gap:8px}
-.trail button{all:unset;cursor:pointer;display:grid;gap:6px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
-.trail button:hover{border-color:var(--accent)}
-.trail button:focus-visible{outline:2px solid var(--hawk);outline-offset:2px}
-.trail .t1{font:600 15px var(--mono)}
-.trail .t2{font-size:12px;color:var(--muted)}
-.trail .tbar{height:6px;border-radius:3px;background:var(--sunk);position:relative;overflow:hidden}
-.trail .tbar i{position:absolute;top:0;bottom:0;border-radius:3px}
-.trail .tv{font:500 13px var(--mono)}
-.trail .ghost-next{border-style:dashed;cursor:default;background:transparent}
+.fact{display:grid;gap:8px;align-content:start;padding:20px;border-top:4px solid var(--ink);background:var(--paper);border-radius:0 0 4px 4px;border-left:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.fact .big{font-size:clamp(52px,6vw,76px)}
+.fact h3{font-size:18px}
+.fact p{font-size:14px;color:var(--muted)}
 
 /* impacto */
-.impact{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px}
-.impact .txt{display:grid;gap:12px;max-width:66ch}
-.channels{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-content:start}
-.channels div{background:var(--sunk);border-radius:6px;padding:10px 12px;font-size:14px}
-.channels b{display:block;font:500 12px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
-details.more summary{cursor:pointer;color:var(--accent);font-size:14px;font-weight:500}
-details.more[open] summary{margin-bottom:10px}
+.impact{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:22px;align-items:start}
+.impact .head{font:800 clamp(30px,3.6vw,46px)/.92 var(--display);text-transform:uppercase}
+.chans{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chan{border:1px solid var(--line);border-radius:4px;padding:12px 14px;background:var(--bg);display:grid;gap:4px}
+.chan .t{display:flex;justify-content:space-between;align-items:center}
+.chan .arrow{font:700 18px var(--mono)}
+.chan p{font-size:13.5px;color:var(--muted)}
+details.more summary{cursor:pointer;font:600 13px var(--mono);color:var(--gold);list-style:none;margin-top:12px}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::before{content:"+ "}
+details.more[open] summary::before{content:"− "}
+details.more .body{display:grid;gap:10px;margin-top:10px;font-size:14.5px;max-width:64ch}
 
-/* seletor de ata */
-.picker{display:flex;gap:6px;flex-wrap:wrap}
-.picker button{display:grid;gap:2px;justify-items:start;min-width:92px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);cursor:pointer;text-align:left}
-.picker button b{font:600 15px var(--mono)}
-.picker button span{font:500 12px var(--mono)}
-.picker button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.picker button[aria-pressed="true"] span{color:var(--accent-ink)}
-.ata-sum{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);gap:16px}
-.facts{display:grid;gap:8px;font-size:14px}
-.facts div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding-bottom:6px}
-.facts div:last-child{border-bottom:0}
-.facts dt,.facts span:first-child{color:var(--muted)}
-.dist{display:flex;height:22px;border-radius:5px;overflow:hidden;margin-top:12px;background:var(--sunk)}
-.dist i{display:block;height:100%}
-.dist-l{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:8px;font:500 12px var(--mono);color:var(--muted);text-align:center}
-.secbars{display:grid;gap:10px;margin-top:12px}
-.secbar{display:grid;grid-template-columns:22px 1fr 50px;gap:8px;align-items:center;font:500 13px var(--mono)}
-.secbar .track{position:relative;height:12px;background:var(--sunk);border-radius:3px}
-.secbar .track::after{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--muted)}
-.secbar .track i{position:absolute;top:0;bottom:0;border-radius:3px}
-.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.seg{display:inline-flex;flex-wrap:wrap;max-width:100%;border:1px solid var(--line);border-radius:7px;overflow:hidden;background:var(--surface)}
-.seg button{border:0;background:transparent;color:var(--ink);padding:7px 11px;font:500 13px var(--body);cursor:pointer;border-right:1px solid var(--line)}
-.seg button:last-child{border-right:0}
-.seg button[aria-pressed="true"]{background:var(--sunk);color:var(--ink);box-shadow:inset 0 -2px 0 var(--accent)}
-input[type=search],input[type=text],textarea{font:15px var(--body);padding:9px 12px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--ink);min-width:0}
-input[type=search]{flex:1 1 200px}
-
-/* parágrafos */
-.paras{display:grid;gap:8px}
-.sec-label{font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:12px;display:flex;justify-content:space-between;gap:10px}
-.para{display:grid;grid-template-columns:46px minmax(0,1fr);gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
-.score{font:600 15px var(--mono);text-align:center;border-radius:5px;padding:6px 0;height:fit-content}
-.s2{background:var(--hawk);color:var(--surface)} .s1{background:var(--hawk-soft);color:var(--hawk)} .s0{background:var(--sunk);color:var(--muted)}
-.s-1{background:var(--dove-soft);color:var(--dove)} .s-2{background:var(--dove);color:var(--surface)}
-.para .meta{font:12px var(--mono);color:var(--muted);display:flex;gap:10px;flex-wrap:wrap}
-.para .q{font:16px/1.5 var(--display);margin-top:4px}
-.para .why{font-size:13.5px;color:var(--muted);margin-top:4px}
-.para details summary{cursor:pointer;color:var(--muted);font-size:13px;margin-top:6px}
-.para details div{font-size:14.5px;margin-top:6px;max-width:80ch}
-.para mark{background:var(--hawk-soft);color:inherit;padding:0 2px;border-radius:2px}
-.para.dv mark{background:var(--dove-soft)}
-.para.n0 mark{background:transparent;text-decoration:underline dotted}
+/* ===== ata por ata ===== */
+.picker{display:grid;grid-template-columns:repeat(var(--n,6),minmax(0,1fr));gap:8px}
+.pick{border:1px solid var(--line);background:var(--paper);border-radius:4px;padding:10px 12px;cursor:pointer;display:grid;gap:4px;text-align:left;position:relative;overflow:hidden}
+.pick .r{font:800 26px/1 var(--display)}
+.pick .v{font:700 13px var(--mono)}
+.pick .bar{height:4px;background:var(--sunk);position:relative;border-radius:2px}
+.pick .bar i{position:absolute;top:0;bottom:0;border-radius:2px}
+.pick[aria-pressed="true"]{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold);background:var(--gold-soft)}
+.ata-top{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1fr) minmax(0,1.1fr);gap:22px}
+.score-big{font-size:clamp(72px,9vw,120px)}
+.facts-l{display:grid;gap:6px;margin-top:12px;font:500 13px var(--mono)}
+.facts-l div{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--line);padding-bottom:5px}
+.facts-l span{color:var(--muted)}
+.donut-wrap{display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center}
+.donut-wrap svg{width:150px;height:150px}
+.dl{display:grid;gap:5px;font:500 12px var(--mono)}
+.dl div{display:flex;align-items:center;gap:8px}
+.dl i{width:12px;height:12px;border-radius:2px;display:inline-block}
+.hbars{display:grid;gap:9px}
+.hbar{display:grid;grid-template-columns:96px 1fr 46px;gap:10px;align-items:center;font:500 12px var(--mono)}
+.hbar .track{position:relative;height:14px;background:var(--sunk);border-radius:2px}
+.hbar .track::after{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--line-2)}
+.hbar .track i{position:absolute;top:0;bottom:0;border-radius:2px;animation:pop .6s var(--ease) both}
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.seg{display:inline-flex;flex-wrap:wrap;max-width:100%;border:1px solid var(--line-2);border-radius:999px;overflow:hidden;background:var(--paper)}
+.seg button{border:0;background:none;padding:7px 12px;font:600 12px var(--body);cursor:pointer;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+input[type=search],input[type=text],textarea{font:14.5px var(--body);padding:9px 14px;border:1px solid var(--line-2);border-radius:999px;background:var(--paper);color:var(--ink);min-width:0}
+textarea{border-radius:6px}
+input[type=search]{flex:1 1 220px}
+.paras{display:grid;gap:6px}
+.sec-l{display:flex;justify-content:space-between;gap:10px;font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:14px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.para{display:grid;grid-template-columns:52px minmax(0,1fr);background:var(--paper);border:1px solid var(--line);border-radius:4px;overflow:hidden;animation:pop .35s var(--ease) both}
+.para .sc{display:grid;place-items:center;font:800 24px/1 var(--display)}
+.para .bd{padding:10px 14px;min-width:0}
+.para .meta{display:flex;gap:12px;flex-wrap:wrap;font:500 11.5px var(--mono);color:var(--muted)}
+.para .q{font-size:15.5px;margin-top:3px;font-weight:500}
+.para .why{font-size:13px;color:var(--muted);margin-top:3px}
+.para details summary{cursor:pointer;font:500 12px var(--mono);color:var(--gold);margin-top:6px}
+.para details div{font-size:14px;margin-top:6px;max-width:82ch;color:var(--muted)}
+.para mark{background:var(--gold-soft);color:var(--ink);padding:0 2px;border-radius:2px}
 .agree{color:var(--ok)} .disagree{color:var(--warn)}
-.empty{padding:20px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:8px}
+.empty{padding:22px;text-align:center;color:var(--muted);border:1px dashed var(--line-2);border-radius:4px}
 
-/* o que mudou */
-.cmp{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:16px}
-.cmp-big{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px}
-.cmp-big b{font:600 32px var(--mono)}
-.cmp-big .arrow{font:500 22px var(--mono);color:var(--muted)}
-table.mini{width:100%;border-collapse:collapse;font-size:14px}
-table.mini th,table.mini td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left}
-table.mini th{font:500 11px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-table.mini td.num{text-align:right}
+/* ===== o que mudou ===== */
+.vs{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.vs .big{font-size:clamp(64px,8vw,104px)}
+.vs .arrow{font:700 34px var(--mono);color:var(--muted)}
+.pill{display:inline-flex;font:700 12px var(--mono);padding:4px 10px;border-radius:999px;white-space:nowrap}
+.pill.dove{background:var(--dove);color:var(--on-strong)} .pill.hawk{background:var(--hawk);color:var(--on-strong)} .pill.neu{background:var(--sunk);color:var(--muted)}
 .changes{display:grid;gap:14px}
-.chg{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px 18px;display:grid;gap:12px}
-.chg-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
-.chg-head h3 .n{font:600 14px var(--mono);color:var(--muted);margin-right:8px}
-.pill{font:500 12px var(--mono);padding:3px 9px;border-radius:999px;white-space:nowrap}
-.pill.dove{background:var(--dove-soft);color:var(--dove)} .pill.hawk{background:var(--hawk-soft);color:var(--hawk)} .pill.neu{background:var(--sunk);color:var(--muted)}
-.diff{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.quote{font:15.5px/1.5 var(--display);margin:0;padding:10px 12px;border-radius:6px;background:var(--sunk)}
-.quote cite{display:block;font:500 11px var(--mono);font-style:normal;color:var(--muted);margin-bottom:4px;letter-spacing:.04em;text-transform:uppercase}
-.quote.gone{color:var(--muted)}
-.quote.gone span{text-decoration:line-through;text-decoration-thickness:1px}
-.chg .read{font-size:14.5px;color:var(--muted);max-width:75ch}
-.simrow{display:grid;grid-template-columns:150px 1fr 48px;gap:10px;align-items:center;font:13px var(--mono)}
-.simrow .track{height:8px;border-radius:4px;background:var(--sunk);overflow:hidden}
-.simrow .track i{display:block;height:100%;background:var(--accent)}
+.chg{display:grid;grid-template-columns:72px minmax(0,1fr);background:var(--paper);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.chg .idx{display:grid;place-items:center;font:900 44px/1 var(--display);color:var(--on-strong)}
+.chg .bd{padding:16px 18px;display:grid;gap:10px;min-width:0}
+.chg .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.diff{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dq{margin:0;padding:10px 12px;border-radius:3px;font-size:14.5px;border-left:3px solid}
+.dq cite{display:block;font:600 10.5px var(--mono);font-style:normal;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.dq.old{background:var(--sunk);border-color:var(--line-2);color:var(--muted)}
+.dq.old span{text-decoration:line-through;text-decoration-thickness:1px}
+.dq.new{background:var(--gold-soft);border-color:var(--gold)}
+.chg .read{font-size:13.5px;color:var(--muted)}
+.simrow{display:grid;grid-template-columns:160px 1fr 52px;gap:10px;align-items:center;font:500 12px var(--mono)}
+.simrow .track{height:10px;background:var(--sunk);border-radius:2px;overflow:hidden}
+.simrow .track i{display:block;height:100%;background:var(--ink);animation:fillx 1.2s var(--ease) both;transform-origin:left}
+@keyframes fillx{from{transform:scaleX(0)}}
 
-/* chat */
+/* ===== chat ===== */
 .chat{display:grid;grid-template-rows:auto auto 1fr auto;padding:0;overflow:hidden}
-.chat-tools{display:flex;gap:10px;flex-wrap:wrap;padding:12px 14px;border-bottom:1px solid var(--line);align-items:center;justify-content:space-between}
-.log{padding:16px;display:grid;gap:12px;max-height:540px;overflow-y:auto;min-height:220px;align-content:start}
+.chat-tools{display:flex;gap:10px;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--line);align-items:center;justify-content:space-between}
+.log{padding:18px;display:grid;gap:12px;max-height:560px;overflow-y:auto;min-height:240px;align-content:start;background:var(--bg)}
 .msg{max-width:78ch;min-width:0}
-.msg.u{justify-self:end;background:var(--accent);color:var(--accent-ink);padding:8px 12px;border-radius:10px 10px 2px 10px}
-.msg.a{background:var(--sunk);padding:12px 14px;border-radius:10px 10px 10px 2px}
+.msg.u{justify-self:end;background:var(--ink);color:var(--paper);padding:9px 14px;border-radius:14px 14px 2px 14px;font-weight:500}
+.msg.a{background:var(--paper);border:1px solid var(--line);padding:12px 14px;border-radius:14px 14px 14px 2px}
 .cites{margin-top:10px;display:grid;gap:6px}
-.cite{font-size:13.5px;border-left:3px solid var(--ok);padding:2px 0 2px 10px}
+.cite{font-size:13px;border-left:3px solid var(--ok);padding:2px 0 2px 10px}
 .cite.bad{border-left-color:var(--warn)}
-.cite b{font-family:var(--mono);font-weight:500}
-.chk{font:12px var(--mono);color:var(--ok)} .cite.bad .chk{color:var(--warn)}
-form.ask{display:flex;gap:8px;padding:12px 14px;border-top:1px solid var(--line)}
+.cite b{font-family:var(--mono)}
+.chk{font:600 11px var(--mono);color:var(--ok)} .cite.bad .chk{color:var(--warn)}
+form.ask{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--line)}
 form.ask input{flex:1}
 .sugs{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-button.primary{font:600 14px var(--body);padding:10px 16px;border-radius:7px;border:0;background:var(--accent);color:var(--accent-ink);cursor:pointer}
-button.ghost{font:500 13px var(--body);padding:7px 11px;border-radius:7px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;text-align:left}
-button:disabled{opacity:.5;cursor:default}
-.newata{padding:14px;border-bottom:1px solid var(--line);display:grid;gap:10px;background:var(--sunk)}
+button.primary{font:700 13px var(--body);padding:10px 18px;border-radius:999px;border:0;background:var(--ink);color:var(--paper);cursor:pointer;letter-spacing:.02em}
+button.ghost{font:500 12.5px var(--body);padding:7px 12px;border-radius:999px;border:1px solid var(--line-2);background:var(--paper);cursor:pointer;text-align:left}
+button:disabled{opacity:.45;cursor:default}
+.newata{padding:14px 16px;border-bottom:1px solid var(--line);display:grid;gap:10px;background:var(--sunk)}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.status{font-size:12.5px;color:var(--muted)}
 
-/* método */
-.method{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
-.method table{border-collapse:collapse;width:100%;font-size:14px}
-.method td,.method th{border-bottom:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
-.method th{font:500 11px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-.method p{font-size:15px}
-.checks{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.checks div{display:grid;gap:4px;padding:14px 16px;border-radius:8px;background:var(--surface);border:1px solid var(--line)}
-.checks b{font:600 24px var(--mono);color:var(--ok)}
+/* ===== método ===== */
+.checks{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.checks div{background:var(--paper);padding:16px 18px;display:grid;gap:4px}
+.checks .big{font-size:clamp(44px,5vw,60px);color:var(--ok)}
 .checks span{font-size:13px;color:var(--muted)}
-.prow{display:flex;gap:14px;flex-wrap:wrap;align-items:end;margin-top:12px;font-size:14px}
+.ruler{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}
+.ruler div{padding:12px;border-radius:3px;display:grid;gap:4px;align-content:start;min-width:0}
+.ruler b{font:900 34px/1 var(--display)}
+.ruler span{font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.ruler p{font-size:12.5px}
+.cm{display:grid;grid-template-columns:44px repeat(5,minmax(0,1fr));gap:3px;font:600 12px var(--mono)}
+.cm .c{height:40px;display:grid;place-items:center;border-radius:2px}
+.cm .hd{display:grid;place-items:center;color:var(--muted);font-weight:500}
+.prow{display:flex;gap:14px;flex-wrap:wrap;align-items:end;margin-top:12px;font-size:13px}
 .prow label{display:grid;gap:4px;color:var(--muted)}
-.prow input[type=number]{width:90px;font:15px var(--mono);padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink)}
+.prow input[type=number]{width:84px;font:600 15px var(--mono);padding:7px 10px;border:1px solid var(--line-2);border-radius:4px;background:var(--paper);color:var(--ink)}
 .prow .chkl{display:flex;align-items:center;gap:6px;color:var(--ink)}
 
-footer{border-top:1px solid var(--line);padding-block:22px 40px;font-size:13px;color:var(--muted)}
-footer p{max-width:90ch}
+footer{border-top:1px solid var(--line);padding-block:20px 44px;font-size:12.5px;color:var(--muted)}
+footer p{max-width:100ch}
 
-@media (max-width:900px){
-  .hero,.impact,.method,.cmp,.ata-sum{grid-template-columns:1fr}
-  .tiles,.checks{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .insights{grid-template-columns:1fr}
-  .trail{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:960px){
+  .bar{flex-wrap:wrap;row-gap:6px} nav.tabs{width:100%}
+  .hero,.impact,.grid2,.ata-top{grid-template-columns:1fr}
+  .kpis,.checks{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid3{grid-template-columns:1fr}
+  .picker{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .gauge-box{min-height:280px}
+  .ruler{grid-template-columns:repeat(5,minmax(110px,1fr));overflow-x:auto}
 }
-@media (max-width:560px){
-  .diff,.channels{grid-template-columns:1fr}
-  .trail{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .simrow{grid-template-columns:1fr 48px}.simrow .lab{grid-column:1/-1}
-  .brand small{display:none}
+@media (max-width:600px){
+  .bar{flex-wrap:wrap}
+  .hero{padding:20px}
+  .picker{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .diff,.chans{grid-template-columns:1fr}
+  .heat-row{grid-template-columns:64px repeat(var(--n),minmax(0,1fr))}
+  .simrow{grid-template-columns:1fr 52px}.simrow .lab{grid-column:1/-1}
+  .chg{grid-template-columns:44px minmax(0,1fr)}.chg .idx{font-size:28px}
+  .donut-wrap{grid-template-columns:1fr;justify-items:start}
 }
-@media (prefers-reduced-motion:no-preference){
-  .needle{transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .draw{stroke-dashoffset:0}
 }
 </style>
 </head>
 <body>
-<header class="top"><div class="wrap">
-  <div class="bar">
-    <div class="brand">Tradutor do Copom <small id="brand-sub">ATAS DO COPOM · 2026</small></div>
-    <a class="live" id="live" href="#mudou" hidden></a>
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="#panorama" aria-label="Tradutor do Copom, início">
+      <svg class="seal" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="14" fill="none" stroke="var(--ink)" stroke-width="1.5"/><path d="M4 15a11 11 0 0 1 11-11v22A11 11 0 0 1 4 15z" fill="var(--dove)"/><path d="M26 15a11 11 0 0 1-11 11V4a11 11 0 0 1 11 11z" fill="var(--hawk)"/></svg>
+      <span><b>Tradutor do Copom</b><small id="brand-sub">ATAS DO COPOM · 2026</small></span>
+    </a>
+    <nav class="tabs" aria-label="Seções do site">
+      <a href="#panorama" data-v="panorama">Panorama</a>
+      <a href="#atas" data-v="atas">Ata por ata</a>
+      <a href="#mudou" data-v="mudou">O que mudou</a>
+      <a href="#pergunte" data-v="pergunte">Pergunte às atas</a>
+      <a href="#metodo" data-v="metodo">Como medimos</a>
+    </nav>
   </div>
-  <nav class="tabs" aria-label="Seções do site">
-    <a href="#panorama" data-v="panorama">Panorama</a>
-    <a href="#atas" data-v="atas">Ata por ata</a>
-    <a href="#mudou" data-v="mudou">O que mudou</a>
-    <a href="#pergunte" data-v="pergunte">Pergunte às atas</a>
-    <a href="#metodo" data-v="metodo">Como medimos</a>
-  </nav>
-</div></header>
+  <div class="ticker" aria-label="Números-chave"><div class="ticker-track" id="ticker"></div></div>
+</header>
 
 <main class="wrap">
 
 <!-- PANORAMA -->
 <section class="view" id="v-panorama" aria-label="Panorama">
   <div class="hero">
-    <div>
-      <div class="kicker" id="hero-kicker"></div>
-      <h1 id="hero-title" style="margin-top:10px"></h1>
-      <p class="lede" id="hero-lede"></p>
+    <div style="position:relative;z-index:1">
+      <div class="lbl" id="hero-kicker"></div>
+      <h1>Corta os juros.<br><em>Fala como falcão.</em></h1>
+      <p class="sub" id="hero-sub"></p>
+      <div class="chips" id="hero-chips"></div>
     </div>
-    <div class="dial">
-      <div class="kicker">Índice de tom da ata mais recente</div>
-      <svg id="dial" viewBox="0 0 320 196" role="img" aria-label="Mostrador do índice de tom, de −2 a +2"></svg>
-      <div class="dial-read" id="dial-read"></div>
+    <div class="gauge-box">
+      <svg class="guilloche" viewBox="0 0 600 600" aria-hidden="true"><g class="spin" id="guil"></g></svg>
+      <svg id="gauge" viewBox="0 0 420 300" role="img" aria-label="Índice de tom da ata mais recente, de −2 a +2"></svg>
     </div>
   </div>
 
-  <div class="tiles" id="tiles"></div>
+  <div class="kpis" id="kpis"></div>
 
   <div class="card">
-    <div class="section-head">
-      <h2 id="chart-title">O tom endureceu enquanto a Selic caía</h2>
-      <p class="lede">Barras: índice de tom de cada ata. Linha em degraus: Selic meta. Linha tracejada: mediana do Focus para a Selic no <b>fim de 2026</b>, que não é a expectativa para a reunião seguinte.</p>
-    </div>
-    <div class="chart-scroll"><svg id="chart" viewBox="0 0 960 440" role="img" aria-label="Índice de tom por reunião, Selic meta e Focus"></svg></div>
-    <div class="legend"><span><i style="background:var(--hawk)"></i>tom duro (&gt; 0)</span><span><i style="background:var(--dove)"></i>tom brando (&lt; 0)</span><span><i style="background:var(--ink)"></i>Selic meta</span><span><i style="background:var(--muted)"></i>Focus: Selic no fim de 2026 (semanal)</span></div>
+    <div class="card-h"><h2>Tom × Selic × Focus</h2><div class="legend"><span><i style="background:var(--hawk)"></i>tom duro</span><span><i style="background:var(--dove)"></i>tom brando</span><span><i style="background:var(--ink);height:3px"></i>Selic meta</span><span><i style="background:var(--muted);height:3px"></i>Focus fim de 2026</span></div></div>
+    <div class="chart-scroll" style="position:relative"><svg id="chart" viewBox="0 0 980 440" role="img" aria-label="Índice de tom por reunião, Selic meta e Focus"></svg><div class="tip" id="tip" hidden></div></div>
   </div>
 
-  <div class="section-head"><div class="kicker">Três números que contam a história</div></div>
-  <div class="insights" id="insights"></div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-h"><h3>Onde o tom mora</h3><span class="lbl">nota média · seção × ata</span></div>
+      <div class="heat" id="heat"></div>
+    </div>
+    <div class="card">
+      <div class="card-h"><h3>Impressão digital das atas</h3><span class="lbl">1 quadrado = 1 parágrafo</span></div>
+      <div class="prints" id="prints"></div>
+      <div class="scale" style="margin-top:12px" id="scale"></div>
+    </div>
+  </div>
 
-  <div class="section-head"><div class="kicker">As seis atas · clique para abrir</div></div>
-  <div class="trail" id="trail"></div>
+  <div class="grid3" id="facts"></div>
 
   <div class="card">
-    <div class="section-head"><div class="kicker">Principal impacto</div><h2 id="imp-title"></h2></div>
-    <div class="impact" style="margin-top:14px">
-      <div class="txt" id="imp-text"></div>
-      <div class="channels">
-        <div><b>Selic</b>Cortes graduais seguiam no cenário. A pausa da 282ª mostra que câmbio e expectativas pesam.</div>
-        <div><b>Juros futuros</b>Diagnóstico mais brando sustentava cortes; orientação igual limitava apostas em aceleração.</div>
-        <div><b>Câmbio</b>É o risco de alta que a ata destaca. Dólar mais caro favorece a pausa.</div>
-        <div><b>Crédito e consumo</b>A ata já vê o crédito livre desacelerando. Juros altos mantêm o freio.</div>
+    <div class="impact">
+      <div>
+        <div class="lbl">Principal impacto</div>
+        <div class="head" id="imp-title" style="margin-top:8px"></div>
+        <p class="muted" id="imp-lead" style="margin-top:12px;font-size:14.5px;max-width:58ch"></p>
+        <details class="more"><summary>análise completa e fontes</summary><div class="body" id="imp-more"></div></details>
       </div>
+      <div class="chans" id="chans"></div>
     </div>
-    <p class="status" style="margin-top:14px">Interpretação, não previsão. Não é recomendação de investimento.</p>
+    <p class="status" style="margin-top:16px">Interpretação, não previsão. Não é recomendação de investimento.</p>
   </div>
 </section>
 
 <!-- ATA POR ATA -->
 <section class="view" id="v-atas" aria-label="Ata por ata" hidden>
-  <div class="section-head">
-    <h2>Ata por ata</h2>
-    <p class="lede">Escolha uma reunião. Cada parágrafo traz a nota na régua de −2 a +2, o tema, o trecho exato que sustenta a nota e a justificativa. Os trechos foram conferidos contra o texto do PDF.</p>
-  </div>
+  <div class="card-h" style="margin:0"><h2>Ata por ata</h2><span class="lbl">nota de −2 a +2 em cada parágrafo, com o trecho que a sustenta</span></div>
   <div class="picker" id="picker" role="group" aria-label="Escolher ata"></div>
-  <div class="ata-sum" id="ata-sum"></div>
+  <div class="ata-top" id="ata-top"></div>
   <div class="filters">
     <div class="seg" id="f-sec" role="group" aria-label="Filtrar por seção"></div>
     <div class="seg" id="f-tom" role="group" aria-label="Filtrar por tom"></div>
-    <label for="f-q" class="status" style="position:absolute;left:-9999px">Buscar nos parágrafos</label>
+    <label for="f-q" style="position:absolute;left:-9999px">Buscar nos parágrafos</label>
     <input type="search" id="f-q" placeholder="Buscar: câmbio, expectativas, fiscal…">
   </div>
   <p class="status" id="f-count"></p>
@@ -330,41 +374,32 @@ footer p{max-width:90ch}
 
 <!-- O QUE MUDOU -->
 <section class="view" id="v-mudou" aria-label="O que mudou" hidden>
-  <div class="section-head">
-    <div class="kicker" id="mud-kicker"></div>
-    <h2>O que mudou na ata mais recente</h2>
-    <p class="lede">Comparação parágrafo a parágrafo com a ata anterior: as três mudanças que mais mexem no tom, um contraponto e o que ficou igual.</p>
-  </div>
-  <div class="cmp">
+  <div class="grid2">
     <div class="card">
-      <div class="kicker">Índice de tom</div>
-      <div class="cmp-big" id="cmp-big"></div>
-      <p class="status" id="cmp-note" style="margin-top:8px"></p>
+      <div class="lbl" id="mud-kicker"></div>
+      <div class="vs" id="vs" style="margin-top:10px"></div>
+      <p class="muted" id="vs-note" style="margin-top:10px;font-size:14px"></p>
     </div>
-    <div class="card" style="overflow-x:auto">
-      <div class="kicker">Nota média por seção</div>
-      <table class="mini" id="cmp-table" style="margin-top:8px"></table>
+    <div class="card">
+      <div class="card-h"><h3>Seção por seção</h3><span class="lbl">nota média · antes → depois</span></div>
+      <svg id="slope" viewBox="0 0 520 230" style="width:100%;height:auto" role="img" aria-label="Nota média por seção, ata anterior e mais recente"></svg>
     </div>
   </div>
   <div class="changes" id="changes"></div>
   <div class="card">
-    <div class="kicker">O que não mudou</div>
-    <h3 style="margin-top:6px">A orientação para as próximas reuniões ficou idêntica</h3>
-    <p class="lede" id="same-text" style="margin-top:6px"></p>
-    <div class="stack" id="sim" style="margin-top:14px;gap:8px"></div>
+    <div class="card-h"><h3>O que não mudou</h3><span class="lbl">similaridade de texto da orientação</span></div>
+    <p class="muted" id="same-text" style="font-size:14px;margin-bottom:12px"></p>
+    <div style="display:grid;gap:8px" id="sim"></div>
   </div>
 </section>
 
 <!-- PERGUNTE -->
 <section class="view" id="v-pergunte" aria-label="Pergunte às atas" hidden>
-  <div class="section-head">
-    <h2>Pergunte às atas</h2>
-    <p class="lede">O Claude responde só com base no texto das atas carregadas e cita reunião, parágrafo e trecho. Cada citação é conferida contra o texto: <span style="color:var(--ok)">✓ encontrado</span> ou <span style="color:var(--warn)">⚠ não encontrado literalmente</span>.</p>
-  </div>
+  <div class="card-h" style="margin:0"><h2>Pergunte às atas</h2><span class="lbl">toda resposta cita reunião, parágrafo e trecho · <span style="color:var(--ok)">✓ conferido</span> · <span style="color:var(--warn)">⚠ não literal</span></span></div>
   <div class="card chat">
     <div class="chat-tools">
       <span class="status" id="corpus-info"></span>
-      <button class="ghost" id="btn-new" type="button" aria-expanded="false">+ Adicionar ata nova (PDF ou texto)</button>
+      <button class="ghost" id="btn-new" type="button" aria-expanded="false">+ Ata nova (PDF ou texto)</button>
     </div>
     <div class="newata" id="newata" hidden>
       <label for="pdf" class="status">PDF da ata (por exemplo, a 282ª quando sair):</label>
@@ -379,56 +414,53 @@ footer p{max-width:90ch}
       </div>
     </div>
     <div class="log" id="log" aria-live="polite">
-      <div class="msg a">Pergunte, por exemplo, o que o Copom disse sobre câmbio, quando falou pela primeira vez em pausa ou como descreveu o mercado de trabalho.
+      <div class="msg a">Pergunte sobre câmbio, mercado de trabalho, pausa nos cortes ou qualquer tema das atas.
         <div class="sugs" id="sugs"></div></div>
     </div>
-    <form class="ask" id="ask"><label for="q" class="status" style="position:absolute;left:-9999px">Pergunta</label><input type="text" id="q" placeholder="O que o Copom disse sobre câmbio?" autocomplete="off"><button class="primary" id="send" type="submit">Perguntar</button></form>
+    <form class="ask" id="ask"><label for="q" style="position:absolute;left:-9999px">Pergunta</label><input type="text" id="q" placeholder="O que o Copom disse sobre câmbio?" autocomplete="off"><button class="primary" id="send" type="submit">Perguntar</button></form>
   </div>
 </section>
 
 <!-- MÉTODO -->
 <section class="view" id="v-metodo" aria-label="Como medimos" hidden>
-  <div class="section-head">
-    <h2>Como medimos e como conferimos</h2>
-    <p class="lede">A régua, a regra que transforma notas de parágrafos em um índice por ata e as checagens automáticas que rodam a cada atualização.</p>
-  </div>
+  <div class="card-h" style="margin:0"><h2>Como medimos</h2><span class="lbl">régua, agregação e checagens automáticas</span></div>
   <div class="checks" id="checks"></div>
-  <div class="method">
-    <div class="card" style="overflow-x:auto">
-      <div class="kicker">Régua por parágrafo</div>
-      <table style="margin-top:8px"><thead><tr><th>Nota</th><th>Significado</th><th>Exemplo nas atas</th></tr></thead><tbody>
-        <tr><td><span class="score s2" style="display:block;width:38px">+2</span></td><td>muito duro</td><td>“desancoragem adicional”; restrição “maior e por mais tempo” com ênfase</td></tr>
-        <tr><td><span class="score s1" style="display:block;width:38px">+1</span></td><td>duro</td><td>riscos com “assimetria altista”; “serenidade e cautela”; atividade em retomada</td></tr>
-        <tr><td><span class="score s0" style="display:block;width:38px">0</span></td><td>neutro</td><td>premissas das projeções, números, procedimento, votação</td></tr>
-        <tr><td><span class="score s-1" style="display:block;width:38px">−1</span></td><td>brando</td><td>inflação cedendo; atividade desacelerando; corte de 0,25</td></tr>
-        <tr><td><span class="score s-2" style="display:block;width:38px">−2</span></td><td>muito brando</td><td>“sinalizar o início de um ciclo de redução” (276ª)</td></tr>
-      </tbody></table>
-    </div>
-    <div class="card stack">
-      <p><b>Agregação.</b> Média ponderada só dos parágrafos com nota diferente de zero. Peso 2 nas seções C (discussão da política) e D (decisão), peso 1 em A e B. Parágrafos neutros diluíam o sinal, e é em C e D que o Copom sinaliza os próximos passos. A média simples de todos os parágrafos aparece na aba de cada ata e conta a mesma história.</p>
-      <p><b>Quem classifica.</b> Um agente lê cada ata e dá a nota de cada parágrafo seguindo a régua do arquivo <code>parametros.json</code>, sempre com o trecho que sustenta a nota. Um script confere se cada trecho existe na ata, ignorando espaços quebrados pelo PDF.</p>
-      <p><b>Segunda leitura.</b> Uma segunda classificação dos mesmos parágrafos, também feita pelo Claude, foi comparada com a do agente. Ela mede a consistência da régua, mas não substitui a validação humana. <span id="conc"></span></p>
-      <p><b>Limitações.</b> A nota é um julgamento, mesmo com régua fixa. <span id="focus-lim"></span> Mudança de tom não é mudança de juros.</p>
+  <div class="card">
+    <div class="card-h"><h3>A régua</h3><span class="lbl">nota por parágrafo</span></div>
+    <div class="ruler">
+      <div style="background:var(--dove);color:var(--on-strong)"><b>−2</b><span>muito brando</span><p>“sinalizar o início de um ciclo de redução” (276ª)</p></div>
+      <div style="background:var(--dove-2)"><b>−1</b><span>brando</span><p>inflação cedendo; atividade desacelerando; corte de 0,25</p></div>
+      <div style="background:var(--sunk)"><b>0</b><span>neutro</span><p>premissas, números, procedimento, votação</p></div>
+      <div style="background:var(--hawk-2)"><b>+1</b><span>duro</span><p>“assimetria altista”; “serenidade e cautela”</p></div>
+      <div style="background:var(--hawk);color:var(--on-strong)"><b>+2</b><span>muito duro</span><p>“desancoragem adicional”; “maior e por mais tempo”</p></div>
     </div>
   </div>
-  <div class="card">
-    <h3>Teste outros pesos</h3>
-    <p class="status" style="margin-top:4px">Mude os pesos e o índice de todas as atas é recalculado na hora, em todas as abas. A régua só muda rodando o agente de novo.</p>
-    <div class="prow">
-      <label for="wA">Peso A (conjuntura) <input type="number" min="0" max="5" step="0.5" id="wA"></label>
-      <label for="wB">Peso B (cenários e riscos) <input type="number" min="0" max="5" step="0.5" id="wB"></label>
-      <label for="wC">Peso C (discussão) <input type="number" min="0" max="5" step="0.5" id="wC"></label>
-      <label for="wD">Peso D (decisão) <input type="number" min="0" max="5" step="0.5" id="wD"></label>
-      <label class="chkl" for="ign"><input type="checkbox" id="ign"> Ignorar parágrafos neutros</label>
-      <button class="ghost" type="button" id="reset">Voltar ao padrão</button>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-h"><h3>Agente × 2ª leitura</h3><span class="lbl">quantos parágrafos em cada par de notas</span></div>
+      <div class="cm" id="cm"></div>
+      <p class="status" style="margin-top:10px">A diagonal são as notas iguais. A 2ª leitura também foi feita pelo Claude: mede a consistência da régua, não substitui a validação humana.</p>
     </div>
-    <p class="status" id="w-out" style="margin-top:10px"></p>
+    <div class="card" style="display:grid;gap:12px;align-content:start">
+      <h3>Agregação</h3>
+      <p class="muted" style="font-size:14px">Média ponderada só dos parágrafos com nota diferente de zero. Peso 2 nas seções C (discussão) e D (decisão), peso 1 em A e B: é onde o Copom sinaliza os próximos passos.</p>
+      <div class="prow">
+        <label for="wA">Peso A <input type="number" min="0" max="5" step="0.5" id="wA"></label>
+        <label for="wB">Peso B <input type="number" min="0" max="5" step="0.5" id="wB"></label>
+        <label for="wC">Peso C <input type="number" min="0" max="5" step="0.5" id="wC"></label>
+        <label for="wD">Peso D <input type="number" min="0" max="5" step="0.5" id="wD"></label>
+        <label class="chkl" for="ign"><input type="checkbox" id="ign"> Ignorar neutros</label>
+        <button class="ghost" type="button" id="reset">Padrão</button>
+      </div>
+      <p class="status" id="w-out"></p>
+      <p class="status" id="focus-lim"></p>
+    </div>
   </div>
 </section>
 </main>
 
 <footer><div class="wrap">
-  <p>Fonte: Banco Central do Brasil, <a href="https://www.bcb.gov.br/publicacoes/atascopom">Atas do Copom</a> (<span id="ft-atas"></span>); Selic meta conforme o parágrafo de decisão de cada ata e o <a href="https://www.bcb.gov.br/publicacoes/comunicadoscopom">comunicado do Copom</a>; expectativas do Relatório Focus (BCB), mediana para a Selic no fim de 2026, via <span id="focus-src"></span>. Trechos curtos para fins de análise. Isto não é recomendação de investimento. Claude Lab · Economia &amp; Finanças · PUC-Rio · 06/11/2026.</p>
+  <p>Fonte: Banco Central do Brasil, <a href="https://www.bcb.gov.br/publicacoes/atascopom">Atas do Copom</a> (<span id="ft-atas"></span>); Selic meta pelo parágrafo de decisão de cada ata e pelo <a href="https://www.bcb.gov.br/publicacoes/comunicadoscopom">comunicado do Copom</a>; Relatório Focus (BCB), mediana da Selic no fim de 2026, via <span id="focus-src"></span>. Trechos curtos para fins de análise. Não é recomendação de investimento. Claude Lab · Economia &amp; Finanças · PUC-Rio · 06/11/2026.</p>
 </div></footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -442,193 +474,275 @@ const pct = v => v.toFixed(2).replace(".", ",") + "%";
 const dataBR = s => s ? s.slice(8, 10) + "/" + s.slice(5, 7) + "/" + s.slice(0, 4) : "—";
 const dataCurta = s => s.slice(8, 10) + "/" + s.slice(5, 7);
 const MES = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
-const SEC = {A: "Conjuntura", B: "Cenários e riscos", C: "Discussão da política", D: "Decisão"};
+const SEC = {A: "Conjuntura", B: "Riscos", C: "Discussão", D: "Decisão"};
 const notaTxt = n => n > 0 ? "+" + n : n === 0 ? "0" : "−" + Math.abs(n);
 const tomCor = v => v > 0 ? "var(--hawk)" : v < 0 ? "var(--dove)" : "var(--muted)";
+const NOTA_COR = {"2": "var(--hawk)", "1": "var(--hawk-2)", "0": "var(--neu)", "-1": "var(--dove-2)", "-2": "var(--dove)"};
 const rotulo = v => v <= -1.5 ? "Muito brando" : v <= -0.5 ? "Brando" : v < -0.15 ? "Levemente brando" : v <= 0.15 ? "Neutro" : v < 0.5 ? "Levemente duro" : v < 1.5 ? "Duro" : "Muito duro";
+const REDUZ = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const heatBg = v => { const k = Math.min(1, Math.abs(v) / 1.2) * 100; return v === 0 ? "var(--sunk)" : `color-mix(in oklab, ${v > 0 ? "var(--hawk)" : "var(--dove)"} ${k.toFixed(0)}%, var(--paper))`; };
+const heatInk = v => Math.abs(v) >= 1 ? "var(--on-strong)" : "var(--ink)";
 
 const atas = D.atas;
 const ordem = () => Object.keys(atas).sort();
 const sel = Object.fromEntries(D.selic.map(s => [String(s.reuniao), s]));
 const prox = D.proxima || null;
-const lastOf = () => { const n = ordem().filter(r => atas[r].indice !== undefined && !atas[r].semNota); return n[n.length - 1]; };
+const notadas = () => ordem().filter(r => atas[r].indice !== undefined && !atas[r].semNota);
+const lastOf = () => { const n = notadas(); return n[n.length - 1]; };
 const prevOf = r => { const n = ordem(); return n[n.indexOf(r) - 1]; };
 const secMedia = (a, k) => { const v = Object.values(a.paragrafos).filter(p => p.secao[0] === k && p.nota !== undefined).map(p => p.nota); return v.length ? v.reduce((s, x) => s + x, 0) / v.length : null; };
 
-/* Focus: um ponto por semana (o último de cada semana) */
-const focusSem = (() => {
-  const out = []; let key = null;
-  D.focus.forEach(f => { const d = new Date(f.data + "T12:00:00"); const k = d.getFullYear() + "-" + Math.floor((d - new Date(d.getFullYear(), 0, 1)) / 6048e5 + (new Date(d.getFullYear(), 0, 1).getDay() + 6) % 7 / 7);
+/* contagem animada dos números */
+function countUp(node, to, f, dur = 1100) {
+  if (!node) return;
+  if (REDUZ) { node.textContent = f(to); return; }
+  const t0 = performance.now(), from = 0;
+  const step = t => { const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3); node.textContent = f(from + (to - from) * e); if (k < 1) requestAnimationFrame(step); else node.textContent = f(to); };
+  node.textContent = f(from); requestAnimationFrame(step);
+}
+function countAll(root) { root.querySelectorAll("[data-to]").forEach(n => { const to = +n.dataset.to, kind = n.dataset.f || "fmt", d = +(n.dataset.d ?? 2);
+  const f = kind === "pct" ? v => pct(v) : kind === "int" ? v => String(Math.round(v)) : kind === "pc" ? v => Math.round(v) + "%" : v => fmt(v, d); countUp(n, to, f); }); }
+
+/* Focus semanal */
+const focusSem = (() => { const out = []; let key = null;
+  D.focus.forEach(f => { const d = new Date(f.data + "T12:00:00"), y0 = new Date(d.getFullYear(), 0, 1);
+    const k = d.getFullYear() + "-" + Math.floor(((d - y0) / 864e5 + (y0.getDay() + 6) % 7) / 7);
     if (k !== key) { out.push(f); key = k; } else out[out.length - 1] = f; });
-  return out;
-})();
+  return out; })();
 const focusLast = D.focus[D.focus.length - 1];
 
-/* ===== roteamento por abas ===== */
+/* ===== abas ===== */
 const VIEWS = ["panorama", "atas", "mudou", "pergunte", "metodo"];
+const RENDER = {panorama: () => renderPanorama(), atas: () => renderAta(), mudou: () => renderMudou(), metodo: () => renderMetodo(), pergunte: () => {}};
+let vista = null;
 function show(v) {
   if (!VIEWS.includes(v)) v = "panorama";
   VIEWS.forEach(x => { $("#v-" + x).hidden = x !== v; });
   document.querySelectorAll("nav.tabs a").forEach(a => { if (a.dataset.v === v) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+  if (vista !== v) { vista = v; RENDER[v](); }
   window.scrollTo({top: 0});
 }
 function go(v) { show(v); try { if (location.hash !== "#" + v) history.replaceState(null, "", "#" + v); } catch (e) {} }
-function route() { show(location.hash.slice(1)); }
-window.addEventListener("hashchange", route);
+window.addEventListener("hashchange", () => show(location.hash.slice(1)));
 document.addEventListener("click", e => { const a = e.target.closest('a[href^="#"]'); if (!a) return; const v = a.getAttribute("href").slice(1); if (VIEWS.includes(v)) { e.preventDefault(); go(v); } });
 
-/* ===== panorama ===== */
-function renderHero() {
-  const last = lastOf(), prev = prevOf(last), a = atas[last];
-  const pub = D.ata_publicada[last];
-  $("#brand-sub").textContent = `ATAS ${ordem()[0]}ª–${last}ª · 2026`;
-  $("#hero-kicker").textContent = `${last}ª reunião · ${dataBR(a.data_reuniao)}${pub ? " · ata publicada em " + dataBR(pub) : ""}`;
-  $("#hero-title").textContent = "Copom cortou para 13,75% e suavizou o diagnóstico, mas manteve a mesma orientação";
-  $("#hero-lede").textContent = "A ata de setembro trocou poucas palavras, quase todas no diagnóstico: inflação abaixo do teto, crédito esfriando e expectativas sem piora adicional. As seções de discussão e decisão ficaram idênticas às de agosto.";
-  drawDial(a.indice, prev ? atas[prev].indice : null, prev);
-  const ix = a.indice, ixp = prev ? atas[prev].indice : ix, dx = ix - ixp;
-  $("#dial-read").innerHTML = `${rotulo(ix)}<span>${prev}ª: ${fmt(ixp)} · ${dx < 0 ? "suavizou " + fmt(dx).replace("−", "") : dx > 0 ? "endureceu " + fmt(dx) : "sem mudança"}</span>`;
-
-  const s = sel[last] || {};
-  const tiles = [
-    [pct(s.selic ?? 0), `Selic meta após a ${last}ª`, s.decisao ? s.decisao + (s.decisao.startsWith("−") ? " p.p." : "") : "", "flat"],
-    [fmt(ix), "índice de tom (−2 a +2)", `${dx <= 0 ? "▼" : "▲"} ${fmt(dx)} vs ${prev}ª`, dx < 0 ? "down" : dx > 0 ? "up" : "flat"],
-    [pct(focusLast.v), "Focus: Selic no fim de 2026", `dados de ${dataBR(focusLast.data)}`, "flat"],
-  ];
-  if (prox) tiles.push([pct(prox.selic), `${prox.reuniao}ª reunião (${dataCurta(prox.data)})`, `${prox.decisao}: 1ª pausa após 5 cortes`, "up"]);
-  $("#tiles").innerHTML = tiles.map(t => `<div><b>${t[0]}</b><span>${t[1]}</span><span class="d ${t[3]}">${t[2]}</span></div>`).join("");
+/* ===== topo: faixa de cotações ===== */
+function renderTicker() {
+  const last = lastOf(), prev = prevOf(last), ix = atas[last].indice, dx = ix - atas[prev].indice;
+  const it = [
+    `SELIC META <b>${pct(prox ? prox.selic : sel[last].selic)}</b>`,
+    `TOM ${last}ª <b class="${ix > 0 ? "u" : "d"}">${fmt(ix)}</b> <span class="${dx < 0 ? "d" : "u"}">${dx < 0 ? "▼" : "▲"} ${fmt(Math.abs(dx))}</span>`,
+    `FOCUS SELIC 2026 <b>${pct(focusLast.v)}</b> (${dataCurta(focusLast.data)})`,
+    ...(prox ? [`${prox.reuniao}ª REUNIÃO ${dataCurta(prox.data)} · <b class="u">${prox.decisao.toUpperCase()}</b> · ATA PREVISTA ${dataCurta(prox.ata_prevista)}`] : []),
+    `SELIC CORTADA <b>${fmt(sel[last].selic - sel[ordem()[0]].selic).replace("−", "−")} p.p.</b> DESDE A ${ordem()[0]}ª`,
+    `${notadas().filter(r => atas[r].indice > 0).length} DE ${notadas().length} ATAS COM TOM DURO`,
+    `${D.concordancia.total}/${D.concordancia.total} TRECHOS CONFERIDOS`,
+  ].map(s => `<span>${s}</span>`).join("<span aria-hidden=\"true\">◆</span>");
+  $("#ticker").innerHTML = it + '<span aria-hidden="true">◆</span>' + `<span aria-hidden="true" style="display:contents">${it}</span>`;
 }
 
-function drawDial(v, vp, rp) {
-  const cx = 160, cy = 160, R = 128, w = 22;
+/* ===== panorama ===== */
+function guilloche() {
+  const cx = 300, cy = 300; let g = "";
+  const curve = (R, r, d, rot, steps = 1400) => { let p = ""; const k = (R - r) / r;
+    for (let i = 0; i <= steps; i++) { const t = i / steps * Math.PI * 2 * r / gcd(R, r);
+      const x = (R - r) * Math.cos(t) + d * Math.cos(k * t), y = (R - r) * Math.sin(t) - d * Math.sin(k * t);
+      const xr = x * Math.cos(rot) - y * Math.sin(rot), yr = x * Math.sin(rot) + y * Math.cos(rot);
+      p += (i ? "L" : "M") + (cx + xr).toFixed(1) + "," + (cy + yr).toFixed(1); } return `<path d="${p}"/>`; };
+  function gcd(a, b) { return b ? gcd(b, a % b) : a; }
+  g += curve(280, 35, 120, 0) + curve(280, 35, 100, .05) + curve(210, 30, 90, .1) + curve(150, 25, 60, 0);
+  $("#guil").innerHTML = g;
+}
+function renderHero() {
+  const last = lastOf(), prev = prevOf(last), a = atas[last], pub = D.ata_publicada[last], s = sel[last];
+  $("#brand-sub").textContent = `ATAS ${ordem()[0]}ª–${last}ª · 2026`;
+  $("#hero-kicker").textContent = `${last}ª reunião · ${dataBR(a.data_reuniao)}${pub ? " · ata de " + dataBR(pub) : ""}`;
+  const n = notadas();
+  $("#hero-sub").textContent = `De ${pct(sel[n[0]].selic)} para ${pct(s.selic)} em ${n.length - 1} cortes seguidos, e mesmo assim ${n.filter(r => atas[r].indice > 0).length} das ${n.length} atas tiveram tom duro.`;
+  $("#hero-chips").innerHTML = `<span class="chip"><i style="background:var(--hawk)"></i>${rotulo(a.indice)}</span><span class="chip">${s.decisao} p.p. → ${pct(s.selic)}</span>` + (prox ? `<span class="chip" style="border-color:var(--warn);color:var(--warn)"><i style="background:var(--warn)"></i>${prox.reuniao}ª: Selic ${prox.decisao === "manteve" ? "mantida" : prox.decisao}</span>` : "");
+  drawGauge(a.indice, atas[prev].indice, prev, last);
+}
+function drawGauge(v, vp, rp, r) {
+  const cx = 210, cy = 210, R = 168, w = 30;
   const ang = x => Math.PI * (1 - (Math.max(-2, Math.min(2, x)) + 2) / 4);
-  const pt = (x, r) => [cx + r * Math.cos(ang(x)), cy - r * Math.sin(ang(x))];
-  const arc = (a0, a1, col) => { const [x0, y0] = pt(a0, R), [x1, y1] = pt(a1, R); return `<path d="M${x0},${y0} A${R},${R} 0 0 1 ${x1},${y1}" fill="none" stroke="${col}" stroke-width="${w}"/>`; };
-  let g = arc(-2, -1, "var(--dove)") + arc(-1, -0.03, "var(--dove-soft)") + arc(0.03, 1, "var(--hawk-soft)") + arc(1, 2, "var(--hawk)");
-  [-2, -1, 0, 1, 2].forEach(t => { const [x, y] = pt(t, R + w / 2 + 12); g += `<text x="${x}" y="${y + 4}" text-anchor="middle" style="font:500 12px var(--mono);fill:var(--muted)">${fmt(t, 0)}</text>`; });
-  g += `<text x="${cx - R}" y="${cy + 26}" text-anchor="middle" style="font:500 11px var(--mono);fill:var(--dove)">BRANDO</text><text x="${cx + R}" y="${cy + 26}" text-anchor="middle" style="font:500 11px var(--mono);fill:var(--hawk)">DURO</text>`;
-  if (vp !== null && vp !== undefined) { const [x, y] = pt(vp, R - w / 2 - 4), [x2, y2] = pt(vp, R + w / 2 + 2); g += `<line x1="${x}" y1="${y}" x2="${x2}" y2="${y2}" stroke="var(--muted)" stroke-width="2" stroke-dasharray="3 2"/>`; const [lx, ly] = pt(vp, R - w - 14); g += `<text x="${lx}" y="${ly}" text-anchor="middle" style="font:500 11px var(--mono);fill:var(--muted)">${rp}ª</text>`; }
+  const pt = (x, rr) => [cx + rr * Math.cos(ang(x)), cy - rr * Math.sin(ang(x))];
+  const arc = (a0, a1, col, rr = R, ww = w) => { const [x0, y0] = pt(a0, rr), [x1, y1] = pt(a1, rr); return `<path d="M${x0.toFixed(1)},${y0.toFixed(1)} A${rr},${rr} 0 0 1 ${x1.toFixed(1)},${y1.toFixed(1)}" fill="none" stroke="${col}" stroke-width="${ww}"/>`; };
+  let g = arc(-2, -1.02, "var(--dove)") + arc(-.98, -.02, "var(--dove-2)") + arc(.02, .98, "var(--hawk-2)") + arc(1.02, 2, "var(--hawk)");
+  for (let t = -2; t <= 2.001; t += .25) { const [x0, y0] = pt(t, R - w / 2 - 6), [x1, y1] = pt(t, R - w / 2 - (Math.abs(t % 1) < .01 ? 18 : 11)); g += `<line x1="${x0.toFixed(1)}" y1="${y0.toFixed(1)}" x2="${x1.toFixed(1)}" y2="${y1.toFixed(1)}" stroke="var(--ink)" stroke-width="${Math.abs(t % 1) < .01 ? 2 : 1}"/>`; }
+  [-2, -1, 0, 1, 2].forEach(t => { const [x, y] = pt(t, R + w / 2 + 16); g += `<text x="${x.toFixed(1)}" y="${(y + 5).toFixed(1)}" text-anchor="middle" style="font:700 13px var(--mono);fill:var(--muted)">${fmt(t, 0)}</text>`; });
+  g += `<text x="${cx - R}" y="${cy + 30}" text-anchor="middle" style="font:700 12px var(--mono);letter-spacing:.12em;fill:var(--dove)">POMBA</text><text x="${cx + R}" y="${cy + 30}" text-anchor="middle" style="font:700 12px var(--mono);letter-spacing:.12em;fill:var(--hawk)">FALCÃO</text>`;
+  const [px, py] = pt(vp, R - w / 2), [px2, py2] = pt(vp, R + w / 2 + 2);
+  g += `<line x1="${px.toFixed(1)}" y1="${py.toFixed(1)}" x2="${px2.toFixed(1)}" y2="${py2.toFixed(1)}" stroke="var(--ink)" stroke-width="2.5" stroke-dasharray="4 3"/>`;
+  const [lx, ly] = pt(vp, R + w / 2 + 34); g += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" style="font:600 11px var(--mono);fill:var(--muted)">${rp}ª ${fmt(vp)}</text>`;
   const deg = 90 - ang(v) * 180 / Math.PI;
-  g += `<g class="needle" style="transform-origin:${cx}px ${cy}px;transform:rotate(${deg}deg)"><path d="M${cx - 5},${cy} L${cx},${cy - R + 6} L${cx + 5},${cy} Z" fill="var(--ink)"/></g><circle cx="${cx}" cy="${cy}" r="9" fill="var(--ink)"/><circle cx="${cx}" cy="${cy}" r="3.5" fill="var(--surface)"/>`;
-  g += `<text x="${cx}" y="${cy + 34}" text-anchor="middle" style="font:600 26px var(--mono);fill:${tomCor(v)}">${fmt(v)}</text>`;
-  $("#dial").innerHTML = g;
+  g += `<g class="needle" id="needle" style="transform:rotate(-90deg)"><path d="M${cx - 7},${cy} L${cx},${cy - R + 20} L${cx + 7},${cy} Z" fill="var(--ink)"/></g><circle cx="${cx}" cy="${cy}" r="13" fill="var(--ink)"/><circle cx="${cx}" cy="${cy}" r="5" fill="var(--gold)"/>`;
+  g += `<text x="${cx}" y="${cy + 74}" text-anchor="middle" class="big" style="font:800 64px var(--display);fill:${tomCor(v)}" id="g-val">${fmt(v)}</text>`;
+  g += `<text x="${cx}" y="${cy + 94}" text-anchor="middle" style="font:600 11px var(--mono);letter-spacing:.14em;fill:var(--muted)">ÍNDICE DE TOM · ${r}ª</text>`;
+  $("#gauge").innerHTML = g;
+  const nd = $("#needle"), gv = $("#g-val");
+  requestAnimationFrame(() => requestAnimationFrame(() => { nd.style.transform = `rotate(${deg}deg)`; }));
+  countUp(gv, v, x => fmt(x), 1400);
+}
+
+function spark(vals, col, fill = true) {
+  const W = 200, H = 34, mn = Math.min(...vals), mx = Math.max(...vals), sp = mx - mn || 1;
+  const pts = vals.map((v, i) => [i / (vals.length - 1) * W, H - 4 - (v - mn) / sp * (H - 8)]);
+  const d = pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + "," + p[1].toFixed(1)).join("");
+  const last = pts[pts.length - 1];
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">${fill ? `<path d="${d}L${W},${H}L0,${H}Z" fill="${col}" opacity=".12"/>` : ""}<path d="${d}" fill="none" stroke="${col}" stroke-width="2" vector-effect="non-scaling-stroke" class="draw" pathLength="1"/><circle cx="${last[0]}" cy="${last[1]}" r="3.5" fill="${col}"/></svg>`;
+}
+function renderKpis() {
+  const n = notadas(), last = n[n.length - 1], prev = prevOf(last), ix = atas[last].indice, dx = ix - atas[prev].indice;
+  const sv = D.selic.map(s => s.selic).concat(prox ? [prox.selic] : []);
+  const tiles = [
+    {v: sel[last].selic, f: "pct", lbl: `Selic após a ${last}ª`, d: `<span class="dove">▼ ${fmt(sel[last].selic - sel[n[0]].selic).replace("−", "")} p.p.</span> desde jan`, sp: spark(sv, "var(--ink)")},
+    {v: ix, f: "fmt", lbl: "Índice de tom", d: `<span class="${dx < 0 ? "dove" : "hawk"}">${dx < 0 ? "▼" : "▲"} ${fmt(Math.abs(dx))}</span> vs ${prev}ª`, sp: spark(n.map(r => atas[r].indice), "var(--hawk)"), col: tomCor(ix)},
+    {v: focusLast.v, f: "pct", lbl: "Focus · Selic fim de 2026", d: `<span class="muted">dados de ${dataBR(focusLast.data)}</span>`, sp: spark(focusSem.map(f => f.v), "var(--muted)")},
+    prox ? {v: prox.selic, f: "pct", lbl: `${prox.reuniao}ª reunião · ${dataCurta(prox.data)}`, d: `<span style="color:var(--warn)">● pausa após ${n.length - 1} cortes</span>`, sp: spark(sv.slice(-3), "var(--warn)", false)} : null,
+  ].filter(Boolean);
+  $("#kpis").innerHTML = tiles.map(t => `<div class="kpi"><span class="lbl">${t.lbl}</span><span class="big v" style="color:${t.col || "var(--ink)"}" data-to="${t.v}" data-f="${t.f}">${t.f === "pct" ? pct(t.v) : fmt(t.v)}</span><span class="d">${t.d}</span>${t.sp}</div>`).join("");
+  countAll($("#kpis"));
 }
 
 function drawChart() {
-  const svg = $("#chart"), W = 960, L = 60, R = 74;
-  const t0 = Date.parse("2026-01-10"), t1 = Date.parse("2026-11-20");
+  const svg = $("#chart"), W = 980, L = 62, R = 80;
+  const t0 = Date.parse("2026-01-08"), t1 = Date.parse("2026-11-22");
   const x = s => L + (Date.parse(s) - t0) / (t1 - t0) * (W - L - R);
-  const yt = v => 110 - v * 40; const ys = v => 395 - (v - 11.5) / 4 * 160;
+  const yt = v => 118 - v * 42; const ys = v => 400 - (v - 11.5) / 4 * 160;
   let g = "";
-  const txt = (X, Y, s, a = "", st = "font:12px var(--mono);fill:var(--muted)") => `<text x="${X}" y="${Y}" ${a} style="${st}">${s}</text>`;
-  [-2,-1,0,1,2].forEach(v => { g += `<line x1="${L}" x2="${W-R}" y1="${yt(v)}" y2="${yt(v)}" stroke="var(--line)" ${v===0?'stroke-width="1.5"':'stroke-dasharray="2 4"'}/>` + txt(L-8, yt(v)+4, fmt(v,0), 'text-anchor="end"'); });
-  g += txt(L, 16, "ÍNDICE DE TOM");
-  [12,13,14,15].forEach(v => { g += `<line x1="${L}" x2="${W-R}" y1="${ys(v)}" y2="${ys(v)}" stroke="var(--line)" stroke-dasharray="2 4"/>` + txt(L-8, ys(v)+4, v+"%", 'text-anchor="end"'); });
-  g += txt(L, 226, "SELIC E FOCUS (% A.A.)");
-  for (let m = 1; m <= 10; m++) { const s = `2026-${String(m+1).padStart(2,"0")}-01`; g += `<line x1="${x(s)}" x2="${x(s)}" y1="${ys(11.5)}" y2="${ys(11.5)+5}" stroke="var(--muted)"/>` + txt(x(s), 416, MES[m], 'text-anchor="middle"'); }
-  ordem().forEach(r => { const a = atas[r]; if (a.indice === undefined) return; const v = a.indice, X = x(a.data_reuniao), y0 = yt(0), y1 = yt(v);
-    g += `<rect x="${X-16}" y="${Math.min(y0,y1)}" width="32" height="${Math.max(2,Math.abs(y1-y0))}" rx="2" fill="${tomCor(v)}"><title>${r}ª: ${fmt(v)}</title></rect>`;
-    g += txt(X, v >= 0 ? y1 - 7 : y1 + 16, fmt(v), 'text-anchor="middle"', "font:600 12px var(--mono);fill:var(--ink)");
-    g += txt(X, 204, r + "ª", 'text-anchor="middle"'); });
-  if (prox) { const X = x(prox.data); g += `<rect x="${X-16}" y="${yt(0)-1}" width="32" height="2" fill="var(--muted)"/>` + txt(X, 204, prox.reuniao + "ª", 'text-anchor="middle"') + txt(X, yt(0) - 10, "ata em breve", 'text-anchor="middle"', "font:11px var(--mono);fill:var(--warn)"); }
-  const sl = [...D.selic]; if (prox) sl.push({data: prox.data, selic: prox.selic});
-  let p = `M${x("2026-01-10")},${ys(15)}`; sl.forEach((s, i) => { if (i) p += ` H${x(s.data)} V${ys(s.selic)}`; }); p += ` H${x("2026-11-20")}`;
-  g += `<path d="${p}" fill="none" stroke="var(--ink)" stroke-width="2.5"/>`;
-  sl.forEach(s => { g += `<circle cx="${x(s.data)}" cy="${ys(s.selic)}" r="3.5" fill="var(--ink)"><title>Selic ${dataBR(s.data)}: ${pct(s.selic)}</title></circle>`; });
-  g += txt(W - R + 6, ys(sl[sl.length-1].selic) + 4, pct(sl[sl.length-1].selic).replace("%", ""), "", "font:600 12px var(--mono);fill:var(--ink)");
-  let fp = ""; focusSem.forEach((f, i) => { fp += (i ? " L" : "M") + x(f.data) + "," + ys(f.v); });
-  g += `<path d="${fp}" fill="none" stroke="var(--muted)" stroke-width="1.75" stroke-dasharray="5 3"/>`;
-  focusSem.forEach(f => { g += `<circle cx="${x(f.data)}" cy="${ys(f.v)}" r="6" fill="transparent"><title>Focus ${dataBR(f.data)}: ${pct(f.v)}</title></circle>`; });
+  const txt = (X, Y, s, a = "", st = "font:500 11.5px var(--mono);fill:var(--muted)") => `<text x="${X}" y="${Y}" ${a} style="${st}">${s}</text>`;
+  g += `<rect x="${L}" y="${yt(2)}" width="${W - L - R}" height="${yt(0) - yt(2)}" fill="var(--hawk)" opacity=".05"/><rect x="${L}" y="${yt(0)}" width="${W - L - R}" height="${yt(-2) - yt(0)}" fill="var(--dove)" opacity=".05"/>`;
+  [-2,-1,0,1,2].forEach(v => { g += `<line x1="${L}" x2="${W-R}" y1="${yt(v)}" y2="${yt(v)}" stroke="${v === 0 ? "var(--ink)" : "var(--line)"}" ${v === 0 ? 'stroke-width="1.2"' : 'stroke-dasharray="2 4"'}/>` + txt(L-10, yt(v)+4, fmt(v,0), 'text-anchor="end"'); });
+  g += txt(W - R + 8, yt(1.6), "DURO", "", "font:700 10.5px var(--mono);letter-spacing:.1em;fill:var(--hawk)") + txt(W - R + 8, yt(-1.5), "BRANDO", "", "font:700 10.5px var(--mono);letter-spacing:.1em;fill:var(--dove)");
+  [12,13,14,15].forEach(v => { g += `<line x1="${L}" x2="${W-R}" y1="${ys(v)}" y2="${ys(v)}" stroke="var(--line)" stroke-dasharray="2 4"/>` + txt(L-10, ys(v)+4, v+"%", 'text-anchor="end"'); });
+  for (let m = 1; m <= 10; m++) { const s = `2026-${String(m+1).padStart(2,"0")}-01`; g += `<line x1="${x(s)}" x2="${x(s)}" y1="${ys(11.5)}" y2="${ys(11.5)+5}" stroke="var(--line-2)"/>` + txt(x(s), 420, MES[m].toUpperCase(), 'text-anchor="middle"'); }
+  const cols = [];
+  notadas().forEach((r, i) => { const a = atas[r], v = a.indice, X = x(a.data_reuniao), y0 = yt(0), y1 = yt(v);
+    cols.push({r, X, v});
+    g += `<rect class="grow ${v >= 0 ? "up" : "dn"}" style="animation-delay:${i * 90}ms" x="${X-18}" y="${Math.min(y0,y1)}" width="36" height="${Math.max(2,Math.abs(y1-y0))}" fill="${tomCor(v)}"/>`;
+    g += txt(X, v >= 0 ? y1 - 8 : y1 + 17, fmt(v), 'text-anchor="middle" class="pop"', `font:700 12.5px var(--mono);fill:var(--ink);animation-delay:${400 + i * 90}ms`);
+    g += txt(X, 222, r + "ª", 'text-anchor="middle"', "font:700 12px var(--mono);fill:var(--ink)"); });
+  if (prox) { const X = x(prox.data); g += `<rect x="${X-18}" y="${yt(0)-1.5}" width="36" height="3" fill="var(--warn)"/>` + txt(X, 222, prox.reuniao + "ª", 'text-anchor="middle"', "font:700 12px var(--mono);fill:var(--warn)") + txt(X, yt(0) - 10, "ATA EM BREVE", 'text-anchor="middle"', "font:700 10px var(--mono);letter-spacing:.08em;fill:var(--warn)"); }
+  const sl = [...D.selic]; if (prox) sl.push({data: prox.data, selic: prox.selic, reuniao: prox.reuniao});
+  let p = `M${x("2026-01-08")},${ys(15)}`; sl.forEach((s, i) => { if (i) p += ` H${x(s.data)} V${ys(s.selic)}`; }); p += ` H${x("2026-11-22")}`;
+  g += `<path d="${p}" fill="none" stroke="var(--ink)" stroke-width="3" class="draw" pathLength="1"/>`;
+  sl.forEach(s => { g += `<circle cx="${x(s.data)}" cy="${ys(s.selic)}" r="4" fill="var(--ink)" class="pop" style="animation-delay:1.2s"/>`; });
+  g += txt(W - R + 8, ys(sl[sl.length-1].selic) + 4, pct(sl[sl.length-1].selic), "", "font:700 12.5px var(--mono);fill:var(--ink)");
+  let fp = ""; focusSem.forEach((f, i) => { fp += (i ? " L" : "M") + x(f.data).toFixed(1) + "," + ys(f.v).toFixed(1); });
+  g += `<path d="${fp}L${x(focusLast.data).toFixed(1)},${ys(11.5)}L${x(focusSem[0].data).toFixed(1)},${ys(11.5)}Z" fill="var(--muted)" opacity=".08"/>`;
+  g += `<path d="${fp}" fill="none" stroke="var(--muted)" stroke-width="2" stroke-dasharray="6 4" class="pop" style="animation-delay:.6s"/>`;
   const fmax = focusSem.reduce((m, f) => f.v > m.v ? f : m, focusSem[0]), fmin = focusSem.reduce((m, f) => f.v < m.v ? f : m, focusSem[0]);
-  [[fmin, 18, "mín."], [fmax, 20, "máx."]].forEach(([f, dy, l]) => { g += `<circle cx="${x(f.data)}" cy="${ys(f.v)}" r="3.5" fill="var(--surface)" stroke="var(--muted)" stroke-width="1.5"/>` + txt(x(f.data) + 6, ys(f.v) + dy, `${l} ${f.v.toFixed(2).replace(".", ",")}`, 'text-anchor="start"'); });
-  g += `<circle cx="${x(focusLast.data)}" cy="${ys(focusLast.v)}" r="3.5" fill="var(--muted)"/>` + txt(x(focusLast.data) + 8, ys(focusLast.v) + 18, focusLast.v.toFixed(2).replace(".", ","));
+  [[fmin, 20, "MÍN"], [fmax, 22, "MÁX"]].forEach(([f, dy, l]) => { g += `<circle cx="${x(f.data)}" cy="${ys(f.v)}" r="4.5" fill="var(--paper)" stroke="var(--muted)" stroke-width="2"/>` + txt(x(f.data) + 8, ys(f.v) + dy, `${l} ${f.v.toFixed(2).replace(".", ",")}`, "", "font:700 11px var(--mono);fill:var(--muted)"); });
+  g += `<circle cx="${x(focusLast.data)}" cy="${ys(focusLast.v)}" r="4.5" fill="var(--muted)"/>` + txt(x(focusLast.data) + 8, ys(focusLast.v) + 20, focusLast.v.toFixed(2).replace(".", ","), "", "font:700 11px var(--mono);fill:var(--muted)");
+  g += `<line id="xh" x1="0" x2="0" y1="${yt(2)}" y2="${ys(11.5)}" stroke="var(--gold)" stroke-width="1.5" opacity="0"/>`;
+  g += `<rect id="hov" x="${L}" y="0" width="${W - L - R}" height="${ys(11.5)}" fill="transparent"/>`;
   svg.innerHTML = g;
+  const tip = $("#tip"), xh = $("#xh"), hov = $("#hov");
+  const inv = px => t0 + (px - L) / (W - L - R) * (t1 - t0);
+  const selicEm = t => { let v = 15; sl.forEach(s => { if (Date.parse(s.data) <= t) v = s.selic; }); return v; };
+  const focusEm = t => { let f = null; D.focus.forEach(q => { if (Date.parse(q.data) <= t) f = q; }); return f; };
+  hov.onmousemove = e => { const b = svg.getBoundingClientRect(), sx = (e.clientX - b.left) / b.width * W, t = inv(sx);
+    const near = cols.reduce((m, c) => Math.abs(c.X - sx) < Math.abs((m?.X ?? 1e9) - sx) ? c : m, null);
+    const f = focusEm(t), dt = new Date(t).toISOString().slice(0, 10);
+    xh.setAttribute("x1", sx); xh.setAttribute("x2", sx); xh.setAttribute("opacity", "1");
+    tip.hidden = false; tip.style.left = (e.clientX - b.left) + "px"; tip.style.top = (e.clientY - b.top) + "px";
+    tip.innerHTML = `${dataBR(dt)}<br>Selic ${pct(selicEm(t))}${f ? ` · Focus ${pct(f.v)}` : ""}${near && Math.abs(near.X - sx) < 24 ? `<br>${near.r}ª · tom ${fmt(near.v)}` : ""}`; };
+  hov.onmouseleave = () => { tip.hidden = true; xh.setAttribute("opacity", "0"); };
 }
 
-function renderInsights() {
-  const n = ordem().filter(r => atas[r].indice !== undefined && !atas[r].semNota), a0 = atas[n[0]], aN = atas[n[n.length - 1]];
-  const s0 = sel[n[0]]?.selic, sN = sel[n[n.length - 1]]?.selic;
-  const virada = aN.indice - a0.indice;
+function renderHeat() {
+  const n = notadas(), box = $("#heat"); box.style.setProperty("--n", n.length);
+  let h = `<div class="heat-row head" style="--n:${n.length}"><span></span>${n.map(r => `<span class="h2">${r}ª</span>`).join("")}</div>`;
+  "ABCD".split("").forEach((k, ri) => { h += `<div class="heat-row" style="--n:${n.length}"><span class="h">${k} · ${SEC[k]}</span>` + n.map((r, ci) => { const m = secMedia(atas[r], k); if (m === null) return `<span class="cell" style="background:var(--sunk)">—</span>`;
+    return `<span class="cell" title="${r}ª · seção ${k}: ${fmt(m)}" style="background:${heatBg(m)};color:${heatInk(m)};animation-delay:${(ri * n.length + ci) * 30}ms">${fmt(m, 1)}</span>`; }).join("") + "</div>"; });
+  h += `<div class="heat-row" style="--n:${n.length};margin-top:6px"><span class="h" style="color:var(--ink);font-weight:700">ÍNDICE</span>${n.map(r => `<span class="cell" style="background:var(--paper);border:2px solid ${tomCor(atas[r].indice)};color:${tomCor(atas[r].indice)}">${fmt(atas[r].indice)}</span>`).join("")}</div>`;
+  box.innerHTML = h;
+}
+function renderPrints() {
+  $("#prints").innerHTML = notadas().map((r, i) => { const a = atas[r], ps = Object.entries(a.paragrafos);
+    return `<button class="print" type="button" data-r="${r}" aria-label="Abrir a ${r}ª ata"><span class="r">${r}ª</span><span class="sqs">${ps.map(([n, p], j) => `<i class="sq" title="§${n} · nota ${notaTxt(p.nota ?? 0)}" style="background:${NOTA_COR[String(p.nota ?? 0)]};animation-delay:${i * 60 + j * 12}ms"></i>`).join("")}</span><span class="v" style="color:${tomCor(a.indice)}">${fmt(a.indice)}</span></button>`; }).join("");
+  document.querySelectorAll(".print").forEach(b => b.onclick = () => { atual = b.dataset.r; vista = null; go("atas"); });
+  $("#scale").innerHTML = `<span style="margin-right:6px">brando</span>` + ["-2", "-1", "0", "1", "2"].map(k => `<i style="background:${NOTA_COR[k]}" title="${notaTxt(+k)}"></i>`).join("") + `<span style="margin-left:6px">duro</span>`;
+}
+function renderFacts() {
+  const n = notadas(), a0 = atas[n[0]], aN = atas[n[n.length - 1]], virada = aN.indice - a0.indice;
   let best = null; "ABCD".split("").forEach(k => { const m0 = secMedia(a0, k), mN = secMedia(aN, k); if (m0 === null || mN === null) return; const d = mN - m0; if (!best || Math.abs(d) > Math.abs(best.d)) best = {k, m0, mN, d}; });
-  const acima = n.filter(r => atas[r].indice > 0).length;
-  const sim = Object.values(D.inalterado.pares); const simMin = Math.min(...sim);
-  $("#insights").innerHTML = `
-  <div class="insight"><div class="big ${virada > 0 ? "up" : "down"}">${fmt(virada)}</div><h3>de virada no tom com a Selic em queda</h3><p>O índice foi de ${fmt(a0.indice)} (${n[0]}ª) a ${fmt(aN.indice)} (${n[n.length-1]}ª), enquanto a Selic caiu de ${pct(s0)} para ${pct(sN)}. ${acima} das ${n.length} atas ficaram acima de zero: o Copom cortou falando como quem quer juros restritivos.</p></div>
-  <div class="insight"><div class="big">${fmt(best.m0, 1)} → ${fmt(best.mN, 1)}</div><h3>Seção ${best.k}, ${SEC[best.k].toLowerCase()}, foi a que mais virou</h3><p>Nota média dos parágrafos da seção entre a ${n[0]}ª e a ${n[n.length-1]}ª. É ali que o Copom explica o raciocínio, por isso ela tem peso 2 no índice.</p></div>
-  <div class="insight"><div class="big">${Math.round(simMin * 100)}%</div><h3>da orientação repetida, palavra por palavra</h3><p>Os ${sim.length} parágrafos de orientação da ${n[n.length-1]}ª são idênticos aos da ${prevOf(n[n.length-1])}ª. A mudança de tom veio só do diagnóstico, não do recado sobre os próximos passos.</p></div>`;
+  const sim = Math.min(...Object.values(D.inalterado.pares));
+  $("#facts").innerHTML = `
+  <div class="fact" style="border-top-color:var(--hawk)"><span class="lbl">virada do tom · ${n[0]}ª → ${n[n.length-1]}ª</span><span class="big hawk" data-to="${virada}">${fmt(virada)}</span><h3>enquanto a Selic caía ${fmt(sel[n[n.length-1]].selic - sel[n[0]].selic).replace("−", "")} p.p.</h3></div>
+  <div class="fact" style="border-top-color:var(--ink)"><span class="lbl">seção que mais virou</span><span class="big">${best.k} <span style="font-size:.55em">${fmt(best.m0, 1)} → ${fmt(best.mN, 1)}</span></span><h3>${SEC[best.k]} da política</h3><p>é onde o Copom explica o raciocínio, por isso pesa 2× no índice.</p></div>
+  <div class="fact" style="border-top-color:var(--gold)"><span class="lbl">orientação repetida</span><span class="big" style="color:var(--gold)" data-to="${Math.round(sim * 100)}" data-f="pc">${Math.round(sim * 100)}%</span><h3>palavra por palavra, ${prevOf(n[n.length-1])}ª → ${n[n.length-1]}ª</h3><p>o tom mudou só no diagnóstico, não no recado.</p></div>`;
+  countAll($("#facts"));
 }
-
-function renderTrail() {
-  const box = $("#trail"); box.innerHTML = "";
-  ordem().forEach(r => { const a = atas[r], v = a.indice ?? 0, s = sel[r];
-    const b = el("button", {type: "button", "aria-label": `Abrir a ${r}ª ata`});
-    const left = v >= 0 ? 50 : 50 + v / 2 * 50, width = Math.abs(v) / 2 * 50;
-    b.innerHTML = `<span class="t1">${r}ª</span><span class="t2">${dataBR(a.data_reuniao)}${s ? " · " + pct(s.selic) : ""}</span><span class="tbar"><i style="left:${left}%;width:${Math.max(width, 1)}%;background:${tomCor(v)}"></i></span><span class="tv" style="color:${tomCor(v)}">${a.semNota ? "sem nota" : fmt(v)}</span>`;
-    b.onclick = () => { atual = r; go("atas"); renderAta(); };
-    box.appendChild(b); });
-  if (prox && !atas[String(prox.reuniao)]) box.appendChild(el("div", {class: "ghost-next trail-ghost", style: "display:grid;gap:6px;padding:12px;border:1px dashed var(--line);border-radius:8px"}, `<span class="t1" style="font:600 15px var(--mono)">${prox.reuniao}ª</span><span class="t2" style="font-size:12px;color:var(--muted)">${dataBR(prox.data)} · ${pct(prox.selic)}</span><span style="font-size:12px;color:var(--warn)">ata prevista para ${dataBR(prox.ata_prevista)}</span>`));
-  box.style.setProperty("--cols", box.children.length);
-}
-
 function renderImpact() {
-  $("#imp-title").textContent = D.impacto.manchete;
   const t = D.impacto.texto;
-  $("#imp-text").innerHTML = `<p>${esc(t[0])}</p><details class="more"><summary>Ler a análise completa</summary><div class="stack" style="gap:12px">${t.slice(1).map(x => `<p>${esc(x)}</p>`).join("")}<p class="status">Trecho de risco: “${esc(D.impacto.risco_trecho)}” (281ª §13). Opções de Copom: <a href="${D.impacto.fontes[0]}">Rankia, 26/10</a>. Decisão da 282ª: <a href="${D.impacto.fontes[1]}">comunicado do Copom</a>.</p></div></details>`;
+  $("#imp-title").textContent = D.impacto.manchete;
+  $("#imp-lead").textContent = t[0];
+  $("#imp-more").innerHTML = t.slice(1).map(x => `<p>${esc(x)}</p>`).join("") + `<p class="status">Trecho de risco: “${esc(D.impacto.risco_trecho)}” (281ª §13). Opções de Copom: <a href="${D.impacto.fontes[0]}">Rankia, 26/10</a>. Decisão da 282ª: <a href="${D.impacto.fontes[1]}">comunicado do Copom</a>.</p>`;
+  const ch = [["Selic", "↘", "dove", "cortes graduais seguiam no cenário; a pausa da 282ª mostra o peso do câmbio"], ["Juros futuros", "→", "flat", "diagnóstico mais brando, orientação igual: sem aposta em aceleração"], ["Câmbio", "↗", "hawk", "é o risco de alta que a ata destaca; dólar mais caro favorece pausa"], ["Crédito", "↘", "dove", "crédito livre já desacelera; juros altos mantêm o freio"]];
+  $("#chans").innerHTML = ch.map(([t, a, c, p]) => `<div class="chan"><div class="t"><span class="lbl" style="color:var(--ink)">${t}</span><span class="arrow ${c}" aria-hidden="true">${a}</span></div><p>${p}</p></div>`).join("");
 }
+function renderPanorama() { renderHero(); renderKpis(); drawChart(); renderHeat(); renderPrints(); renderFacts(); }
 
 /* ===== ata por ata ===== */
 let atual = null, fSec = "todas", fTom = "todos";
 function renderPicker() {
-  const box = $("#picker"); box.innerHTML = "";
-  ordem().forEach(r => { const v = atas[r].indice ?? 0;
-    const b = el("button", {type: "button", "aria-pressed": String(r === atual)}, `<b>${r}ª</b><span style="color:${r === atual ? "" : tomCor(v)}">${atas[r].semNota ? "sem nota" : fmt(v)}</span>`);
+  const box = $("#picker"), rs = ordem(); box.style.setProperty("--n", rs.length);
+  box.innerHTML = "";
+  rs.forEach(r => { const v = atas[r].indice ?? 0, left = v >= 0 ? 50 : 50 + v / 2 * 50, w = Math.abs(v) / 2 * 50;
+    const b = el("button", {type: "button", class: "pick", "aria-pressed": String(r === atual)}, `<span class="r">${r}ª</span><span class="v" style="color:${tomCor(v)}">${atas[r].semNota ? "sem nota" : fmt(v)}</span><span class="bar"><i style="left:${left}%;width:${Math.max(w, 1)}%;background:${tomCor(v)}"></i></span><span class="lbl" style="font-size:10px">${dataBR(atas[r].data_reuniao)}</span>`);
     b.onclick = () => { atual = r; renderAta(); }; box.appendChild(b); });
 }
-function segs(id, opts, cur, on) {
-  const box = $(id); box.innerHTML = "";
-  opts.forEach(([k, l]) => { const b = el("button", {type: "button", "aria-pressed": String(k === cur)}, l); b.onclick = () => on(k); box.appendChild(b); });
+function segs(id, opts, cur, on) { const box = $(id); box.innerHTML = ""; opts.forEach(([k, l]) => { const b = el("button", {type: "button", "aria-pressed": String(k === cur)}, l); b.onclick = () => on(k); box.appendChild(b); }); }
+function donut(cnt, tot) {
+  const R = 60, C = 2 * Math.PI * R; let off = 0, g = "";
+  [2, 1, 0, -1, -2].forEach((n, i) => { const c = cnt[i]; if (!c) return; const len = c / tot * C;
+    g += `<circle cx="75" cy="75" r="${R}" fill="none" stroke="${NOTA_COR[String(n)]}" stroke-width="22" stroke-dasharray="${len} ${C - len}" stroke-dashoffset="${-off}" transform="rotate(-90 75 75)"><title>${notaTxt(n)}: ${c}</title></circle>`; off += len; });
+  return `<svg viewBox="0 0 150 150">${g}<text x="75" y="76" text-anchor="middle" style="font:800 40px var(--display);fill:var(--ink)">${tot}</text><text x="75" y="96" text-anchor="middle" style="font:600 10px var(--mono);letter-spacing:.1em;fill:var(--muted)">PARÁGRAFOS</text></svg>`;
 }
 function renderAta() {
   if (!atual) atual = lastOf();
   renderPicker();
-  const a = atas[atual], s = sel[atual], ps = Object.values(a.paragrafos), pub = D.ata_publicada[atual];
-  const cnt = [2, 1, 0, -1, -2].map(n => ps.filter(p => p.nota === n).length), tot = ps.length;
-  const cores = ["var(--hawk)", "var(--hawk-soft)", "var(--sunk)", "var(--dove-soft)", "var(--dove)"];
-  const bars = "ABCD".split("").map(k => { const m = secMedia(a, k); if (m === null) return ""; const left = m >= 0 ? 50 : 50 + m / 2 * 50, w = Math.abs(m) / 2 * 50;
-    return `<div class="secbar"><span>${k}</span><div class="track" title="${SEC[k]}"><i style="left:${left}%;width:${Math.max(w, .8)}%;background:${tomCor(m)}"></i></div><span style="text-align:right;color:${tomCor(m)}">${fmt(m)}</span></div>`; }).join("");
-  $("#ata-sum").innerHTML = `
-  <div class="card"><div class="kicker">${atual}ª reunião</div><h3 style="margin:6px 0 10px;color:${tomCor(a.indice ?? 0)}">${a.semNota ? "Ainda sem nota" : rotulo(a.indice) + " · " + fmt(a.indice)}</h3>
-    <div class="facts"><div><span>Reunião</span><b class="num">${dataBR(a.data_reuniao)}</b></div><div><span>Ata publicada</span><b class="num">${dataBR(pub)}</b></div>
-    <div><span>Decisão</span><b class="num">${s ? s.decisao + " → " + pct(s.selic) : "—"}</b></div><div><span>Média simples</span><b class="num">${fmt(a.media_simples ?? 0)}</b></div>
-    ${a.indice_revisor !== undefined ? `<div><span>Índice da 2ª leitura</span><b class="num">${fmt(a.indice_revisor)}</b></div>` : ""}</div></div>
-  <div class="card"><div class="kicker">Notas dos ${tot} parágrafos</div>
-    <div class="dist" role="img" aria-label="Distribuição das notas">${cnt.map((c, i) => c ? `<i style="width:${c / tot * 100}%;background:${cores[i]}" title="${notaTxt([2,1,0,-1,-2][i])}: ${c}"></i>` : "").join("")}</div>
-    <div class="dist-l">${cnt.map((c, i) => `<span>${notaTxt([2,1,0,-1,-2][i])}<br><b style="color:var(--ink)">${c}</b></span>`).join("")}</div>
-    <p class="status" style="margin-top:10px">${a.n_duros ?? 0} duros, ${a.n_brandos ?? 0} brandos, ${tot - (a.n_duros ?? 0) - (a.n_brandos ?? 0)} neutros.</p></div>
-  <div class="card"><div class="kicker">Nota média por seção</div><div class="secbars">${bars}</div>
-    <p class="status" style="margin-top:10px">A ${SEC.A.toLowerCase()} · B ${SEC.B.toLowerCase()} · C ${SEC.C.toLowerCase()} · D ${SEC.D.toLowerCase()}</p></div>`;
+  const a = atas[atual], s = sel[atual], ps = Object.values(a.paragrafos), pub = D.ata_publicada[atual], tot = ps.length;
+  const cnt = [2, 1, 0, -1, -2].map(n => ps.filter(p => (p.nota ?? 0) === n).length);
+  const temas = {}; ps.forEach(p => { if (p.nota === undefined) return; const t = p.tema || "outro"; (temas[t] ||= []).push(p.nota); });
+  const temaRows = Object.entries(temas).map(([t, v]) => [t, v.reduce((x, y) => x + y, 0) / v.length, v.length]).sort((x, y) => y[2] - x[2]).slice(0, 6);
+  const bar = (lab, m, extra = "") => { const left = m >= 0 ? 50 : 50 + m / 2 * 50, w = Math.abs(m) / 2 * 50;
+    return `<div class="hbar"><span>${lab}</span><div class="track"><i style="left:${left}%;width:${Math.max(w, .8)}%;background:${tomCor(m)}"></i></div><span style="text-align:right;color:${tomCor(m)};font-weight:700">${fmt(m)}${extra}</span></div>`; };
+  $("#ata-top").innerHTML = `
+  <div class="card"><span class="lbl">${atual}ª reunião · ${a.semNota ? "ainda sem nota" : rotulo(a.indice)}</span>
+    <div class="big score-big" style="color:${tomCor(a.indice ?? 0)};margin-top:6px" data-to="${a.indice ?? 0}">${fmt(a.indice ?? 0)}</div>
+    <div class="facts-l"><div><span>reunião</span><b>${dataBR(a.data_reuniao)}</b></div><div><span>ata publicada</span><b>${dataBR(pub)}</b></div>
+    <div><span>decisão</span><b>${s ? s.decisao + " → " + pct(s.selic) : "—"}</b></div><div><span>média simples</span><b>${fmt(a.media_simples ?? 0)}</b></div>
+    ${a.indice_revisor !== undefined ? `<div><span>2ª leitura</span><b>${fmt(a.indice_revisor)}</b></div>` : ""}</div></div>
+  <div class="card"><div class="card-h"><h3>Distribuição</h3><span class="lbl">${a.n_duros ?? 0} duros · ${a.n_brandos ?? 0} brandos</span></div>
+    <div class="donut-wrap">${donut(cnt, tot)}<div class="dl">${[2, 1, 0, -1, -2].map((n, i) => `<div><i style="background:${NOTA_COR[String(n)]}"></i><b style="width:24px">${notaTxt(n)}</b><span class="muted">${cnt[i]} par.</span></div>`).join("")}</div></div></div>
+  <div class="card"><div class="card-h"><h3>Seções e temas</h3><span class="lbl">nota média</span></div>
+    <div class="hbars">${"ABCD".split("").map(k => { const m = secMedia(a, k); return m === null ? "" : bar(`${k} · ${SEC[k]}`, m); }).join("")}</div>
+    <div class="hbars" style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)">${temaRows.map(([t, m, c]) => bar(`${t} (${c})`, m)).join("")}</div></div>`;
+  countAll($("#ata-top"));
   const secs = [...new Set(ps.map(p => p.secao[0]))];
   segs("#f-sec", [["todas", "Todas"], ...secs.map(k => [k, `${k} · ${SEC[k] || ""}`])], fSec, k => { fSec = k; renderAta(); });
   segs("#f-tom", [["todos", "Todos"], ["duro", "Duros"], ["neutro", "Neutros"], ["brando", "Brandos"]], fTom, k => { fTom = k; renderAta(); });
   renderParas();
 }
 function renderParas() {
-  const a = atas[atual], qy = $("#f-q").value.trim().toLowerCase(), box = $("#paras"); box.innerHTML = "";
-  const norm0 = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  const a = atas[atual], qy = $("#f-q").value.trim(), box = $("#paras"); box.innerHTML = "";
+  const n0 = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
   const list = Object.entries(a.paragrafos).filter(([n, p]) => (fSec === "todas" || p.secao[0] === fSec)
-    && (fTom === "todos" || (fTom === "duro" ? p.nota > 0 : fTom === "brando" ? p.nota < 0 : p.nota === 0))
-    && (!qy || norm0(p.texto + " " + (p.tema || "")).includes(norm0(qy))));
+    && (fTom === "todos" || (fTom === "duro" ? p.nota > 0 : fTom === "brando" ? p.nota < 0 : (p.nota ?? 0) === 0))
+    && (!qy || n0(p.texto + " " + (p.tema || "")).includes(n0(qy))));
   $("#f-count").textContent = `${list.length} de ${Object.keys(a.paragrafos).length} parágrafos`;
-  if (!list.length) { box.appendChild(el("div", {class: "empty"}, "Nenhum parágrafo com esses filtros. Tente outra seção ou limpe a busca.")); return; }
+  if (!list.length) { box.appendChild(el("div", {class: "empty"}, "Nenhum parágrafo com esses filtros. Troque a seção ou limpe a busca.")); return; }
   let sec = "";
-  list.forEach(([n, p]) => {
-    if (p.secao !== sec) { sec = p.secao; const m = secMedia(a, sec[0]); box.appendChild(el("div", {class: "sec-label"}, `<span>${esc(sec)}</span>${m !== null ? `<span style="color:${tomCor(m)}">média ${fmt(m)}</span>` : ""}`)); }
+  list.forEach(([n, p], i) => {
+    if (p.secao !== sec) { sec = p.secao; const m = secMedia(a, sec[0]); box.appendChild(el("div", {class: "sec-l"}, `<span>${esc(sec)}</span>${m !== null ? `<span style="color:${tomCor(m)}">média ${fmt(m)}</span>` : ""}`)); }
     const nota = p.nota ?? 0, t = esc(p.texto), tr = esc(p.trecho || "");
     let hi = t; if (tr) { const re = new RegExp(tr.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s*")); hi = t.replace(re, m => `<mark>${m}</mark>`); }
-    const rv = p.nota_revisor !== undefined ? `<span class="${p.nota_revisor === nota ? "agree" : "disagree"}">2ª leitura: ${notaTxt(p.nota_revisor)}${p.nota_revisor === nota ? " ✓" : ""}</span>` : "";
-    const d = el("div", {class: "para" + (nota < 0 ? " dv" : nota === 0 ? " n0" : "")});
-    d.innerHTML = `<div class="score s${nota}" aria-label="nota ${notaTxt(nota)}">${notaTxt(nota)}</div>
-      <div style="min-width:0"><div class="meta"><span>§${n}</span><span>${esc(p.tema || "")}</span>${rv}</div><div class="q">“${tr}”</div>${p.justificativa ? `<div class="why">${esc(p.justificativa)}</div>` : ""}<details><summary>Ver parágrafo completo</summary><div>${hi}</div></details></div>`;
+    const rv = p.nota_revisor !== undefined ? `<span class="${p.nota_revisor === nota ? "agree" : "disagree"}">2ª leitura ${notaTxt(p.nota_revisor)}${p.nota_revisor === nota ? " ✓" : ""}</span>` : "";
+    const d = el("div", {class: "para", style: `animation-delay:${Math.min(i, 12) * 25}ms`});
+    d.innerHTML = `<div class="sc" style="background:${NOTA_COR[String(nota)]};color:${Math.abs(nota) === 2 ? "var(--on-strong)" : "var(--ink)"}" aria-label="nota ${notaTxt(nota)}">${notaTxt(nota)}</div>
+      <div class="bd"><div class="meta"><span>§${n}</span><span>${esc(p.tema || "")}</span>${rv}</div><div class="q">“${tr || esc(p.texto.slice(0, 120))}”</div>${p.justificativa ? `<div class="why">${esc(p.justificativa)}</div>` : ""}<details><summary>parágrafo completo</summary><div>${hi}</div></details></div>`;
     box.appendChild(d);
   });
 }
@@ -636,58 +750,71 @@ $("#f-q").addEventListener("input", renderParas);
 
 /* ===== o que mudou ===== */
 function renderMudou() {
-  const n = ordem().filter(r => !atas[r].semNota && atas[r].indice !== undefined), b = "281", a = "280";
-  $("#mud-kicker").textContent = `${a}ª (${dataBR(atas[a].data_reuniao)}) → ${b}ª (${dataBR(atas[b].data_reuniao)})`;
-  const ia = atas[a].indice, ib = atas[b].indice, d = ib - ia;
-  $("#cmp-big").innerHTML = `<b style="color:${tomCor(ia)}">${fmt(ia)}</b><span class="arrow">→</span><b style="color:${tomCor(ib)}">${fmt(ib)}</b><span class="pill ${d < 0 ? "dove" : d > 0 ? "hawk" : "neu"}">${d < 0 ? "suavizou" : d > 0 ? "endureceu" : "igual"} ${fmt(d)}</span>`;
-  $("#cmp-note").textContent = `${rotulo(ia)} → ${rotulo(ib).toLowerCase()}. O índice continua acima de zero: ainda é um Copom duro, só que um pouco menos.`;
-  $("#cmp-table").innerHTML = `<thead><tr><th>Seção</th><th style="text-align:right">${a}ª</th><th style="text-align:right">${b}ª</th><th style="text-align:right">Δ</th></tr></thead><tbody>` +
-    "ABCD".split("").map(k => { const x = secMedia(atas[a], k), y = secMedia(atas[b], k); if (x === null || y === null) return ""; const dd = y - x;
-      return `<tr><td>${k} · ${SEC[k]}</td><td class="num">${fmt(x)}</td><td class="num">${fmt(y)}</td><td class="num" style="color:${Math.abs(dd) < .005 ? "var(--muted)" : tomCor(dd)}">${Math.abs(dd) < .005 ? "=" : fmt(dd)}</td></tr>`; }).join("") + "</tbody>";
-  const q = (o, gone) => o ? `<blockquote class="quote${gone ? " gone" : ""}"><cite>${gone ? "antes · " : "depois · "}${o.reuniao}ª §${o.par}</cite><span>“${esc(o.trecho)}”</span></blockquote>` : `<blockquote class="quote gone"><cite>antes · ${a}ª</cite>parágrafo não existia</blockquote>`;
+  const a = "280", b = "281", ia = atas[a].indice, ib = atas[b].indice, d = ib - ia;
+  $("#mud-kicker").textContent = `${a}ª ${dataBR(atas[a].data_reuniao)} → ${b}ª ${dataBR(atas[b].data_reuniao)}`;
+  $("#vs").innerHTML = `<span class="big" style="color:${tomCor(ia)};opacity:.55" data-to="${ia}">${fmt(ia)}</span><span class="arrow">→</span><span class="big" style="color:${tomCor(ib)}" data-to="${ib}">${fmt(ib)}</span><span class="pill ${d < 0 ? "dove" : d > 0 ? "hawk" : "neu"}">${d < 0 ? "▼ suavizou" : d > 0 ? "▲ endureceu" : "igual"} ${fmt(Math.abs(d))}</span>`;
+  $("#vs-note").textContent = `${rotulo(ia)} → ${rotulo(ib).toLowerCase()}. Ainda acima de zero: um Copom duro, só que menos.`;
+  countAll($("#vs"));
+  // gráfico de inclinação por seção
+  const W = 520, X0 = 120, X1 = 400, yv = v => 124 - v * 48; let g = "";
+  [-2, -1, 0, 1, 2].forEach(v => { g += `<line x1="${X0}" x2="${X1}" y1="${yv(v)}" y2="${yv(v)}" stroke="${v === 0 ? "var(--line-2)" : "var(--line)"}" stroke-dasharray="${v === 0 ? "" : "2 4"}"/><text x="${X0 - 12}" y="${yv(v) + 4}" text-anchor="end" style="font:500 11px var(--mono);fill:var(--muted)">${fmt(v, 0)}</text>`; });
+  g += `<text x="${X0}" y="16" text-anchor="middle" style="font:700 12px var(--mono);fill:var(--muted)">${a}ª</text><text x="${X1}" y="16" text-anchor="middle" style="font:700 12px var(--mono);fill:var(--ink)">${b}ª</text>`;
+  const labs = [];
+  "ABCD".split("").forEach((k, i) => { const x = secMedia(atas[a], k), y = secMedia(atas[b], k); if (x === null || y === null) return; const dd = y - x, col = Math.abs(dd) < .005 ? "var(--muted)" : tomCor(dd);
+    const jit = (i - 1.5) * 3;
+    g += `<line x1="${X0}" y1="${yv(x) + jit}" x2="${X1}" y2="${yv(y) + jit}" stroke="${col}" stroke-width="${Math.abs(dd) < .005 ? 2 : 3.5}" class="draw" pathLength="1"/><circle cx="${X0}" cy="${yv(x) + jit}" r="5" fill="${col}"/><circle cx="${X1}" cy="${yv(y) + jit}" r="6" fill="${col}"/>`;
+    labs.push({y: yv(y) + jit + 4, t: `${k} ${fmt(y)}${Math.abs(dd) < .005 ? " =" : ` (${fmt(dd)})`}`, col}); });
+  labs.sort((p, q) => p.y - q.y).forEach((l, i, arr) => { if (i && l.y - arr[i - 1].y < 15) l.y = arr[i - 1].y + 15; g += `<text x="${X1 + 14}" y="${l.y}" style="font:700 11.5px var(--mono);fill:${l.col}">${l.t}</text>`; });
+  $("#slope").innerHTML = g;
+  const q = (o, old) => o ? `<blockquote class="dq ${old ? "old" : "new"}"><cite>${old ? "antes" : "depois"} · ${o.reuniao}ª §${o.par}</cite><span>“${esc(o.trecho)}”</span></blockquote>` : `<blockquote class="dq old"><cite>antes · ${a}ª</cite>parágrafo não existia</blockquote>`;
   $("#changes").innerHTML = "";
   [...D.mudancas, D.contraponto].forEach((m, i) => {
     const hawk = m.efeito.startsWith("endureceu");
-    const c = el("article", {class: "chg"});
-    c.innerHTML = `<div class="chg-head"><h3><span class="n">${i < 3 ? "Mudança " + (i + 1) : "Contraponto"}</span>${esc(m.titulo.replace(/^Contraponto: /, ""))}</h3><span class="pill ${hawk ? "hawk" : "dove"}">${esc(m.efeito)} · nota ${esc(m.nota)}</span></div>
-      <div class="diff">${q(m.antes, true)}${q(m.depois)}</div>${m.leitura ? `<p class="read">${esc(m.leitura)}</p>` : ""}`;
+    const c = el("article", {class: "chg pop", style: `animation-delay:${i * 80}ms`});
+    c.innerHTML = `<div class="idx" style="background:${hawk ? "var(--hawk)" : "var(--dove)"}">${i < 3 ? i + 1 : "×"}</div><div class="bd"><div class="top"><h3>${esc(m.titulo.replace(/^Contraponto: /, ""))}</h3><span class="pill ${hawk ? "hawk" : "dove"}">${esc(m.efeito)} · ${esc(m.nota)}</span></div>
+      <div class="diff">${q(m.antes, true)}${q(m.depois)}</div>${m.leitura ? `<p class="read">${esc(m.leitura)}</p>` : ""}</div>`;
     $("#changes").appendChild(c);
   });
-  $("#same-text").innerHTML = `Os parágrafos de orientação da ${b}ª têm 100% de similaridade de texto com os da ${a}ª. Inclusive: “${esc(D.inalterado.trecho)}” (${b}ª §17).`;
-  $("#sim").innerHTML = Object.entries(D.inalterado.pares).map(([k, v]) => `<div class="simrow"><span class="lab">${esc(k)}</span><div class="track"><i style="width:${v * 100}%"></i></div><span style="text-align:right">${Math.round(v * 100)}%</span></div>`).join("");
+  $("#same-text").innerHTML = `“${esc(D.inalterado.trecho)}” (${b}ª §17) e os demais parágrafos de orientação seguem idênticos.`;
+  $("#sim").innerHTML = Object.entries(D.inalterado.pares).map(([k, v], i) => `<div class="simrow"><span class="lab">${esc(k)}</span><div class="track"><i style="width:${v * 100}%;animation-delay:${i * 120}ms"></i></div><span style="text-align:right;font-weight:700">${Math.round(v * 100)}%</span></div>`).join("");
 }
 
 /* ===== método ===== */
 function renderMetodo() {
-  let nT = 0; Object.values(atas).forEach(a => { if (!a.semNota) nT += Object.keys(a.paragrafos).length; });
   const C = D.concordancia;
-  $("#checks").innerHTML = `<div><b>${C.total}/${C.total}</b><span>trechos citados encontrados literalmente nas atas</span></div>
-    <div><b>${Math.round(C.iguais / C.total * 100)}%</b><span>notas idênticas na 2ª leitura (${C.iguais} de ${C.total})</span></div>
-    <div><b>${Math.round(C.ate_1_ponto / C.total * 100)}%</b><span>a no máximo 1 ponto de diferença (${C.ate_1_ponto} de ${C.total})</span></div>
-    <div><b>${D.focus.length}</b><span>pontos do Focus oficial, conferidos em duas fontes do BC</span></div>`;
-  $("#conc").innerHTML = `Com as notas da 2ª leitura, o índice das atas fica: ${ordem().filter(r => atas[r].indice_revisor !== undefined).map(r => r + "ª " + fmt(atas[r].indice_revisor)).join(" · ")}. A tendência é a mesma.`;
-  $("#focus-lim").textContent = D.focus_origem === "oficial" ? `O Focus vem da API Olinda do BC (python-bcb), dados até ${dataBR(focusLast.data)}.` : "Por enquanto, o Focus vem de notícias que citam o boletim.";
-  $("#focus-src").innerHTML = D.focus_origem === "oficial" ? "API Olinda do BC" : "notícias que citam o boletim";
-  const n = ordem(); $("#ft-atas").textContent = `${n[0]}ª a ${n[n.length - 1]}ª, reuniões de ${dataBR(atas[n[0]].data_reuniao)} a ${dataBR(atas[n[n.length - 1]].data_reuniao)}`;
+  $("#checks").innerHTML = `<div><span class="big" data-to="${C.total}" data-f="int">${C.total}</span><span>de ${C.total} trechos citados existem literalmente nas atas</span></div>
+    <div><span class="big" data-to="${Math.round(C.iguais / C.total * 100)}" data-f="pc">0%</span><span>notas idênticas na 2ª leitura (${C.iguais} de ${C.total})</span></div>
+    <div><span class="big" data-to="${Math.round(C.ate_1_ponto / C.total * 100)}" data-f="pc">0%</span><span>a no máximo 1 ponto (${C.ate_1_ponto} de ${C.total})</span></div>
+    <div><span class="big" data-to="${D.focus.length}" data-f="int">0</span><span>pontos do Focus oficial, conferidos em 2 fontes do BC</span></div>`;
+  countAll($("#checks"));
+  const M = {}; let mx = 0;
+  Object.values(atas).forEach(a => Object.values(a.paragrafos).forEach(p => { if (p.nota === undefined || p.nota_revisor === undefined) return; const k = p.nota + "|" + p.nota_revisor; M[k] = (M[k] || 0) + 1; mx = Math.max(mx, M[k]); }));
+  const ns = [2, 1, 0, -1, -2];
+  let h = `<span class="hd" style="font-size:10px">ag \\ 2ª</span>` + ns.map(n => `<span class="hd">${notaTxt(n)}</span>`).join("");
+  ns.forEach(r => { h += `<span class="hd">${notaTxt(r)}</span>`; ns.forEach(c => { const v = M[r + "|" + c] || 0, k = v / mx;
+    const bg = v ? (r === c ? `color-mix(in oklab, var(--ok) ${(25 + k * 75).toFixed(0)}%, var(--paper))` : `color-mix(in oklab, var(--warn) ${(20 + k * 60).toFixed(0)}%, var(--paper))`) : "var(--sunk)";
+    h += `<span class="c" style="background:${bg};color:${v && k > .5 ? "var(--on-strong)" : "var(--ink)"}" title="agente ${notaTxt(r)} · 2ª leitura ${notaTxt(c)}: ${v}">${v || ""}</span>`; }); });
+  $("#cm").innerHTML = h;
+  $("#focus-lim").textContent = D.focus_origem === "oficial" ? `Focus: API Olinda do BC (python-bcb), dados até ${dataBR(focusLast.data)}. A nota é um julgamento, mesmo com régua fixa. Mudança de tom não é mudança de juros.` : "";
 }
 
-/* ===== render geral + pesos ===== */
-function renderAll() { renderHero(); drawChart(); renderInsights(); renderTrail(); renderAta(); renderMudou(); renderMetodo(); }
+/* ===== pesos ===== */
 const DEF = JSON.parse(JSON.stringify(D.agregacao));
 function setInputs(a) { "ABCD".split("").forEach(k => $("#w" + k).value = a.peso_por_secao[k]); $("#ign").checked = a.ignorar_neutros; }
 function recalc() {
   const w = Object.fromEntries("ABCD".split("").map(k => [k, Math.max(0, +$("#w" + k).value || 0)])), ign = $("#ign").checked;
   Object.values(atas).forEach(a => { if (a.semNota) return; let num = 0, den = 0; Object.values(a.paragrafos).forEach(p => { if (p.nota === undefined || (ign && p.nota === 0)) return; const ww = w[p.secao[0]] ?? 1; num += ww * p.nota; den += ww; }); a.indice = den ? Math.round(num / den * 100) / 100 : 0; });
   const mud = JSON.stringify(w) !== JSON.stringify(DEF.peso_por_secao) || ign !== DEF.ignorar_neutros;
-  $("#w-out").textContent = mud ? "Pesos alterados: " + ordem().filter(r => !atas[r].semNota).map(r => r + "ª " + fmt(atas[r].indice)).join(" · ") : "Pesos padrão do projeto.";
-  renderAll();
+  $("#w-out").innerHTML = mud ? "Com estes pesos: " + notadas().map(r => `<b style="color:${tomCor(atas[r].indice)}">${r}ª ${fmt(atas[r].indice)}</b>`).join(" · ") : "Pesos padrão do projeto. Mude e veja o índice de todas as abas recalcular.";
+  renderTicker();
 }
 setInputs(DEF);
 ["#wA", "#wB", "#wC", "#wD", "#ign"].forEach(id => $(id).addEventListener("input", recalc));
 $("#reset").onclick = () => { setInputs(DEF); recalc(); };
 
-if (prox) { const L = $("#live"); L.hidden = false; L.textContent = `${prox.reuniao}ª reunião: Selic ${prox.decisao === "manteve" ? "mantida" : prox.decisao} em ${pct(prox.selic)} · ata prevista ${dataCurta(prox.ata_prevista)}`; L.href = "#panorama"; }
-renderImpact(); renderAll(); $("#w-out").textContent = "Pesos padrão do projeto."; route();
+const n_ = ordem(); $("#ft-atas").textContent = `${n_[0]}ª a ${n_[n_.length - 1]}ª, reuniões de ${dataBR(atas[n_[0]].data_reuniao)} a ${dataBR(atas[n_[n_.length - 1]].data_reuniao)}`;
+$("#focus-src").textContent = D.focus_origem === "oficial" ? "API Olinda do BC" : "notícias que citam o boletim";
+guilloche(); renderTicker(); renderImpact(); recalc(); show(location.hash.slice(1));
 
 /* ===== chat ===== */
 const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[“”"«»]/g, "").replace(/[^a-z0-9%,.]/g, "");
@@ -701,7 +828,7 @@ const SUGS = ["O que o Copom disse sobre câmbio?", "Quando a ata falou pela pri
 SUGS.forEach(s => { const b = el("button", {class: "ghost", type: "button"}, esc(s)); b.onclick = () => { $("#q").value = s; ask(); }; $("#sugs").appendChild(b); });
 /* Duas formas de falar com o Claude: dentro do artefato do claude.ai (capacidade "sample")
    ou, no Netlify, pelas funções /api/chat e /api/tom, que guardam a chave da API no servidor. */
-let sample = null, api = false, history = [];
+let sample = null, api = false, history = [], novaR = null;
 const podeIA = () => !!(sample || api);
 async function apiPost(path, body) {
   const r = await fetch(path, {method: "POST", headers: {"content-type": "application/json"}, body: JSON.stringify(body)});
@@ -716,7 +843,7 @@ const novaParaApi = () => novaR && atas[novaR] ? {reuniao: novaR, paragrafos: Ob
     try { const r = await fetch("/api/saude", {cache: "no-store"}); if (r.ok) api = !!(await r.json()).ok; } catch (e) { api = false; }
   }
   $("#send").disabled = !podeIA();
-  if (!podeIA()) $("#q").placeholder = "O chat precisa do Claude: use o site no Netlify ou o artefato publicado.";
+  if (!podeIA()) $("#q").placeholder = "O chat precisa do Claude: abra o artefato publicado no claude.ai.";
   if (novaR) $("#btn-score").disabled = !podeIA();
 })();
 function addMsg(cls, html) { const m = el("div", {class: "msg " + cls}, html); $("#log").appendChild(m); $("#log").scrollTop = 1e9; return m; }
@@ -782,7 +909,6 @@ async function pdfText(file) {
   for (let i = 1; i <= doc.numPages; i++) { const c = await (await doc.getPage(i)).getTextContent(); out += c.items.map(it => it.str + (it.hasEOL ? "\n" : "")).join("") + "\n"; }
   return out;
 }
-let novaR = null;
 $("#btn-load").onclick = async () => {
   const st = $("#new-status"); st.textContent = "Lendo…";
   try {
@@ -793,7 +919,7 @@ $("#btn-load").onclick = async () => {
     if (!r || n < 5) { st.textContent = `Não reconheci os parágrafos numerados (achei ${n}). Confira o arquivo ou cole o texto.`; return; }
     const dataR = (f && (f.name.match(/\d{4}-\d{2}-\d{2}/) || [])[0]) || (prox && String(prox.reuniao) === r ? prox.data : "2026-11-04");
     atas[r] = {data_reuniao: dataR, paragrafos: pars, semNota: true, nova: true};
-    novaR = r; updCorpus(); renderTrail(); renderPicker();
+    novaR = r; updCorpus(); vista = null;
     st.textContent = `${r}ª carregada: ${n} parágrafos. Já dá para perguntar sobre ela.`;
     $("#btn-score").disabled = !podeIA();
   } catch (e) { st.textContent = "Não consegui ler esse arquivo. Tente colar o texto."; }
@@ -821,7 +947,7 @@ ${Object.entries(a.paragrafos).map(([n, p]) => `§${n} (${p.secao[0]}) ${p.texto
     delete a.semNota;
     a.media_simples = all.length ? Math.round(all.reduce((s, v) => s + v, 0) / all.length * 100) / 100 : 0;
     a.n_duros = all.filter(v => v > 0).length; a.n_brandos = all.filter(v => v < 0).length;
-    recalc(); atual = novaR; renderAta();
+    recalc(); atual = novaR; vista = null;
     st.textContent = `Índice da ${novaR}ª: ${fmt(a.indice)} (281ª: ${fmt(atas["281"].indice)}). ${bad ? bad + " trecho(s) não conferiram e foram trocados pelo início do parágrafo; revise na aba Ata por ata." : "Todos os trechos conferidos."}`;
     go("atas");
   } catch (e) { st.textContent = "Não consegui medir agora. Tente de novo."; $("#btn-score").disabled = false; }
