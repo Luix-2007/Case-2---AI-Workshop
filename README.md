@@ -2,135 +2,187 @@
 
 > Claude Lab · Economia & Finanças · PUC-Rio · 06/11/2026
 
-**🎬 Vídeo (2 min):** [PREENCHER]
+**🎬 Vídeo (2 min):** [PREENCHER: link do YouTube não listado ou do Drive com "qualquer pessoa com o link"]
 **🔗 Artefato público:** https://claude.ai/artifact/AXfdFGVa6h5voQmWovGHnr
 
 ## Equipe
 
 | Nome | Curso / período | Papel no projeto | LinkedIn / GitHub |
 |---|---|---|---|
-| [PREENCHER] | | | |
-| | | | |
-| | | | |
-| | | | |
+| Beatriz Menezes | Economia / 4º | Sugestões de funções e design | www.linkedin.com/in/beatriz-rangel-de-menezes-87a1b738a github: beatrizrmenezes|
+| Antônio Varejão | Engenharia de Produção / 3º| Sugestões de funções e organizaçao | https://www.linkedin.com/in/ant%C3%B4nio-varej%C3%A3o-734a68421/ github: antoniovarejao |
+| Rafael Sanches | Engenharia de computação / 3º  | desenvolvimento do site e orginazao | https://www.linkedin.com/in/rafael-sanches-05536a436/ github: rafasanches10 |
+| [PREENCHER] | [PREENCHER] | [PREENCHER] | [PREENCHER] |
 
 ## O problema
 
-No dia em que o Copom publica uma ata, o economista-chefe de um banco precisa saber em poucos minutos três coisas: se o Banco Central ficou mais duro ou mais brando, o que mudou em relação à ata anterior e o que isso pode significar para os juros. As atas são longas e quase iguais entre si. A diferença costuma estar em poucas palavras.
+No dia em que sai uma ata do Copom, o economista-chefe precisa saber em poucos minutos três coisas: se o Banco Central ficou mais duro ou mais brando, o que mudou em relação à ata anterior e o que isso pode significar para os juros. As atas são longas, técnicas e muito parecidas entre si. A mudança que importa costuma ser uma única palavra. E ninguém aceita resumo sem fonte.
 
 ## A solução
 
-Um site que lê as atas do Copom e mostra:
+Um site que **traduz as atas do Copom para quem decide**. Cada nota, cada mudança e cada resposta vem com **o nº do parágrafo e o trecho exato da ata**.
 
-1. **Veredito e termômetro**: o índice de tom da ata mais recente, de −2 (muito brando) a +2 (muito duro), comparado com a ata anterior.
-2. **Evolução**: o índice das 6 atas de 2026 (276ª a 281ª), com a Selic meta e a expectativa do Focus para a Selic no fim de 2026.
-3. **O que mudou** da 280ª para a 281ª: as 3 mudanças mais relevantes, com o trecho exato antes e depois, e o efeito de cada uma no tom.
-4. **Principal impacto**: o que a mudança sinaliza para a Selic, os juros futuros, o câmbio e o crédito, em linguagem condicional.
-5. **Evidências**: cada parágrafo de cada ata, com a nota, o tema, o trecho que sustenta a nota e a justificativa.
-6. **Pergunte às atas**: um chat único que conhece as 6 atas e responde citando reunião, parágrafo e trecho. O site confere automaticamente se cada trecho citado existe na ata. Também é possível subir uma ata nova (PDF ou texto) e medir o tom dela com a mesma régua.
-7. **Como medimos**: a régua, a regra de agregação, a concordância com uma segunda leitura e um painel para testar outros pesos ao vivo.
+| Aba | O que mostra |
+|---|---|
+| **Panorama** | Termômetro do tom da última ata, o índice nas 6 reuniões ao lado da Selic meta e da mediana do Focus, e o principal impacto |
+| **Ata por ata** | Os parágrafos de cada ata, coloridos pela nota (−2 a +2), com o trecho que justifica cada nota e a média por seção |
+| **O que mudou** | As 3 mudanças mais relevantes da 281ª em relação à 280ª, mais um contraponto e os parágrafos que ficaram idênticos |
+| **Pergunte às atas** | Chat com o Claude que responde só com base nas atas. Cada citação passa por uma conferência automática (✓ trecho conferido / ⚠ não literal). O usuário também pode **subir uma ata nova em PDF**, como a 282ª, e medir o tom dela com a mesma régua |
+| **Como medimos** | A régua, os pesos (que o usuário pode alterar para ver o índice recalcular) e as checagens feitas |
+
+[PREENCHER: prints do site]
+
+### Resultado: índice de tom (−2 brando · +2 duro)
+
+| Reunião | Data | Decisão | Selic | Índice | Média simples |
+|---|---|---|---|---|---|
+| 276ª | 28/01/2026 | manteve | 15,00% | **−0,47** | −0,16 |
+| 277ª | 18/03/2026 | −0,25 | 14,75% | **+0,24** | +0,28 |
+| 278ª | 29/04/2026 | −0,25 | 14,50% | **+0,27** | +0,28 |
+| 279ª | 17/06/2026 | −0,25 | 14,25% | **+0,32** | +0,32 |
+| 280ª | 05/08/2026 | −0,25 | 14,00% | **+0,63** | +0,47 |
+| 281ª | 16/09/2026 | −0,25 | 13,75% | **+0,45** | +0,30 |
+
+**A leitura:**
+- O Copom cortou a Selic 5 vezes seguidas e, mesmo assim, 5 das 6 atas tiveram tom duro: o BC cortava os juros sem deixar de avisar que vigiava a inflação. Mudança de tom não é mudança de juros.
+- A 276ª é a única ata branda. Foi ela que sinalizou o início do ciclo de cortes.
+- A 281ª suavizou em relação à 280ª (de +0,63 para +0,45), mas continua dura.
+
+### As 3 mudanças da 281ª em relação à 280ª
+
+| # | Mudança | Antes (280ª) | Depois (281ª) | Efeito |
+|---|---|---|---|---|
+| 1 | A desancoragem das expectativas deixou de ser "adicional" | §9 "monitora com atenção a desancoragem **adicional** das expectativas de inflação para prazos mais longos" | §10 "monitora com atenção a desancoragem das expectativas de inflação para prazos mais longos" | suavizou (nota igual, +2) |
+| 2 | A inflação cheia voltou para baixo do teto da meta | §2 "a inflação cheia desacelerou, porém ainda acima do limite superior da meta" | §2 "situando-se abaixo do limite superior do intervalo de tolerância, porém ainda acima da meta" | suavizou (+1 → −1) |
+| 3 | Parágrafo novo: o crédito está esfriando | (não existia) | §6 "consistente com um quadro de desaceleração do crescimento, em meio a uma política monetária restritiva" | suavizou (novo, −1) |
+| contraponto | Os preços ao produtor voltaram a subir | §8 "os preços aos produtores recuaram" | §9 "as variações de preços aos produtores aceleraram" | endureceu (nota igual, −1) |
+
+### Principal impacto
+
+O diagnóstico da 281ª ficou mais brando, mas as seções de discussão e decisão (C e D) ficaram praticamente iguais às da 280ª. Isso **sinalizava** continuidade dos cortes de 0,25 ponto, sem aceleração. O Focus já ia nessa direção: a mediana da Selic no fim de 2026 caiu de 13,75% para 13,50% em 18/09, logo depois da reunião e antes da publicação da ata (22/09), e chegou a 13,25% em 09/10. O risco estava escrito na própria ata: um câmbio "persistentemente mais depreciado" (281ª §13) é um dos riscos de alta para a inflação. Com o dólar subindo, o Focus voltou a 13,50% em 30/10, e na 282ª reunião (04/11) o Copom **manteve a Selic em 13,75%**, interrompendo os cortes. *Interpretação, não previsão.*
 
 ## Como funciona
 
 ```
-atas (PDF) ──► extrair.py ──► paragrafos.json   (numeração oficial dos parágrafos, sem cabeçalhos/rodapés)
-                                   │
-config/parametros.json ──► agente_tom.py ──► dados/tom_agente/ata_<n>.json   (nota, tema, trecho, justificativa)
-                                   │                  └─ --conferir: todo trecho existe na ata?
-                                   ▼
-                              indice.py ──► tom.json   (índice por ata + concordância com o revisor)
-                                   ▼
-dados_bcb.py (Selic, Focus) ──► montar_dados.py ──► site_data.json ──► gerar_site.py ──► site/index.html
+PDFs das atas ──► extrair e numerar parágrafos ──► Claude classifica cada parágrafo (−2 a +2 + trecho literal)
+                                                   │
+                                                   ├──► 2ª leitura independente (revisor) → concordância
+                                                   ▼
+                    índice por ata (regra de agregação) + diff 281ª × 280ª + Selic (SGS 432) + Focus (Olinda)
+                                                   ▼
+                            dados/resultados.json ──► site (artefato do claude.ai com IA)
+                                                   ▼
+                            verificacao/verificar.py confere tudo contra as fontes
 ```
 
-- **Agente de tom.** Um agente Claude por ata, rodando em paralelo. Cada um recebe a régua do `config/parametros.json` e classifica todos os parágrafos. Os prompts usados estão em `prompts/`.
-- **Parâmetros.** A régua (o que vale cada nota) e a agregação (pesos por seção, ignorar neutros) ficam em `config/parametros.json`. Se a régua mudar, o agente roda de novo. Se só os pesos mudarem, basta recalcular o índice. O site também tem um painel para testar pesos na hora.
+1. **Extração:** o texto de cada ata é dividido nos parágrafos numerados do próprio PDF (§1, §2, …) e cada parágrafo recebe a seção dele (A, B, C ou D).
+2. **Classificação:** o Claude dá uma nota a cada parágrafo e copia literalmente o trecho que a justifica.
+3. **Segunda leitura:** uma classificação independente, feita do zero, mede a consistência.
+4. **Agregação:** a média ponderada vira o índice de cada ata.
+5. **Diff:** a comparação entre a 281ª e a 280ª mostra parágrafos novos, alterados e idênticos.
+6. **Cruzamento com o mercado:** o índice é comparado com a Selic meta e com o Focus.
+7. **Site gerado a partir do JSON:** uma ata nova entra pelo próprio site, que extrai o PDF no navegador e aplica a mesma régua.
 
-### Régua e agregação
+### A régua (nota por parágrafo)
 
-| Nota | Significado | Exemplo nas atas |
+| Nota | Significado | Exemplo real nas atas |
 |---|---|---|
-| +2 | muito duro | "desancoragem adicional"; restrição "maior e por mais tempo" com ênfase |
-| +1 | duro | riscos com "assimetria altista"; "serenidade e cautela" |
+| +2 | muito duro | "desancoragem adicional"; "maior e por mais tempo" |
+| +1 | duro | "assimetria altista"; "serenidade e cautela" |
 | 0 | neutro | premissas, números, procedimento, votação |
-| −1 | brando | inflação cedendo; atividade e crédito desacelerando; corte de 0,25 |
+| −1 | brando | inflação cedendo; atividade desacelerando; corte de 0,25 |
 | −2 | muito brando | "sinalizar o início de um ciclo de redução" (276ª) |
 
-**Índice da ata** = média ponderada das notas, **ignorando parágrafos neutros**, com **peso 2 nas seções C (discussão) e D (decisão)** e peso 1 em A e B. Os neutros diluíam o sinal, e é nas seções C e D que o Copom sinaliza os próximos passos.
+### Regra de agregação
 
-### Resultado
+**Índice = média ponderada das notas, ignorando os parágrafos neutros (0).** As seções têm pesos diferentes:
 
-| Reunião | Data | Selic | Índice (agente) | Índice (revisor) |
-|---|---|---|---|---|
-| 276ª | 28/01/2026 | 15,00% (manteve) | −0,47 | −1,00 |
-| 277ª | 18/03/2026 | 14,75% | +0,24 | +0,07 |
-| 278ª | 29/04/2026 | 14,50% | +0,27 | +0,36 |
-| 279ª | 17/06/2026 | 14,25% | +0,32 | +0,39 |
-| 280ª | 05/08/2026 | 14,00% | +0,63 | +0,44 |
-| 281ª | 16/09/2026 | 13,75% | +0,45 | +0,38 |
+| Seção | Peso |
+|---|---|
+| A) Conjuntura | 1 |
+| B) Cenários e riscos | 1 |
+| C) Discussão da política monetária | 2 |
+| D) Decisão | 2 |
 
-O tom ficou mais duro enquanto a Selic caía. O Copom cortou em todas as reuniões a partir de março, mas falando como quem quer manter os juros restritivos. A 276ª, com a Selic parada, foi a mais branda porque anunciou o início dos cortes. Mudança de tom não é mudança de juros.
+**Por quê:**
+- Os parágrafos neutros (dados, votação) diluem o sinal.
+- As seções C e D são onde o Copom sinaliza os próximos passos.
+
+A média simples continua sendo mostrada, para comparação. No site, o usuário pode mudar os pesos e ver o índice recalcular.
 
 ## Dados usados
 
-- **Atas do Copom** 276ª a 281ª (PDF), do repositório do workshop. Fonte: [Banco Central do Brasil](https://www.bcb.gov.br/publicacoes/atascopom). A data da reunião é diferente da data de publicação da ata (por exemplo, a 281ª reunião foi em 16/09 e a ata saiu em 22/09).
-- **Selic meta**: o valor do parágrafo de decisão de cada ata (conferido por script). `scripts/dados_bcb.py` baixa a série 432 do SGS (`dados/selic_meta.csv`, até 06/11/2026). A 282ª reunião (04/11/2026) **manteve a Selic em 13,75%**, segundo o comunicado do Copom. A ata dela ainda não foi publicada.
-- **Focus**: mediana da Selic esperada para o **fim de 2026**, que não é a expectativa para a próxima reunião. Fonte: **Banco Central do Brasil, API Olinda**, via `scripts/dados_bcb.py` (`python-bcb`), `baseCalculo = 0`. São 208 pontos de 02/01 a **30/10/2026** (`dados/focus_selic.csv`).
+| Dado | Fonte | Data dos dados |
+|---|---|---|
+| Atas 276ª a 281ª (PDF) | Banco Central do Brasil, [Atas do Copom](https://www.bcb.gov.br/publicacoes/atascopom), arquivos em `data/case2_copom/atas/` do repositório do workshop | reuniões de 28/01 a 16/09/2026 |
+| Selic meta | BCB, SGS série 432 | até 06/11/2026 |
+| Mediana da Selic esperada para o fim de 2026 | BCB, Relatório Focus (API Olinda, `ExpectativasMercadoAnuais`, base de cálculo 0) | 02/01 a 30/10/2026 (208 dias úteis) |
+| Decisão da 282ª reunião | BCB, [Comunicados do Copom](https://www.bcb.gov.br/publicacoes/comunicadoscopom) | 04/11/2026 |
+| Probabilidade de pausa nas opções de Copom da B3 (~63%) | [Rankia](https://rankia.com.br/copom-4-novembro-selic-manutencao-63-opcoes-b3/) | fechamento de 26/10/2026 (**dado de terceiros, não conferido**) |
+
+### Como tratamos os cuidados do case
+
+1. **Data da reunião ≠ data da ata.** Guardamos as duas. As atas foram publicadas 6 dias depois de cada reunião (ex.: reunião em 16/09, ata em 22/09), e o impacto separa o que aconteceu depois da reunião do que aconteceu depois da ata. A ata da 282ª é esperada para 10/11.
+2. **Tom ≠ juros.** O site mostra lado a lado "o que decidiram" (Selic) e "como falaram" (índice): 5 cortes com tom duro.
+3. **Sem trecho, não vale.** Toda nota, mudança e resposta do chat cita o nº do parágrafo e um trecho literal. O site confere automaticamente as citações do chat.
+4. **Trechos curtos.** Citamos só o necessário e linkamos a ata original do BCB.
+5. **Focus = Selic esperada para o fim do ano**, não para a próxima reunião. É assim que o site e este README a descrevem.
+6. **Impacto é interpretação.** O texto usa linguagem condicional e o site traz o aviso de que não é recomendação de investimento.
 
 ## Como verificamos os resultados
 
-1. **Trechos existem?** `agente_tom.py --conferir` procura cada um dos 119 trechos citados no texto do parágrafo, ignorando espaços quebrados pelo PDF. Resultado: 119 de 119 encontrados. O chat faz a mesma conferência em cada resposta (✓ ou ⚠).
-2. **Segunda leitura (consistência da régua).** Uma segunda classificação dos 119 parágrafos, **também feita pelo Claude** (`scripts/classificacao_revisor.py`), foi comparada com a do agente. As notas foram idênticas em 91 (76%) e diferiram em no máximo 1 ponto em 115 (97%). Os índices seguem a mesma tendência. As discordâncias se concentram em parágrafos mistos (por exemplo, "inflação cedendo, mas acima da meta"). Como as duas leituras são do Claude, isso mede a consistência da régua. A validação humana é o item 7.
-3. **Selic conferida na fonte.** O valor da Selic de cada reunião foi conferido contra o parágrafo de decisão da própria ata.
-4. **"Nada mudou" medido, não suposto.** Os parágrafos de orientação da 281ª (§15–§19) foram comparados com os da 280ª (§14–§18) por similaridade de texto: 100%.
-5. **Focus conferido em duas fontes.** Os 208 pontos do Focus de 2026 baixados com `python-bcb` são idênticos aos baixados direto da API Olinda (`scripts/baixar_dados_bcb.py`). A primeira versão do site usava 11 valores citados em notícias. Todos batiam com o dado oficial, e foram trocados pela fonte primária.
-6. **Ajuste feito.** O agente manteve nota +2 no parágrafo de expectativas da 281ª, mesmo sem a palavra "adicional". Por isso o site descreve essa mudança como "palavra mais branda, mesma nota", e não como queda de nota.
-7. **Validação manual (time):** [PREENCHER — 10 parágrafos classificados às cegas pelo time e comparados].
+Escrevemos um verificador independente ([`verificacao/verificar.py`](verificacao/verificar.py)). Ele relê os PDFs originais e consulta as APIs do Banco Central. O resultado completo está em [`verificacao/relatorio.md`](verificacao/relatorio.md).
+
+| O que conferimos | Contra o quê | Resultado |
+|---|---|---|
+| Os 119 parágrafos do site (texto e numeração §) | PDFs das 6 atas | ✅ 119/119; o nº de parágrafos bate nas 6 atas |
+| Os 119 trechos que justificam as notas | PDFs | ✅ 119/119 existem literalmente |
+| As 8 citações das mudanças, do contraponto e do risco | PDFs + nº do parágrafo | ✅ 8/8 no parágrafo indicado |
+| Os 6 índices, a 2ª leitura e a média simples | Recálculo com a regra de agregação | ✅ todos idênticos |
+| A Selic de cada reunião | Parágrafo da decisão no PDF + SGS 432 | ✅ 6/6 |
+| A série do Focus no gráfico | API Olinda do BCB | ✅ 208/208 pontos |
+| As datas de publicação das atas | API de atas do BCB | ✅ 6/6 |
+| A decisão da 282ª (manteve 13,75%) | Comunicado oficial do BCB | ✅ |
+
+**Exemplos concretos:**
+- **Trecho que parecia não existir:** em 15 parágrafos o texto do site não batia de primeira com o PDF. Investigamos e a causa era o próprio PDF: notas de rodapé e cabeçalhos de página caem no meio do parágrafo. O texto do site estava correto. O verificador passou a tolerar esse ruído, mas continua exigindo pelo menos 99% do texto em sequência.
+- **Frase imprecisa corrigida:** a primeira versão do impacto dizia que o Focus foi a 13,50% "em 21/09". A série oficial mostra que a mudança aconteceu em **18/09**, e que os 13,25% apareceram em **09/10**, não em 13/10. Corrigimos o texto neste README. [PREENCHER: confirmar que a frase também foi corrigida no site.]
+- **Consistência da classificação:** duas leituras independentes do Claude deram notas idênticas em **91 de 119 parágrafos (76%)** e diferiram em no máximo 1 ponto em **115 de 119 (97%)**. As 4 divergências grandes (276ª §3, 277ª §3, 279ª §20, 280ª §2) estão todas em parágrafos com sinais mistos ("desacelerou, **porém** ainda acima da meta"). Isso mede **coerência**, não acerto, por isso fizemos a validação humana abaixo.
+- **Validação humana:** [PREENCHER: o time classificou 10 parágrafos à mão sem olhar as notas do Claude. Concordância: X de 10. Onde discordamos e o que ajustamos.]
+
+| Ata § | Nota do time | Nota do Claude | Comentário |
+|---|---|---|---|
+| [PREENCHER] | | | |
 
 ## Como reproduzir
 
 ```bash
-pip install -r requirements.txt
-python scripts/extrair.py              # PDFs -> dados/paragrafos.json
-python scripts/dados_bcb.py            # Selic e Focus oficiais (python-bcb)
-python scripts/agente_tom.py --prompts # gera os prompts do agente (prompts/ata_<n>.md)
-#   rodar cada prompt no Claude Code, salvando em dados/tom_agente/ata_<n>.json
-#   ou, com chave de API: python scripts/agente_tom.py --api
-python scripts/agente_tom.py --conferir
-cd scripts && python indice.py && python montar_dados.py && python gerar_site.py
+git clone https://github.com/jplucas29/claude-lab-financas-puc2026   # atas em data/case2_copom/atas
+pip install pypdf
+python verificacao/verificar.py --atas claude-lab-financas-puc2026/data/case2_copom/atas
 ```
 
-**Ata nova** (ex.: 282ª, reunião em 04/11/2026; a ata é esperada para 10/11, seguindo o padrão de publicação 6 dias após a reunião): salvar o PDF como `dados/atas/ata_282_2026-11-04.pdf` e rodar o fluxo de novo, ou subir o PDF direto no chat do site.
+O script regera `verificacao/relatorio.md`. Para rodar sem internet (só a parte dos PDFs e o recálculo), use `--offline`.
 
-### Site no Netlify com o chat ligado ao Claude
+- Os dados que alimentam o site estão em [`dados/resultados.json`](dados/resultados.json).
+- Os prompts estão em [`prompts.md`](prompts.md).
 
-O site estático (`site/`) é servido pelo Netlify, e o chat chama três funções em `netlify/functions/`. A **chave da API fica só no servidor**: o navegador nunca a vê.
-
-| Rota | O que faz |
-|---|---|
-| `GET /api/saude` | Diz se a chave está configurada. O site usa isso para ligar o chat |
-| `POST /api/chat` | Recebe a pergunta, monta o prompt com as 6 atas no servidor e devolve resposta e citações em JSON |
-| `POST /api/tom` | Mede o tom de uma ata nova (ex.: 282ª) com a mesma régua |
-
-- **Modelo:** `claude-opus-5-5`, com esforço `low` no chat e `medium` na medição de tom. A resposta sai em JSON validado por schema.
-- **Custo:** o texto das atas (cerca de 25 mil tokens) fica em cache por 5 minutos, então as perguntas seguintes pagam cerca de 10% dessa parte.
-- **Recusa do filtro de segurança:** se o filtro recusar uma pergunta, a própria API refaz a chamada num modelo de reserva (`fallbacks: "default"`).
-- **Proteções:** só aceita chamadas do próprio site, limita a quantidade de perguntas por IP e minuto, e limita o tamanho das perguntas e de atas enviadas. O site continua conferindo cada trecho citado contra o texto da ata.
-
-**Para publicar:**
-1. No Netlify, escolha **Add new site → Import an existing project → GitHub** e selecione este repositório. As configurações vêm do `netlify.toml`.
-2. Em **Site configuration → Environment variables**, crie `ANTHROPIC_API_KEY` com a chave do [Console da Anthropic](https://console.anthropic.com). Ela nunca vai para o GitHub.
-3. Rode **Deploys → Trigger deploy** para o deploy pegar a chave.
-4. Recomendado: defina um limite de gasto no Console da Anthropic, porque o site é público.
+[PREENCHER: se tiverem os scripts de extração e classificação, coloquem em `codigo/` e citem aqui.]
 
 ## Limitações e próximos passos
 
-- A nota de tom é um julgamento, mesmo com uma régua fixa. A concordância de 76% mostra onde a régua ainda é ambígua, principalmente em parágrafos com sinais mistos.
-- O Focus é anual (fim de 2026). Uma próxima versão pode usar as expectativas por reunião (`ExpectativasMercadoSelic`) e os juros futuros (DI) para medir a reação do mercado no dia da ata.
-- Automatizar: rodar o fluxo sozinho quando sair uma ata nova e mandar o resumo por e-mail.
+- **A classificação é do Claude.** A 2ª leitura mede consistência, e a validação humana foi feita numa amostra de 10 parágrafos, não nas 6 atas inteiras.
+- **Os pesos por seção (C e D valem 2) são uma escolha nossa.** Com média simples a 276ª continua a mais branda e a 280ª a mais dura, mas o nível e a ordem das atas intermediárias mudam. Por isso o site deixa o usuário testar outros pesos.
+- **O mapa de calor por seção** faz a média de todos os parágrafos, incluindo os neutros, enquanto o índice ignora os neutros. Por isso os dois números não são diretamente comparáveis.
+- **Dados de terceiros:** a probabilidade das opções de Copom da B3 e o movimento do dólar vêm de notícias, não de fonte primária.
+- **Texto do PDF:** em alguns parágrafos, ao ler a ata inteira no site, aparecem palavras partidas pela extração (ex.: "ju ros"). Os trechos citados estão limpos.
+- **Com mais um dia:**
+  - medir a reação dos juros futuros (DI) no dia da publicação de cada ata;
+  - ampliar o histórico para antes de 2026, para testar se o índice antecipa a Selic;
+  - rodar a 282ª assim que for publicada, prevista para 10/11.
 
 ## Aviso
 
-Projeto acadêmico desenvolvido em workshop. Não constitui recomendação de investimento.
+Projeto acadêmico desenvolvido em workshop. **Não constitui recomendação de investimento.** Fonte dos dados: Banco Central do Brasil (atas e comunicados do Copom, SGS e Relatório Focus).
 
-**Feito com:** Claude (Claude Code e agentes), Python (pypdf, python-bcb, pandas), HTML/JS.
+**Feito com:** Claude (claude.ai e Claude Code) · Python · pypdf · pdf.js · API de dados abertos do Banco Central
