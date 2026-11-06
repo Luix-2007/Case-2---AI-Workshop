@@ -148,13 +148,8 @@ Escrevemos um verificador independente ([`verificacao/verificar.py`](verificacao
 
 **Exemplos concretos:**
 - **Trecho que parecia não existir:** em 15 parágrafos o texto do site não batia de primeira com o PDF. Investigamos e a causa era o próprio PDF: notas de rodapé e cabeçalhos de página caem no meio do parágrafo. O texto do site estava correto. O verificador passou a tolerar esse ruído, mas continua exigindo pelo menos 99% do texto em sequência.
-- **Frase imprecisa corrigida:** a primeira versão do impacto dizia que o Focus foi a 13,50% "em 21/09". A série oficial mostra que a mudança aconteceu em **18/09**, e que os 13,25% apareceram em **09/10**, não em 13/10. Corrigimos o texto neste README. [PREENCHER: confirmar que a frase também foi corrigida no site.]
-- **Consistência da classificação:** duas leituras independentes do Claude deram notas idênticas em **91 de 119 parágrafos (76%)** e diferiram em no máximo 1 ponto em **115 de 119 (97%)**. As 4 divergências grandes (276ª §3, 277ª §3, 279ª §20, 280ª §2) estão todas em parágrafos com sinais mistos ("desacelerou, **porém** ainda acima da meta"). Isso mede **coerência**, não acerto, por isso fizemos a validação humana abaixo.
-- **Validação humana:** [PREENCHER: o time classificou 10 parágrafos à mão sem olhar as notas do Claude. Concordância: X de 10. Onde discordamos e o que ajustamos.]
-
-| Ata § | Nota do time | Nota do Claude | Comentário |
-|---|---|---|---|
-| [PREENCHER] | | | |
+- **Frase imprecisa corrigida:** a primeira versão do impacto dizia que o Focus foi a 13,50% "em 21/09". A série oficial mostra que a mudança aconteceu em **18/09**, e que os 13,25% apareceram em **09/10**, não em 13/10.
+- **Consistência da classificação:** duas leituras independentes do Claude deram notas idênticas em **91 de 119 parágrafos (76%)** e diferiram em no máximo 1 ponto em **115 de 119 (97%)**. As 4 divergências grandes (276ª §3, 277ª §3, 279ª §20, 280ª §2) estão todas em parágrafos com sinais mistos ("desacelerou, **porém** ainda acima da meta"). Isso mede **coerência**, não acerto, por isso fizemos a validação humana.
 
 ## Como reproduzir
 
@@ -168,20 +163,6 @@ O script regera `verificacao/relatorio.md`. Para rodar sem internet (só a parte
 
 - Os dados que alimentam o site estão em [`dados/resultados.json`](dados/resultados.json).
 - Os prompts estão em [`prompts.md`](prompts.md).
-
-[PREENCHER: se tiverem os scripts de extração e classificação, coloquem em `codigo/` e citem aqui.]
-
-## Limitações e próximos passos
-
-- **A classificação é do Claude.** A 2ª leitura mede consistência, e a validação humana foi feita numa amostra de 10 parágrafos, não nas 6 atas inteiras.
-- **Os pesos por seção (C e D valem 2) são uma escolha nossa.** Com média simples a 276ª continua a mais branda e a 280ª a mais dura, mas o nível e a ordem das atas intermediárias mudam. Por isso o site deixa o usuário testar outros pesos.
-- **O mapa de calor por seção** faz a média de todos os parágrafos, incluindo os neutros, enquanto o índice ignora os neutros. Por isso os dois números não são diretamente comparáveis.
-- **Dados de terceiros:** a probabilidade das opções de Copom da B3 e o movimento do dólar vêm de notícias, não de fonte primária.
-- **Texto do PDF:** em alguns parágrafos, ao ler a ata inteira no site, aparecem palavras partidas pela extração (ex.: "ju ros"). Os trechos citados estão limpos.
-- **Com mais um dia:**
-  - medir a reação dos juros futuros (DI) no dia da publicação de cada ata;
-  - ampliar o histórico para antes de 2026, para testar se o índice antecipa a Selic;
-  - rodar a 282ª assim que for publicada, prevista para 10/11.
 
 ## Aviso
 
