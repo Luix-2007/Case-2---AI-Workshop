@@ -1,0 +1,20 @@
+[
+{"n": 1, "nota": 1, "tema": "cenário externo", "trecho": "Tal cenário exige cautela por parte de países emergentes em ambiente marcado por elevação da volatilidade de preços de ativos e commodities", "justificativa": "Incerteza externa maior pede cautela, viés de preocupação inflacionária."},
+{"n": 2, "nota": -1, "tema": "atividade", "trecho": "o resultado do PIB no último trimestre de 2025 evidenciou a desaceleração esperada da atividade econômica", "justificativa": "Sinal misto; domina a desaceleração da atividade, apesar do trabalho resiliente."},
+{"n": 3, "nota": 1, "tema": "inflação", "trecho": "a inflação cheia e as medidas subjacentes seguiram apresentando algum arrefecimento, mas mantiveram-se acima da meta para a inflação", "justificativa": "Misto; domina inflação e expectativas ainda acima da meta."},
+{"n": 4, "nota": 1, "tema": "cenário externo", "trecho": "A incerteza com relação ao cenário externo se elevou consideravelmente", "justificativa": "Aumento forte da incerteza externa sugere cautela."},
+{"n": 5, "nota": -1, "tema": "atividade", "trecho": "A desaceleração do PIB no final de 2025, mais acentuada em seus componentes cíclicos, tornou evidentes os efeitos defasados", "justificativa": "Atividade desacelerando por efeito da política restritiva."},
+{"n": 6, "nota": 1, "tema": "atividade", "trecho": "indicadores preliminares apontam na direção de uma retomada da atividade econômica em relação ao final de 2025", "justificativa": "Sinais mistos; domina a retomada da atividade no início de 2026."},
+{"n": 7, "nota": 1, "tema": "atividade", "trecho": "a taxa de desemprego tem se mantido em patamares historicamente baixos enquanto os rendimentos reais médios têm mantido a tendência de elevação", "justificativa": "Mercado de trabalho aquecido, rendimentos acima da produtividade."},
+{"n": 8, "nota": 1, "tema": "fiscal", "trecho": "têm o potencial de elevar a taxa de juros neutra da economia, com impactos deletérios sobre a potência da política monetária", "justificativa": "Risco fiscal pode elevar juro neutro e reduzir eficácia monetária."},
+{"n": 9, "nota": 2, "tema": "expectativas", "trecho": "exige-se uma restrição monetária maior e por mais tempo do que outrora seria apropriado", "justificativa": "Expectativas subiram e desancoradas; restrição maior e por mais tempo com ênfase."},
+{"n": 10, "nota": -1, "tema": "inflação", "trecho": "As leituras recentes até o início dos conflitos indicavam algum arrefecimento da inflação", "justificativa": "Misto; domina o arrefecimento da inflação antes dos conflitos."},
+{"n": 11, "nota": 0, "tema": "outro", "trecho": "a trajetória para a taxa de juros é extraída da pesquisa Focus", "justificativa": "Descrição das premissas do cenário de referência."},
+{"n": 12, "nota": 0, "tema": "inflação", "trecho": "projeções para a inflação acumulada em quatro trimestres para 2026 e para o terceiro trimestre de 2027", "justificativa": "Apenas números de projeção."},
+{"n": 13, "nota": 1, "tema": "inflação", "trecho": "o Comitê julgou apropriado seguir com serenidade e reunir mais informações ao longo do tempo", "justificativa": "Riscos intensificados nos dois lados; pedido de serenidade domina."},
+{"n": 14, "nota": 0, "tema": "decisão", "trecho": "O Copom passou então à discussão da condução da política monetária", "justificativa": "Parágrafo de procedimento."},
+{"n": 15, "nota": -1, "tema": "decisão", "trecho": "concluindo que nesse momento a redução de 0,25% é a mais adequada", "justificativa": "Início de ciclo de corte moderado, mantendo caráter restritivo."},
+{"n": 16, "nota": -1, "tema": "decisão", "trecho": "O Copom decidiu reduzir a taxa básica de juros para 14,75% a.a.", "justificativa": "Anuncia corte moderado da Selic."},
+{"n": 17, "nota": 1, "tema": "decisão", "trecho": "o Comitê reafirma serenidade e cautela na condução da política monetária", "justificativa": "Ênfase em cautela diante de incerteza, sem compromisso com novos cortes."},
+{"n": 18, "nota": 0, "tema": "outro", "trecho": "Votaram por essa decisão os seguintes membros do Comitê", "justificativa": "Lista de votantes."}
+]

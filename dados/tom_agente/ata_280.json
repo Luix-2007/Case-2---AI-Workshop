@@ -1,0 +1,21 @@
+[
+{"n": 1, "nota": 1, "tema": "cenário externo", "trecho": "Tal cenário exige cautela por parte de países emergentes", "justificativa": "Incerteza externa e volatilidade pedem cautela, sinal levemente duro."},
+{"n": 2, "nota": 1, "tema": "atividade", "trecho": "com sinais mistos entre setores, e mercado de trabalho aquecido", "justificativa": "Sinais mistos; domina trabalho aquecido e inflação cheia acima do limite da meta."},
+{"n": 3, "nota": 1, "tema": "expectativas", "trecho": "As expectativas de inflação para 2026 e 2027 apuradas pela pesquisa Focus permanecem em valores acima da meta", "justificativa": "Expectativas acima da meta, apesar de projeção próxima ao alvo."},
+{"n": 4, "nota": 0, "tema": "cenário externo", "trecho": "A incerteza com relação ao cenário externo segue em níveis elevados", "justificativa": "Descrição da incerteza externa sem sinal direto sobre juros."},
+{"n": 5, "nota": -1, "tema": "atividade", "trecho": "Indicadores correntes apontam para desaceleração na passagem do primeiro para o segundo trimestre de 2026", "justificativa": "Atividade desacelerando conforme esperado, favorecendo convergência da inflação."},
+{"n": 6, "nota": 1, "tema": "atividade", "trecho": "ainda crescem em termos reais a uma taxa superior à da produtividade do trabalho", "justificativa": "Sinais mistos; domina desemprego baixo e salários reais acima da produtividade."},
+{"n": 7, "nota": 1, "tema": "fiscal", "trecho": "têm o potencial de elevar a taxa de juros neutra da economia", "justificativa": "Riscos fiscais podem elevar juro neutro e reduzir potência monetária."},
+{"n": 8, "nota": -1, "tema": "inflação", "trecho": "A inflação para os consumidores desacelerou nas leituras mais recentes do índice cheio", "justificativa": "Inflação cheia e núcleos desacelerando, embora cheia ainda acima da meta."},
+{"n": 9, "nota": 2, "tema": "expectativas", "trecho": "exige-se uma restrição monetária maior e por mais tempo do que outrora seria apropriado", "justificativa": "Desancoragem adicional exige restrição maior e por mais tempo, com ênfase."},
+{"n": 10, "nota": 0, "tema": "outro", "trecho": "a trajetória para a taxa de juros é extraída da pesquisa Focus", "justificativa": "Descrição de premissas das projeções, sem juízo."},
+{"n": 11, "nota": 0, "tema": "inflação", "trecho": "atual horizonte relevante de política monetária, são, respectivamente, 5,1%, 3,8%, e 3,2%.", "justificativa": "Apenas números de projeção."},
+{"n": 12, "nota": 1, "tema": "inflação", "trecho": "permanecem mais elevados que o usual, com assimetria altista", "justificativa": "Balanço de riscos com assimetria altista."},
+{"n": 13, "nota": 0, "tema": "outro", "trecho": "O Copom passou então à discussão da condução da política monetária", "justificativa": "Parágrafo de procedimento."},
+{"n": 14, "nota": 1, "tema": "inflação", "trecho": "a inflação permanece pressionada pela demanda, exigindo que a política monetária mantenha caráter restritivo", "justificativa": "Mistura transmissão acumulada com pressão de demanda; domina manutenção de restrição."},
+{"n": 15, "nota": 1, "tema": "inflação", "trecho": "reagir com firmeza caso esses efeitos se materializem", "justificativa": "Vigilância e disposição de reagir a efeitos secundários de choques."},
+{"n": 16, "nota": 1, "tema": "decisão", "trecho": "com riscos assimétricos na direção altista para os preços", "justificativa": "Riscos altistas e ciclo calibrado para manter restrição adequada."},
+{"n": 17, "nota": -1, "tema": "decisão", "trecho": "O Copom decidiu reduzir a taxa básica de juros para 14,00% a.a.", "justificativa": "Anuncia corte de juros sem ênfase em aceleração."},
+{"n": 18, "nota": 1, "tema": "decisão", "trecho": "demanda serenidade e cautela na condução da política monetária", "justificativa": "Pede serenidade e cautela diante de incerteza e desancoragem."},
+{"n": 19, "nota": 0, "tema": "outro", "trecho": "Votaram por essa decisão os seguintes membros do Comitê", "justificativa": "Lista de votantes."}
+]

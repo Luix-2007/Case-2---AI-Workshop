@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tradutor do Copom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: coluna editorial de leitura (~70ch) com faixas de dados largas; régua divergente brando(azul-petróleo) ↔ duro(vermelhão) */
+:root{
+  --bg:#f4f5f3; --surface:#ffffff; --ink:#16201f; --muted:#5d6967; --line:#d9dedb;
+  --dove:#1d6f8a; --hawk:#c2410c; --accent:#0f3d3e;
+  --dove-soft:#dcecf1; --hawk-soft:#fbe5d9; --ok:#2f7d4f; --warn:#a15c00;
+  --display:"Newsreader", Georgia, "Times New Roman", serif;
+  --body:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#101615; --surface:#172120; --ink:#e7ecea; --muted:#9aa7a4; --line:#2b3836;
+  --dove:#5fb4cf; --hawk:#f08a52; --accent:#9fd3c7; --dove-soft:#163440; --hawk-soft:#3d2214; --ok:#6cc08f; --warn:#e3a54a; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#101615; --surface:#172120; --ink:#e7ecea; --muted:#9aa7a4; --line:#2b3836;
+  --dove:#5fb4cf; --hawk:#f08a52; --accent:#9fd3c7; --dove-soft:#163440; --hawk-soft:#3d2214; --ok:#6cc08f; --warn:#e3a54a; color-scheme:dark;}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body);}
+a{color:var(--accent)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+header.top{border-bottom:1px solid var(--line);background:var(--surface)}
+header.top .wrap{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;padding-top:14px;padding-bottom:14px}
+.brand{font:600 20px/1 var(--display)}
+.brand small{font:500 12px var(--mono);color:var(--muted);margin-left:8px;letter-spacing:.04em}
+nav a{font-size:14px;margin-left:14px;text-decoration:none;color:var(--muted)}
+nav a:hover,nav a:focus-visible{color:var(--ink)}
+h1,h2,h3{font-family:var(--display);font-weight:600;text-wrap:balance;margin:0}
+h2{font-size:28px;line-height:1.15}
+h3{font-size:19px}
+section{padding:40px 0;border-bottom:1px solid var(--line)}
+.kicker{font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.lede{max-width:68ch;color:var(--muted);margin:10px 0 0}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:center;padding:36px 0}
+.hero h1{font-size:40px;line-height:1.08}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-top:20px}
+.facts div{background:var(--surface);padding:12px 14px}
+.facts b{display:block;font:500 22px var(--mono)}
+.facts span{font-size:13px;color:var(--muted)}
+.thermo{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:20px}
+.thermo-bar{position:relative;height:16px;border-radius:8px;background:linear-gradient(90deg,var(--dove) 0%,var(--dove-soft) 42%,var(--line) 50%,var(--hawk-soft) 58%,var(--hawk) 100%);margin:34px 0 8px}
+.thermo-mark{position:absolute;top:-30px;transform:translateX(-50%);text-align:center;font:600 13px var(--mono)}
+.thermo-mark::after{content:"";display:block;width:3px;height:44px;margin:4px auto 0;background:var(--ink);border-radius:2px}
+.thermo-mark.prev{top:-6px;color:var(--muted);font-weight:400}
+.thermo-mark.prev::after{display:none}
+.thermo-mark.prev::before{content:"";display:block;width:2px;height:28px;margin:0 auto 2px;background:var(--muted);border-radius:2px}
+.thermo .ticks{margin-top:26px}
+.ticks{display:flex;justify-content:space-between;font:12px var(--mono);color:var(--muted)}
+.thermo p{margin:14px 0 0;font-size:15px}
+
+/* chart */
+.chart-box{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;margin-top:20px;overflow-x:auto}
+.chart-box svg{display:block;min-width:640px;width:100%;height:auto}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.insights{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}
+.insights div{border-top:3px solid var(--accent);padding-top:10px;font-size:15px}
+
+/* changes */
+.changes{display:grid;gap:16px;margin-top:22px}
+.chg{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--dove);border-radius:6px;padding:16px 18px}
+.chg.hawk{border-left-color:var(--hawk)}
+.chg-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
+.pill{font:500 12px var(--mono);padding:3px 8px;border-radius:999px;white-space:nowrap}
+.pill.dove{background:var(--dove-soft);color:var(--dove)}
+.pill.hawk{background:var(--hawk-soft);color:var(--hawk)}
+.pill.neu{background:var(--line);color:var(--muted)}
+.diff{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.quote{font:15px/1.5 var(--display);border-left:2px solid var(--line);padding:2px 0 2px 12px;margin:0}
+.quote cite{display:block;font:500 12px var(--mono);font-style:normal;color:var(--muted);margin-bottom:4px}
+.quote.gone{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1px}
+.chg p.read{margin:10px 0 0;font-size:15px;color:var(--muted);max-width:75ch}
+.same{margin-top:16px;padding:14px 16px;border:1px dashed var(--line);border-radius:6px;font-size:15px}
+
+/* impact */
+.impact{display:grid;grid-template-columns:1fr 280px;gap:28px;margin-top:16px}
+.impact p{max-width:68ch;margin:0 0 12px}
+.channels{display:grid;gap:8px;align-content:start}
+.channels div{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 12px;font-size:14px}
+.channels b{display:block;font-size:13px;font-family:var(--mono);color:var(--muted);font-weight:500}
+
+/* explorer */
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-top:18px}
+.tabs button{font:500 14px var(--mono);padding:7px 12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.paras{margin-top:14px;display:grid;gap:8px}
+.para{display:grid;grid-template-columns:44px 1fr;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 12px;font-size:14.5px}
+.score{font:600 15px var(--mono);text-align:center;border-radius:4px;padding:4px 0;height:fit-content}
+.s2{background:var(--hawk);color:#fff}.s1{background:var(--hawk-soft);color:var(--hawk)}.s0{background:var(--line);color:var(--muted)}
+.s-1{background:var(--dove-soft);color:var(--dove)}.s-2{background:var(--dove);color:#fff}
+.para .meta{font:12px var(--mono);color:var(--muted)}
+.para mark{background:var(--hawk-soft);color:inherit;padding:0 2px;border-radius:2px}
+.para.dv mark{background:var(--dove-soft)}
+.para.n0 mark{background:transparent;text-decoration:underline dotted}
+details.full summary{cursor:pointer;color:var(--muted);font-size:13px}
+
+/* chat */
+.chat{background:var(--surface);border:1px solid var(--line);border-radius:8px;margin-top:18px;display:grid;grid-template-rows:auto 1fr auto}
+.chat-tools{display:flex;gap:10px;flex-wrap:wrap;padding:12px;border-bottom:1px solid var(--line);align-items:center;font-size:14px}
+.log{padding:14px;display:grid;gap:12px;max-height:520px;overflow-y:auto;min-height:160px}
+.msg{max-width:80ch}
+.msg.u{justify-self:end;background:var(--accent);color:var(--bg);padding:8px 12px;border-radius:10px 10px 2px 10px}
+.msg.a{background:var(--bg);padding:12px 14px;border-radius:10px 10px 10px 2px;border:1px solid var(--line)}
+.cites{margin-top:10px;display:grid;gap:6px}
+.cite{font-size:13.5px;border-left:3px solid var(--ok);padding:2px 0 2px 10px}
+.cite.bad{border-left-color:var(--warn)}
+.cite b{font-family:var(--mono);font-weight:500}
+.chk{font:12px var(--mono);color:var(--ok)}
+.cite.bad .chk{color:var(--warn)}
+form.ask{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line)}
+input[type=text],textarea{flex:1;font:15px var(--body);padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+button.primary{font:600 14px var(--body);padding:10px 16px;border-radius:6px;border:0;background:var(--accent);color:var(--bg);cursor:pointer}
+button.ghost{font:500 13px var(--body);padding:7px 11px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+button:disabled{opacity:.5;cursor:default}
+:focus-visible{outline:2px solid var(--hawk);outline-offset:2px}
+.sugs{display:flex;gap:6px;flex-wrap:wrap}
+.status{font-size:13px;color:var(--muted)}
+.newata{padding:12px;border-bottom:1px solid var(--line);display:none;gap:10px}
+.newata.on{display:grid}
+.method{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:16px}
+.method table{border-collapse:collapse;width:100%;font-size:14px}
+.method td,.method th{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+.method th{font:500 12px var(--mono);color:var(--muted);text-transform:uppercase}
+.method p,.method li{font-size:15px;max-width:62ch}
+.params{margin-top:24px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px 18px}
+.prow{display:flex;gap:14px;flex-wrap:wrap;align-items:end;margin-top:10px;font-size:14px}
+.prow label{display:grid;gap:4px;color:var(--muted)}
+.prow input[type=number]{width:90px;font:15px var(--mono);padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink)}
+.prow .chkl{display:flex;align-items:center;gap:6px;color:var(--ink)}
+.para .why{font-size:13px;color:var(--muted);margin-top:4px}
+footer{padding:28px 0 48px;font-size:13px;color:var(--muted)}
+@media (max-width:820px){.hero,.impact,.method,.diff,.insights{grid-template-columns:1fr}.hero h1{font-size:32px}nav{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="brand">Tradutor do Copom <small>ATAS 276–281 · 2026</small></div>
+  <nav aria-label="Seções"><a href="#tom">Tom</a><a href="#mudou">O que mudou</a><a href="#impacto">Impacto</a><a href="#evidencias">Evidências</a><a href="#pergunte">Pergunte às atas</a><a href="#metodo">Como medimos</a></nav>
+</div></header>
+
+<main class="wrap">
+<div class="hero">
+  <div>
+    <div class="kicker" id="hero-kicker"></div>
+    <h1 id="hero-title"></h1>
+    <p class="lede" id="hero-lede"></p>
+    <div class="facts" id="facts"></div>
+  </div>
+  <div class="thermo" aria-label="Termômetro do tom">
+    <div class="kicker">Índice de tom, régua de −2 a +2</div>
+    <div class="thermo-bar" id="thermo"></div>
+    <div class="ticks"><span>−2 muito brando</span><span>0</span><span>+2 muito duro</span></div>
+    <p id="thermo-text"></p>
+  </div>
+</div>
+
+<section id="tom">
+  <div class="kicker">1 · Evolução</div>
+  <h2>O tom endureceu enquanto a Selic caía</h2>
+  <p class="lede">Barras: índice de tom de cada ata. Linha em degraus: Selic meta. Pontos: mediana do Focus para a Selic no <b>fim de 2026</b>, que não é a expectativa para a reunião seguinte.</p>
+  <div class="chart-box"><svg id="chart" viewBox="0 0 960 430" role="img" aria-label="Índice de tom por reunião, Selic meta e Focus"></svg>
+    <div class="legend"><span><i style="background:var(--hawk)"></i>tom duro (&gt;0)</span><span><i style="background:var(--dove)"></i>tom brando (&lt;0)</span><span><i style="background:var(--ink)"></i>Selic meta</span><span><i style="background:var(--muted);border-radius:50%"></i>Focus: Selic no fim de 2026</span></div>
+  </div>
+  <div class="insights" id="insights"></div>
+</section>
+
+<section id="mudou">
+  <div class="kicker">2 · 280ª → 281ª</div>
+  <h2>O que mudou na ata de setembro</h2>
+  <p class="lede">Comparação parágrafo a parágrafo com a ata de agosto. As três mudanças que mais mexem no tom, com o trecho exato antes e depois.</p>
+  <div class="changes" id="changes"></div>
+  <div class="same" id="same"></div>
+</section>
+
+<section id="impacto">
+  <div class="kicker">3 · Principal impacto</div>
+  <h2 id="imp-title"></h2>
+  <div class="impact">
+    <div id="imp-text"></div>
+    <div class="channels">
+      <div><b>Selic</b>Mais um ou dois cortes de 0,25 seguem no cenário; pausa depende do câmbio e das expectativas.</div>
+      <div><b>Juros futuros</b>Diagnóstico mais brando sustenta a precificação de cortes; orientação igual limita apostas em aceleração.</div>
+      <div><b>Câmbio</b>É o risco de alta que a ata destaca. Dólar mais caro pode levar a pausa.</div>
+      <div><b>Crédito e consumo</b>A ata já vê o crédito livre desacelerando. Cortes lentos mantêm o freio.</div>
+    </div>
+  </div>
+  <p class="status">Interpretação, não previsão. Não é recomendação de investimento.</p>
+</section>
+
+<section id="evidencias">
+  <div class="kicker">4 · Evidências</div>
+  <h2>Cada nota, com o trecho que a sustenta</h2>
+  <p class="lede">Escolha uma ata. Cada parágrafo mostra a nota, o tema e o trecho destacado que justifica a classificação. Os trechos foram conferidos automaticamente contra o texto extraído do PDF.</p>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <p class="status" id="tab-summary"></p>
+  <div class="paras" id="paras"></div>
+</section>
+
+<section id="pergunte">
+  <div class="kicker">5 · Chat</div>
+  <h2>Pergunte às atas</h2>
+  <p class="lede">O Claude responde só com base no texto das atas carregadas e cita reunião, parágrafo e trecho. Cada citação é conferida contra o texto: <span style="color:var(--ok)">✓ encontrado</span> ou <span style="color:var(--warn)">⚠ não encontrado literalmente</span>.</p>
+  <div class="chat">
+    <div class="chat-tools">
+      <span class="status" id="corpus-info"></span>
+      <button class="ghost" id="btn-new" type="button">+ Adicionar ata nova (PDF ou texto)</button>
+    </div>
+    <div class="newata" id="newata">
+      <label for="pdf" class="status">PDF da ata, com o nome no padrão do BC ou qualquer nome:</label>
+      <input type="file" id="pdf" accept="application/pdf,.pdf,.txt">
+      <label for="paste" class="status">Ou cole o texto da ata:</label>
+      <textarea id="paste" rows="4" placeholder="1. O ambiente externo..."></textarea>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <label for="newnum" class="status">Nº da reunião</label><input type="text" id="newnum" value="282" style="max-width:90px;flex:none">
+        <button class="primary" id="btn-load" type="button">Carregar ata</button>
+        <button class="ghost" id="btn-score" type="button" disabled>Medir o tom desta ata</button>
+        <span class="status" id="new-status"></span>
+      </div>
+    </div>
+    <div class="log" id="log" aria-live="polite">
+      <div class="msg a">Pergunte, por exemplo, o que o Copom disse sobre câmbio, quando falou pela primeira vez em pausa ou como descreveu o mercado de trabalho.
+        <div class="sugs" style="margin-top:10px" id="sugs"></div></div>
+    </div>
+    <form class="ask" id="ask"><label for="q" class="status" style="position:absolute;left:-9999px">Pergunta</label><input type="text" id="q" placeholder="O que o Copom disse sobre câmbio?" autocomplete="off"><button class="primary" id="send" type="submit">Perguntar</button></form>
+  </div>
+</section>
+
+<section id="metodo">
+  <div class="kicker">6 · Como medimos</div>
+  <h2>Régua, agregação e conferência</h2>
+  <div class="method">
+    <div>
+      <table><thead><tr><th>Nota</th><th>Significado</th><th>Exemplo nas atas</th></tr></thead><tbody>
+        <tr><td class="num">+2</td><td>muito duro</td><td>“desancoragem adicional”; restrição “maior e por mais tempo” com ênfase</td></tr>
+        <tr><td class="num">+1</td><td>duro</td><td>riscos com “assimetria altista”; “serenidade e cautela”; atividade em retomada</td></tr>
+        <tr><td class="num">0</td><td>neutro</td><td>premissas das projeções, números, procedimento, votação</td></tr>
+        <tr><td class="num">−1</td><td>brando</td><td>inflação cedendo; atividade desacelerando; corte de 0,25</td></tr>
+        <tr><td class="num">−2</td><td>muito brando</td><td>“sinalizar o início de um ciclo de redução” (276ª)</td></tr>
+      </tbody></table>
+    </div>
+    <div>
+      <p><b>Agregação.</b> Média ponderada só dos parágrafos com nota diferente de zero. Peso 2 nas seções C (discussão da política) e D (decisão), peso 1 em A e B. Parágrafos neutros diluíam o sinal, e é em C e D que o Copom sinaliza os próximos passos. A média simples de todos os parágrafos aparece na aba de cada ata e conta a mesma história.</p>
+      <p><b>Quem classifica.</b> Um agente lê cada ata e dá a nota de cada parágrafo seguindo a régua do arquivo <code>parametros.json</code>, sempre com o trecho que sustenta a nota. Um script confere se cada um dos <span class="num" id="n-trechos"></span> trechos existe na ata, ignorando espaços quebrados pelo PDF: <span class="num" id="n-ok"></span> encontrados.</p>
+      <p><b>Segunda leitura.</b> Um revisor classificou os mesmos parágrafos de forma independente. <span id="conc"></span></p>
+      <p><b>Limitações.</b> A nota é um julgamento, mesmo com régua fixa. <span id="focus-lim"></span> Mudança de tom não é mudança de juros.</p>
+    </div>
+  </div>
+  <div class="params" id="params">
+    <h3>Teste outros parâmetros</h3>
+    <p class="status">Mude os pesos e o índice de todas as atas é recalculado na hora. A régua só muda rodando o agente de novo.</p>
+    <div class="prow">
+      <label>Peso A (conjuntura) <input type="number" min="0" max="5" step="0.5" id="wA"></label>
+      <label>Peso B (cenários e riscos) <input type="number" min="0" max="5" step="0.5" id="wB"></label>
+      <label>Peso C (discussão) <input type="number" min="0" max="5" step="0.5" id="wC"></label>
+      <label>Peso D (decisão) <input type="number" min="0" max="5" step="0.5" id="wD"></label>
+      <label class="chkl"><input type="checkbox" id="ign"> Ignorar parágrafos neutros</label>
+      <button class="ghost" type="button" id="reset">Voltar ao padrão</button>
+    </div>
+  </div>
+</section>
+</main>
+<footer class="wrap">
+  Fonte: Banco Central do Brasil, <a href="https://www.bcb.gov.br/publicacoes/atascopom">Atas do Copom</a> (276ª a 281ª, reuniões de 28/01 a 16/09/2026), Selic meta conforme o parágrafo de decisão de cada ata. Expectativas: Relatório Focus (BCB), mediana para a Selic no fim de 2026, via <span id="focus-src"></span>. Trechos curtos para fins de análise. Isto não é recomendação de investimento. Claude Lab · Economia &amp; Finanças · PUC-Rio · 06/11/2026.
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+const D = /*DATA*/null;
+const $ = s => document.querySelector(s);
+const el = (t, a = {}, h = "") => { const e = document.createElement(t); Object.entries(a).forEach(([k, v]) => e.setAttribute(k, v)); e.innerHTML = h; return e; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = (v, d = 2) => (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(d).replace(".", ",");
+const pct = v => v.toFixed(2).replace(".", ",") + "%";
+const dataBR = s => s.slice(8, 10) + "/" + s.slice(5, 7) + "/" + s.slice(0, 4);
+const MES = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+const atas = D.atas; const nums = Object.keys(atas).sort();
+const last = nums[nums.length - 1], prev = nums[nums.length - 2];
+const sel = Object.fromEntries(D.selic.map(s => [String(s.reuniao), s]));
+
+function renderTop() {
+/* hero */
+$("#hero-kicker").textContent = `${last}ª reunião · ${dataBR(atas[last].data_reuniao)} · ata publicada em ${dataBR(D.ata_publicada[last])}`;
+$("#hero-title").textContent = "Copom cortou para 13,75% e suavizou o diagnóstico, mas manteve a mesma orientação";
+$("#hero-lede").textContent = "A ata de setembro trocou poucas palavras, e quase todas no diagnóstico: inflação abaixo do teto, crédito esfriando, expectativas sem piora adicional. As seções de discussão e decisão ficaram idênticas às de agosto.";
+const ix = atas[last].indice, ixp = atas[prev].indice;
+$("#facts").innerHTML = `<div><b>${pct(sel[last].selic)}</b><span>Selic meta (${sel[last].decisao} p.p.)</span></div>
+<div><b>${fmt(ix)}</b><span>índice de tom (${prev}ª: ${fmt(ixp)})</span></div>
+<div><b>${pct(D.focus[D.focus.length-1].v)}</b><span>Focus, Selic fim de 2026 (${dataBR(D.focus[D.focus.length-1].data)})</span></div>`;
+const pos = v => ((v + 2) / 4 * 100).toFixed(2) + "%";
+$("#thermo").innerHTML = `<div class="thermo-mark prev" style="left:${pos(ixp)}">${prev}ª</div><div class="thermo-mark" style="left:${pos(ix)}">${fmt(ix)}</div>`;
+const rot = v => v <= -1.5 ? "Muito brando" : v <= -0.5 ? "Brando" : v < -0.15 ? "Levemente brando" : v <= 0.15 ? "Neutro" : v < 0.5 ? "Levemente duro" : v < 1.5 ? "Duro" : "Muito duro";
+$("#thermo-text").innerHTML = `${rot(ix)}, ${ix < ixp ? "um pouco menos" : ix > ixp ? "um pouco mais" : "tanto quanto"} que na ${prev}ª (${fmt(ixp)} → ${fmt(ix)}). O BC corta a Selic, mas fala como quem quer manter os juros restritivos.`;
+
+drawChart(); }
+/* chart */
+function drawChart() {
+  const svg = $("#chart"), W = 960, L = 60, R = 70, T = 20;
+  const t0 = Date.parse("2026-01-15"), t1 = Date.parse("2026-11-15");
+  const x = s => L + (Date.parse(s) - t0) / (t1 - t0) * (W - L - R);
+  // painel 1: tom (-2..2) y 20..190 ; painel 2: Selic 11.5..15.5 y 230..390
+  const yt = v => 105 - v * 40; const ys = v => 390 - (v - 11.5) / 4 * 160;
+  let g = "";
+  const txt = (X, Y, s, a = "") => `<text x="${X}" y="${Y}" ${a} style="font:12px var(--mono);fill:var(--muted)">${s}</text>`;
+  [-2,-1,0,1,2].forEach(v => { g += `<line x1="${L}" x2="${W-R}" y1="${yt(v)}" y2="${yt(v)}" stroke="var(--line)" ${v===0?'stroke-width="1.5"':'stroke-dasharray="2 4"'}/>` + txt(L-8, yt(v)+4, fmt(v,0), 'text-anchor="end"'); });
+  g += txt(L, 14, "ÍNDICE DE TOM");
+  [12,13,14,15].forEach(v => { g += `<line x1="${L}" x2="${W-R}" y1="${ys(v)}" y2="${ys(v)}" stroke="var(--line)" stroke-dasharray="2 4"/>` + txt(L-8, ys(v)+4, v+"%", 'text-anchor="end"'); });
+  g += txt(L, 222, "SELIC (% A.A.)");
+  for (let m = 1; m <= 10; m++) { const s = `2026-${String(m+1).padStart(2,"0")}-01`; g += `<line x1="${x(s)}" x2="${x(s)}" y1="${ys(11.5)}" y2="${ys(11.5)+5}" stroke="var(--muted)"/>` + txt(x(s), 410, MES[m], 'text-anchor="middle"'); }
+  // tone bars
+  nums.forEach(r => { const a = atas[r], v = a.indice, X = x(a.data_reuniao), y0 = yt(0), y1 = yt(v);
+    g += `<rect x="${X-15}" y="${Math.min(y0,y1)}" width="30" height="${Math.max(2,Math.abs(y1-y0))}" rx="2" fill="${v>0?'var(--hawk)':'var(--dove)'}"><title>${r}ª: ${fmt(v)}</title></rect>`;
+    g += `<text x="${X}" y="${v>=0?y1-6:y1+15}" text-anchor="middle" style="font:600 12px var(--mono);fill:var(--ink)">${fmt(v)}</text>`;
+    g += txt(X, 196, r+"ª", 'text-anchor="middle"'); });
+  // selic step
+  let p = `M${x("2026-01-15")},${ys(15)}`; D.selic.forEach((s,i) => { if (i) { p += ` H${x(s.data)} V${ys(s.selic)}`; } }); p += ` H${x("2026-11-15")}`;
+  g += `<path d="${p}" fill="none" stroke="var(--ink)" stroke-width="2.5"/>`;
+  D.selic.forEach(s => { g += `<circle cx="${x(s.data)}" cy="${ys(s.selic)}" r="3.5" fill="var(--ink)"/>`; });
+  g += `<text x="${W-R+6}" y="${ys(13.75)+4}" style="font:600 12px var(--mono);fill:var(--ink)">13,75</text>`;
+  // focus
+  let fp = ""; D.focus.forEach((f,i) => { fp += (i?" L":"M") + x(f.data) + "," + ys(f.v); });
+  g += `<path d="${fp}" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="4 3"/>`;
+  D.focus.forEach(f => { g += `<circle cx="${x(f.data)}" cy="${ys(f.v)}" r="4" fill="var(--surface)" stroke="var(--muted)" stroke-width="1.5"><title>Focus ${dataBR(f.data)}: ${pct(f.v)}</title></circle>`; });
+  const fl = D.focus[D.focus.length-1]; g += `<text x="${x(fl.data)+8}" y="${ys(fl.v)+16}" style="font:12px var(--mono);fill:var(--muted)">${fl.v.toFixed(2).replace(".",",")}</text>`;
+  const f0 = D.focus[1]; g += `<text x="${x(f0.data)}" y="${ys(f0.v)+18}" text-anchor="middle" style="font:12px var(--mono);fill:var(--muted)">12,00</text>`;
+  svg.innerHTML = g;
+}
+renderTop();
+const ix0 = atas[last].indice, ixp0 = atas[prev].indice;
+$("#insights").innerHTML = `
+<div><b>Jan: brando sem cortar.</b> Com a Selic parada em 15%, a 276ª teve o índice mais brando (${fmt(atas["276"].indice)}) porque anunciou o início dos cortes. O corte veio na reunião seguinte.</div>
+<div><b>Mar–ago: cortes com fala dura.</b> Guerra, petróleo e desancoragem levaram o índice para cima de zero. O Copom manteve os cortes, só que lentos, de 0,25. O Focus para o fim de 2026 subiu de 12,00% (02/03) para 14,00% (22/06).</div>
+<div><b>Set: primeiro alívio.</b> O índice caiu de ${fmt(ixp0)} para ${fmt(ix0)} sem mudar a orientação. O Focus recuou para 13,25% em outubro e voltou a 13,50% em 03/11, depois da alta do dólar.</div>`;
+
+/* changes */
+const q = (o, gone) => o ? `<blockquote class="quote${gone?' gone':''}"><cite>${o.reuniao}ª · §${o.par}</cite>“${esc(o.trecho)}”</blockquote>` : `<blockquote class="quote gone"><cite>280ª</cite>não existia</blockquote>`;
+[...D.mudancas, D.contraponto].forEach((m, i) => {
+  const hawk = m.efeito === "endureceu";
+  const c = el("div", {class: "chg" + (hawk ? " hawk" : "")});
+  c.innerHTML = `<div class="chg-head"><h3>${i < 3 ? (i+1) + ". " : ""}${esc(m.titulo)}</h3><span class="pill ${hawk?'hawk':'dove'}">${m.efeito} · ${esc(m.nota)}</span></div>
+  <div class="diff">${q(m.antes, true)}${q(m.depois)}</div>${m.leitura ? `<p class="read">${esc(m.leitura)}</p>` : ""}`;
+  $("#changes").appendChild(c);
+});
+$("#same").innerHTML = `<b>O que não mudou:</b> os parágrafos de orientação (281ª §15 a §19) são idênticos aos da 280ª (§14 a §18), com 100% de similaridade de texto. Inclusive: “${esc(D.inalterado.trecho)}” (281ª §17).`;
+
+/* impact */
+$("#imp-title").textContent = D.impacto.manchete;
+$("#imp-text").innerHTML = D.impacto.texto.map(t => `<p>${esc(t)}</p>`).join("") + `<p class="status">Trecho de risco: “${esc(D.impacto.risco_trecho)}” (281ª §13). Opções de Copom: <a href="${D.impacto.fontes[0]}">Rankia, 26/10</a>.</p>`;
+
+/* explorer */
+function showAta(r) {
+  document.querySelectorAll("#tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.r === r));
+  const a = atas[r]; const box = $("#paras"); box.innerHTML = "";
+  $("#tab-summary").innerHTML = `${r}ª · ${dataBR(a.data_reuniao)} · ${sel[r] ? "Selic " + pct(sel[r].selic) : ""} · índice <b class="num">${fmt(a.indice)}</b> · média simples <span class="num">${fmt(a.media_simples)}</span> · ${a.n_duros} parágrafos duros, ${a.n_brandos} brandos`;
+  let sec = "";
+  Object.entries(a.paragrafos).forEach(([n, p]) => {
+    if (p.secao !== sec) { sec = p.secao; box.appendChild(el("div", {class: "kicker", style: "margin-top:10px"}, esc(sec))); }
+    const t = esc(p.texto), tr = esc(p.trecho);
+    const re = new RegExp(tr.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s*"));
+    const hi = t.replace(re, m => `<mark>${m}</mark>`);
+    const d = el("div", {class: "para" + (p.nota < 0 ? " dv" : p.nota === 0 ? " n0" : "")});
+    d.innerHTML = `<div class="score s${p.nota}">${p.nota > 0 ? "+" + p.nota : p.nota === 0 ? "0" : "−" + Math.abs(p.nota)}</div>
+      <div><div class="meta">§${n} · ${esc(p.tema)}${p.nota_revisor !== undefined ? ` · revisor: ${p.nota_revisor > 0 ? "+" : ""}${p.nota_revisor}${p.nota_revisor === p.nota ? " ✓" : ""}` : ""}</div><div>“${tr}”</div>${p.justificativa ? `<div class="why">${esc(p.justificativa)}</div>` : ""}<details class="full"><summary>parágrafo completo</summary><div>${hi}</div></details></div>`;
+    box.appendChild(d);
+  });
+}
+function renderTabs() {
+  $("#tabs").innerHTML = "";
+  Object.keys(atas).sort().forEach(r => { const b = el("button", {role: "tab", "data-r": r, type: "button"}, `${r}ª · ${fmt(atas[r].indice)}`); b.onclick = () => showAta(r); $("#tabs").appendChild(b); });
+}
+renderTabs(); showAta(last);
+
+/* method counts */
+let nT = 0; Object.values(atas).forEach(a => nT += Object.keys(a.paragrafos).length);
+$("#n-trechos").textContent = nT; $("#n-ok").textContent = nT + " de " + nT;
+const C = D.concordancia;
+$("#conc").innerHTML = `As notas foram idênticas em <b class="num">${C.iguais} de ${C.total}</b> parágrafos (${Math.round(C.iguais / C.total * 100)}%) e diferiram em no máximo 1 ponto em <b class="num">${C.ate_1_ponto}</b> (${Math.round(C.ate_1_ponto / C.total * 100)}%). Com as notas do revisor, o índice das atas fica: ${nums.map(r => r + "ª " + fmt(atas[r].indice_revisor)).join(" · ")}. A tendência é a mesma.`;
+$("#focus-lim").textContent = D.focus_origem === "oficial" ? "O Focus vem da API do BC (python-bcb)." : "Por enquanto, o Focus vem de notícias que citam o boletim. O script dados_bcb.py troca esses pontos pelo dado oficial do BC.";
+const DEF = JSON.parse(JSON.stringify(D.agregacao));
+function setInputs(a) { "ABCD".split("").forEach(k => $("#w" + k).value = a.peso_por_secao[k]); $("#ign").checked = a.ignorar_neutros; }
+function recalc() {
+  const w = Object.fromEntries("ABCD".split("").map(k => [k, Math.max(0, +$("#w" + k).value || 0)])), ign = $("#ign").checked;
+  Object.values(atas).forEach(a => { let num = 0, den = 0; Object.values(a.paragrafos).forEach(p => { if (p.nota === undefined || (ign && p.nota === 0)) return; const ww = w[p.secao[0]] ?? 1; num += ww * p.nota; den += ww; }); a.indice = den ? Math.round(num / den * 100) / 100 : 0; });
+  renderTop(); renderTabs(); showAta(document.querySelector('#tabs button[aria-selected="true"]')?.dataset.r || last);
+}
+setInputs(DEF);
+["#wA", "#wB", "#wC", "#wD", "#ign"].forEach(id => $(id).addEventListener("input", recalc));
+$("#reset").onclick = () => { setInputs(DEF); recalc(); };
+$("#focus-src").innerHTML = D.focus_origem === "oficial" ? "API Olinda do BC" : "notícias que citam o boletim (" + [...new Set(D.focus.map(f => new URL(f.fonte).hostname.replace("www.","")))].map(h => `<a href="${D.focus.find(f=>f.fonte.includes(h)).fonte}">${h}</a>`).join(", ") + ")";
+
+/* ===== chat ===== */
+const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[“”"«»]/g, "").replace(/[^a-z0-9%,.]/g, "");
+function corpusText() {
+  return Object.keys(atas).sort().map(r => `=== ATA ${r}ª reunião (${atas[r].data_reuniao}) ===\n` +
+    Object.entries(atas[r].paragrafos).map(([n, p]) => `[${r} §${n}] ${p.texto}`).join("\n")).join("\n\n");
+}
+function updCorpus() { $("#corpus-info").textContent = `${Object.keys(atas).length} atas carregadas: ` + Object.keys(atas).sort().map(r => r + "ª").join(", "); }
+updCorpus();
+const SUGS = ["O que o Copom disse sobre câmbio?", "Quando a ata falou pela primeira vez em pausa?", "Como mudou a visão sobre o mercado de trabalho?", "Por que o Copom não acelera os cortes?"];
+SUGS.forEach(s => { const b = el("button", {class: "ghost", type: "button"}, esc(s)); b.onclick = () => { $("#q").value = s; ask(); }; $("#sugs").appendChild(b); });
+let sample = null, history = [];
+(async () => { try { sample = await window.claude?.use("sample"); } catch (e) { sample = null; } if (!sample) { $("#send").disabled = true; $("#q").placeholder = "O chat precisa do Claude disponível nesta página."; } })();
+function addMsg(cls, html) { const m = el("div", {class: "msg " + cls}, html); $("#log").appendChild(m); $("#log").scrollTop = 1e9; return m; }
+function checkCite(c) {
+  const a = atas[String(c.reuniao)]; if (!a) return false;
+  const p = a.paragrafos[String(c.paragrafo)]; const t = norm(c.trecho || "");
+  if (p && t && norm(p.texto).includes(t)) return true;
+  return false;
+}
+async function ask(ev) {
+  ev && ev.preventDefault();
+  const question = $("#q").value.trim(); if (!question || !sample) return;
+  $("#q").value = ""; $("#send").disabled = true;
+  addMsg("u", esc(question));
+  const box = addMsg("a", `<span class="status">Lendo as atas…</span>`);
+  const prompt = `Você é analista de política monetária e responde perguntas SOMENTE com base nas atas do Copom abaixo. Cada parágrafo está marcado como [reunião §parágrafo].
+Regras:
+- Responda em português claro, para um leigo, em até 120 palavras.
+- Toda afirmação precisa de citação: reunião, nº do parágrafo e um TRECHO COPIADO LITERALMENTE do parágrafo (8 a 30 palavras, sem alterar nenhuma palavra, sem reticências).
+- Se as atas não tratam do assunto, diga isso e não invente.
+- Não faça previsões nem recomendações de investimento.
+Responda APENAS com JSON: {"resposta": "...", "citacoes": [{"reuniao": 281, "paragrafo": 13, "trecho": "..."}]}
+
+Conversa até aqui:
+${history.slice(-4).map(h => (h.role === "user" ? "Usuário: " : "Analista: ") + h.content).join("\n")}
+
+Pergunta: ${question}
+
+ATAS:
+${corpusText()}`;
+  try {
+    const out = await sample.json(prompt, {cache: false, modelTier: "default"});
+    const cites = (out.citacoes || []).map(c => ({...c, ok: checkCite(c)}));
+    box.innerHTML = `<div>${esc(out.resposta || "")}</div><div class="cites">${cites.map(c => `<div class="cite${c.ok ? "" : " bad"}"><b>${esc(c.reuniao)}ª §${esc(c.paragrafo)}</b> “${esc(c.trecho)}” <span class="chk">${c.ok ? "✓ trecho conferido" : "⚠ não encontrado literalmente"}</span></div>`).join("")}</div>`;
+    history.push({role: "user", content: question}, {role: "assistant", content: out.resposta || ""});
+  } catch (e) {
+    box.innerHTML = e && e.code === "rate_limited" ? "Muitas perguntas seguidas. Espere alguns segundos e tente de novo." : e && e.code === "not_granted" ? "O chat não foi autorizado nesta página." : "Não consegui responder agora. Tente de novo.";
+  }
+  $("#send").disabled = false; $("#log").scrollTop = 1e9;
+}
+$("#ask").addEventListener("submit", ask);
+
+/* ===== ata nova ===== */
+$("#btn-new").onclick = () => $("#newata").classList.toggle("on");
+function splitAta(texto) {
+  texto = texto.replace(/-\n(?=[a-zà-ú])/g, "");
+  const ini = texto.search(/A\)\s*Atualiza/); if (ini > 0) texto = texto.slice(ini);
+  const fim = texto.search(/\n\s*Tabela 1/); if (fim > 0) texto = texto.slice(0, fim);
+  texto = texto.replace(/\d+\s*ª\s*Reunião\s*COPOM[^\n]*\n[^\n]*\n?\s*\d+\s+bcb\.gov\.br/g, "\n");
+  const pars = {}; let sec = "A) Atualização da conjuntura econômica e do cenário do Copom";
+  texto.split(/\n(?=\s*(?:[A-E]\)\s|\d{1,2}\.\s))/).forEach(b => {
+    b = b.trim(); const ms = b.match(/^([A-E])\)\s*([^\n]+)\n?([\s\S]*)$/);
+    if (ms) { sec = ms[1] + ") " + ms[2].trim(); b = ms[3].trim(); }
+    const m = b.match(/^(\d{1,2})\.\s+([\s\S]*)$/); if (!m) return;
+    const n = +m[1]; if (pars[n]) return;
+    pars[n] = {secao: sec, texto: m[2].replace(/\s+/g, " ").replace(/(\w) -(se|lo|la)\b/g, "$1-$2").trim()};
+  });
+  return pars;
+}
+async function pdfText(file) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  const doc = await pdfjsLib.getDocument({data: await file.arrayBuffer()}).promise; let out = "";
+  for (let i = 1; i <= doc.numPages; i++) { const c = await (await doc.getPage(i)).getTextContent(); out += c.items.map(it => it.str + (it.hasEOL ? "\n" : "")).join("") + "\n"; }
+  return out;
+}
+let novaR = null;
+$("#btn-load").onclick = async () => {
+  const st = $("#new-status"); st.textContent = "Lendo…";
+  try {
+    const f = $("#pdf").files[0]; let txt = $("#paste").value;
+    if (f) txt = f.name.toLowerCase().endsWith(".pdf") ? await pdfText(f) : await f.text();
+    const r = ($("#newnum").value.match(/\d+/) || [""])[0] || (txt.match(/(\d{3})\s*ª\s*Reunião/) || [])[1];
+    const pars = splitAta("\n" + txt); const n = Object.keys(pars).length;
+    if (!r || n < 5) { st.textContent = `Não reconheci os parágrafos numerados (achei ${n}). Confira o arquivo ou cole o texto.`; return; }
+    atas[r] = {data_reuniao: (f && (f.name.match(/\d{4}-\d{2}-\d{2}/) || [])[0]) || "2026-11-04", paragrafos: pars, indice: 0, media_simples: 0, n_duros: 0, n_brandos: 0, nova: true};
+    novaR = r; updCorpus(); st.textContent = `${r}ª carregada: ${n} parágrafos. Já dá para perguntar sobre ela.`;
+    $("#btn-score").disabled = !sample;
+  } catch (e) { st.textContent = "Não consegui ler esse arquivo. Tente colar o texto."; }
+};
+$("#btn-score").onclick = async () => {
+  if (!novaR || !sample) return; const st = $("#new-status"); const a = atas[novaR]; $("#btn-score").disabled = true;
+  st.textContent = "Medindo o tom com a mesma régua…";
+  const prompt = `Classifique o TOM de política monetária de CADA parágrafo desta ata do Copom com esta régua:
++2 muito duro: juros altos/restrição "maior e por mais tempo" com ênfase, desancoragem adicional, alta de juros
++1 duro: preocupação com inflação, riscos para cima, "cautela", atividade em retomada
+0 neutro: premissas, números, procedimento, votação
+-1 brando: inflação cedendo, atividade desacelerando, corte de 0,25
+-2 muito brando: sinaliza corte de juros com ênfase
+Para cada parágrafo devolva um trecho COPIADO LITERALMENTE (6 a 25 palavras) que justifica a nota.
+Responda só com JSON: [{"n": 1, "nota": 0, "tema": "inflação|atividade|cenário externo|câmbio|fiscal|expectativas|decisão|outro", "trecho": "..."}]
+
+${Object.entries(a.paragrafos).map(([n, p]) => `§${n} (${p.secao[0]}) ${p.texto}`).join("\n")}`;
+  try {
+    const arr = await sample.json(prompt, {cache: false, modelTier: "complex"});
+    let num = 0, den = 0, all = [], bad = 0;
+    arr.forEach(o => { const p = a.paragrafos[String(o.n)]; if (!p) return; const nota = Math.max(-2, Math.min(2, Math.round(+o.nota || 0)));
+      const ok = norm(p.texto).includes(norm(o.trecho || "")) && (o.trecho || "").length > 10; if (!ok) bad++;
+      Object.assign(p, {nota, tema: o.tema || "outro", trecho: ok ? o.trecho : p.texto.split(" ").slice(0, 14).join(" ")});
+      all.push(nota); const w = "CD".includes(p.secao[0]) ? 2 : 1; if (nota) { num += w * nota; den += w; } });
+    Object.values(a.paragrafos).forEach(p => { if (p.nota === undefined) Object.assign(p, {nota: 0, tema: "outro", trecho: p.texto.split(" ").slice(0, 14).join(" ")}); });
+    recalc(); a.media_simples = all.length ? Math.round(all.reduce((s, v) => s + v, 0) / all.length * 100) / 100 : 0;
+    a.n_duros = all.filter(v => v > 0).length; a.n_brandos = all.filter(v => v < 0).length;
+    renderTabs(); showAta(novaR);
+    st.textContent = `Índice da ${novaR}ª: ${fmt(a.indice)} (281ª: ${fmt(atas["281"].indice)}). ${bad ? bad + " trecho(s) não conferiram e foram trocados pelo início do parágrafo; revise na aba." : "Todos os trechos conferidos."}`;
+    location.hash = "evidencias";
+  } catch (e) { st.textContent = "Não consegui medir agora. Tente de novo."; $("#btn-score").disabled = false; }
+};
+</script>
+</body>
+</html>
