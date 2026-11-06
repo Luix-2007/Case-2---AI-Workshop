@@ -13,6 +13,7 @@ As APIs são públicas e não exigem cadastro nem chave.
 """
 from datetime import date
 from pathlib import Path
+from urllib.parse import quote, urlencode
 
 import pandas as pd
 import requests
@@ -44,7 +45,9 @@ def baixar_focus() -> pd.DataFrame:
             "$format": "json",
             "$top": "100000",
         }
-        r = requests.get(OLINDA, params=params, timeout=120)
+        # A API Olinda rejeita espaços codificados como "+" (erro 400): usar %20.
+        query = urlencode(params, quote_via=quote, safe="$,'")
+        r = requests.get(f"{OLINDA}?{query}", timeout=120)
         r.raise_for_status()
         df = pd.DataFrame(r.json()["value"])
         print(f"Focus {ind}: {len(df)} linhas")
