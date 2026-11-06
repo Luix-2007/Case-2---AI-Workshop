@@ -3,7 +3,7 @@
 > Claude Lab · Economia & Finanças · PUC-Rio · 06/11/2026
 
 **🎬 Vídeo (2 min):** [PREENCHER]
-**🔗 Artefato público:** https://claude.ai/artifact/LB7jNVrtXFB8NjuukvTzAq
+**🔗 Artefato público:** https://claude.ai/artifact/AXfdFGVa6h5voQmWovGHnr
 
 ## Equipe
 
